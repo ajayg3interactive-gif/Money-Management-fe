@@ -1,9 +1,20 @@
-<table style="width:100%;border-collapse:collapse">
+<table style="width: 100%; border-collapse: collapse">
   <!-- Header -->
   <thead>
-    <tr style="border-bottom:1px solid #f1f5f9">
+    <tr style="border-bottom: 1px solid #f1f5f9">
       @for (col of sortedColumns; track col.key) {
-        <th style="text-align:left;padding:14px 20px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap">
+        <th
+          style="
+            text-align: left;
+            padding: 14px 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #94a3b8;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            white-space: nowrap;
+          "
+        >
           {{ col.label }}
         </th>
       }
@@ -13,73 +24,112 @@
   <!-- Body -->
   <tbody>
     @for (row of rows; track row) {
-      <tr class="table-row" style="border-bottom:1px solid #f8fafc;transition:background 0.15s ease">
+      <tr
+        class="table-row"
+        style="border-bottom: 1px solid #f8fafc; transition: background 0.15s ease"
+      >
         @for (col of sortedColumns; track col.key) {
-          <td style="padding:14px 20px;vertical-align:middle">
-
+          <td style="padding: 14px 20px; vertical-align: middle">
             @if (col.key === 'action') {
               <div class="row-actions flex items-center gap-2">
-                <button class="flex items-center gap-1.5 rounded-lg text-xs font-semibold transition-colors"
-                        style="color:#5B6EF5;background:#EEF0FF;padding:6px 10px">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                <button
+                  class="flex items-center gap-1.5 rounded-lg text-xs font-semibold transition-colors"
+                  (click)="editRow.emit(row)"
+                  style="color: #5b6ef5; background: #eef0ff; padding: 6px 10px"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                   </svg>
                   Edit
                 </button>
-                <button class="flex items-center gap-1.5 rounded-lg text-xs font-semibold transition-colors"
-                        style="color:#EF4444;background:#FEF2F2;padding:6px 10px">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="3 6 5 6 21 6"/>
-                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                    <path d="M10 11v6"/><path d="M14 11v6"/>
-                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                <button
+                  class="flex items-center gap-1.5 rounded-lg text-xs font-semibold transition-colors"
+                  style="color: #ef4444; background: #fef2f2; padding: 6px 10px"
+                  (click)="deleteRow.emit(row)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6" />
+                    <path d="M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
                   </svg>
                   Delete
                 </button>
               </div>
-
             } @else if (col.key === 'category') {
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style="background:#EEF0FF;color:#5B6EF5">
+              <span
+                class="text-xs font-semibold px-2.5 py-1 rounded-full"
+                style="background: #eef0ff; color: #5b6ef5"
+              >
                 {{ getCellValue(row, col.key) }}
               </span>
-
             } @else if (col.key === 'amount') {
-              <span style="font-size:13.5px;font-weight:700;color:#1e293b">
+              <span style="font-size: 13.5px; font-weight: 700; color: #1e293b">
                 Rp {{ getCellValue(row, col.key) }}
               </span>
-
             } @else if (col.key === 'date') {
-              <span style="font-size:13px;color:#64748b">
+              <span style="font-size: 13px; color: #64748b">
                 {{ getCellValue(row, col.key) }}
               </span>
-
             } @else {
-              <span style="font-size:13.5px;color:#334155;font-weight:500">
+              <span style="font-size: 13.5px; color: #334155; font-weight: 500">
                 {{ getCellValue(row, col.key) }}
               </span>
             }
-
           </td>
         }
       </tr>
     } @empty {
       <tr>
-        <td [attr.colspan]="sortedColumns.length" style="padding:48px 20px;text-align:center">
+        <td [attr.colspan]="sortedColumns.length" style="padding: 48px 20px; text-align: center">
           <div class="flex flex-col items-center gap-3">
-            <div class="rounded-2xl flex items-center justify-center"
-                 style="width:48px;height:48px;background:#f1f5f9">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                   stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="1" y="4" width="22" height="16" rx="2"/>
-                <line x1="1" y1="10" x2="23" y2="10"/>
+            <div
+              class="rounded-2xl flex items-center justify-center"
+              style="width: 48px; height: 48px; background: #f1f5f9"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#94a3b8"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="1" y="4" width="22" height="16" rx="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
               </svg>
             </div>
-            <p style="color:#475569;font-size:14px;font-weight:600;margin:0">No transactions yet</p>
-            <p style="color:#94a3b8;font-size:12px;margin:0">Add your first transaction to get started</p>
+            <p style="color: #475569; font-size: 14px; font-weight: 600; margin: 0">
+              No transactions yet
+            </p>
+            <p style="color: #94a3b8; font-size: 12px; margin: 0">
+              Add your first transaction to get started
+            </p>
           </div>
         </td>
       </tr>

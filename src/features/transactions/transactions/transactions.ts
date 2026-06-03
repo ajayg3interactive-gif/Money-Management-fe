@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Table } from "../../../shared/table/table";
 import { AddTransactionModal } from "../add-transaction-modal/add-transaction-modal";
+import { Transaction, TransactionService, TransactionColumn } from '../../../core/services/transaction.service';
 
 @Component({
   selector: 'app-transactions',
@@ -8,24 +9,64 @@ import { AddTransactionModal } from "../add-transaction-modal/add-transaction-mo
   templateUrl: './transactions.html',
   styleUrl: './transactions.css',
 })
-export class Transactions {
+export class Transactions implements OnInit {
+  private transactionService = inject(TransactionService)
 
-  columns = [
-    { position: 1, key: 'date', label: 'Date', view: true },
-    { position: 2, key: 'description', label: 'Description', view: true },
-    { position: 3, key: 'category', label: 'Category', view: true },
-    { position: 4, key: 'amount', label: 'Amount', view: true },
-    { position: 5, key: 'action', label: 'Action', view: true },
-  ];
+  rows = signal<Transaction[]>([]);
+  columns = signal<TransactionColumn[]>([])
+  isLoading = signal(true);
+  error = signal<string | null>(null);
+  openModal = signal (false);
+  selectedTransaction = signal<Transaction | null>(null);
 
-  rows = [
-    { date: '12/05/2006', description: 'This layout will look similar to modern fintech', category: 'Travel', amount: 200 },
-    { date: '14/05/2006', description: 'Grocery shopping at the market', category: 'Food', amount: 85 },
-  ];
-  openModal = false;
+  ngOnInit() {
+    this.transactionService.getTransactions().subscribe({
+      next: (data) => {
+        this.rows.set(data);
+        this.isLoading.set(false)
+      },
+      error: (err) => {
+        this.error.set('failed to load transaction');
+        this.isLoading.set(false);
+        console.error(err);
+      }
+    });
 
-  handleModal(open:boolean) {
-    this.openModal = open;
+    this.transactionService.getTransactionsColumns().subscribe({
+      next: (data) => {
+        this.columns.set(data);
+      }
+    })
+  }
+
+  handleModal(open: boolean) {
+    this.openModal.set(open);
+    this.selectedTransaction.set(null);
+  }
+
+  onTransactionAdded(transaction: Transaction) {
+    this.rows.update(current => [...current, transaction]); // ← append to existing rows
+  }
+
+  onTransactionUpdated(transaction: Transaction) {
+    this.rows.update(current =>
+      current.map(r => r.id === transaction.id ? transaction : r)
+    );
+  }
+
+  onEditRow(row: Transaction) {
+    this.selectedTransaction.set(row);
+    this.openModal.set(true);
+  }
+
+  onDeleteRow(row:Transaction){
+    if(!row.id) return ;
+    this.transactionService.deleteTransaction(row.id).subscribe({
+      next :()=>{
+        this.rows.update(current => current.filter(r =>r.id !== row.id));
+      },
+      error : (err) => console.error('Failed to Delete',err)
+    })
 
   }
 }

@@ -1,16 +1,12 @@
 {
   "transaction": [
     {
-      "date": "12/05/2006",
-      "description": "This layout will look similar to modern fintech",
-      "category": "Travel",
-      "amount": 200
-    },
-    {
-      "date": "14/05/2006",
-      "description": "Grocery shopping at the market",
-      "category": "Food",
-      "amount": 85
+      "date": "2026-06-10",
+      "description": "Salary",
+      "category": "salary",
+      "amount": 15000,
+      "type": "Income",
+      "id": 1
     }
   ],
   "columns": [
@@ -29,21 +25,27 @@
           "view": true
         },
         {
-          "position": 3,
+          "position": 4,
           "key": "category",
           "label": "Category",
           "view": true
         },
         {
-          "position": 4,
+          "position": 5,
           "key": "amount",
           "label": "Amount",
           "view": true
         },
         {
-          "position": 5,
+          "position": 6,
           "key": "action",
           "label": "Action",
+          "view": true
+        },
+        {
+          "position": 3,
+          "key": "type",
+          "label": "Type",
           "view": true
         }
       ]
