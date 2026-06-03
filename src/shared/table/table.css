@@ -1,0 +1,7 @@
+.table-row:hover {
+  background-color: #f8fafc;
+}
+
+.table-row:last-child {
+  border-bottom: none !important;
+}

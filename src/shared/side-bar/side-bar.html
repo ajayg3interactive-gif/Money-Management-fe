@@ -1,0 +1,80 @@
+<aside class="sidebar flex flex-col w-64 shrink-0" style="background: #0F172A; height: 100vh; overflow-y: auto">
+
+  <!-- Logo -->
+  <div class="flex items-center gap-3 px-5 border-b" style="height: 64px; border-color: rgba(255,255,255,0.05)">
+    <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+         style="background: linear-gradient(135deg, #5B6EF5 0%, #8B5CF6 100%)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+           fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="1" x2="12" y2="23"/>
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      </svg>
+    </div>
+    <div>
+      <p style="color: #fff; font-size: 15px; font-weight: 700; line-height: 1.2">FinTrack</p>
+      <p style="color: #475569; font-size: 11px; line-height: 1.2">Money Manager</p>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 px-3 py-5">
+
+    <p style="color: #334155; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0 12px; margin-bottom: 8px">
+      Overview
+    </p>
+
+    <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px">
+      @for (menu of mainMenus; track menu.label) {
+        <li>
+          <a
+            [routerLink]="menu.route"
+            routerLinkActive="nav-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="nav-link"
+          >
+            <span [innerHTML]="menu.icon" class="nav-icon"></span>
+            <span>{{ menu.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+
+    <div style="margin: 20px 0; border-top: 1px solid rgba(255,255,255,0.05)"></div>
+
+    <p style="color: #334155; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0 12px; margin-bottom: 8px">
+      Account
+    </p>
+
+    <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px">
+      @for (menu of bottomMenus; track menu.label) {
+        <li>
+          <a
+            [routerLink]="menu.route"
+            routerLinkActive="nav-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="nav-link"
+          >
+            <span [innerHTML]="menu.icon" class="nav-icon"></span>
+            <span>{{ menu.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+
+  </nav>
+
+  <!-- User Profile -->
+  <div class="px-3 pb-4 pt-3" style="border-top: 1px solid rgba(255,255,255,0.05)">
+    <div class="user-profile-btn flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0"
+           style="background: linear-gradient(135deg, #5B6EF5 0%, #8B5CF6 100%); font-size: 11px; font-weight: 700">
+        AJ
+      </div>
+      <div class="flex-1 min-w-0">
+        <p style="color: #e2e8f0; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Ajay G</p>
+        <p style="color: #475569; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">admin&#64;fintrack.app</p>
+      </div>
+    </div>
+  </div>
+
+</aside>

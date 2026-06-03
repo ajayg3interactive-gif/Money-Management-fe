@@ -1,0 +1,76 @@
+<div class="p-6" style="min-height: 100vh; background: #F1F5F9">
+
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <p style="color:#64748b;font-size:13px">Finance</p>
+      <h1 style="color:#0f172a;font-size:24px;font-weight:700;margin:2px 0 0">Transactions</h1>
+    </div>
+    <button
+      (click)="handleModal(true)"
+      class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all active:scale-95"
+      style="background:linear-gradient(135deg,#5B6EF5 0%,#8B5CF6 100%);box-shadow:0 2px 8px rgba(91,110,245,0.35)"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Add Transaction
+    </button>
+  </div>
+
+  <!-- Filter & Search Bar -->
+  <div class="flex flex-wrap items-center gap-3 mb-5">
+
+    <!-- Search Input -->
+    <div class="flex items-center gap-2 bg-white rounded-xl px-3 py-2.5 flex-1"
+         style="min-width:200px;max-width:320px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+           stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" placeholder="Search transactions…"
+             style="flex:1;font-size:13.5px;color:#334155;outline:none;border:none;background:transparent"
+             class="placeholder:text-slate-400" />
+    </div>
+
+    <!-- Type Filter Tabs -->
+    <div class="flex items-center gap-1 bg-white rounded-xl p-1"
+         style="border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+      <button class="px-4 py-1.5 rounded-lg text-sm font-semibold text-white transition-all"
+              style="background:linear-gradient(135deg,#5B6EF5 0%,#8B5CF6 100%)">
+        All
+      </button>
+      <button class="px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
+              style="color:#64748b">
+        Income
+      </button>
+      <button class="px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
+              style="color:#64748b">
+        Expense
+      </button>
+    </div>
+
+    <!-- Sort/Filter Button -->
+    <button class="flex items-center gap-2 bg-white rounded-xl px-3 py-2.5 text-sm font-medium transition-all"
+            style="color:#475569;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="21" y1="10" x2="7" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/>
+        <line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="7" y2="18"/>
+      </svg>
+      Filter
+    </button>
+  </div>
+
+  <!-- Table Card -->
+  <div class="bg-white rounded-2xl overflow-hidden"
+       style="box-shadow:0 1px 4px rgba(0,0,0,0.05);border:1px solid #f1f5f9">
+    <app-table [columns]="columns" [rows]="rows"></app-table>
+  </div>
+
+</div>
+
+@if (openModal) {
+  <app-add-transaction-modal (closemodal)="handleModal($event)"/>
+}
