@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Table } from "../../../shared/table/table";
 import { AddTransactionModal } from "../add-transaction-modal/add-transaction-modal";
 import { Transaction, TransactionService, TransactionColumn } from '../../../core/services/transaction.service';
@@ -18,6 +18,7 @@ export class Transactions implements OnInit {
   error = signal<string | null>(null);
   openModal = signal (false);
   selectedTransaction = signal<Transaction | null>(null);
+  filterType = signal<'All' | 'Income' | 'Expense'>('All');
 
   ngOnInit() {
     this.transactionService.getTransactions().subscribe({
@@ -67,6 +68,15 @@ export class Transactions implements OnInit {
       },
       error : (err) => console.error('Failed to Delete',err)
     })
-
   }
+filteredRows = computed(()=>{
+
+  const filter =this.filterType();
+  if(filter ==='All') return this.rows();
+  return this.rows().filter(r =>r.type === filter);
+});
+
+
+
+  
 }

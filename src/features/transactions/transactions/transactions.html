@@ -81,19 +81,22 @@
     >
       <button
         class="px-4 py-1.5 rounded-lg text-sm font-semibold text-white transition-all"
-        style="background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%)"
+        [style]="filterType() ==='All' ? 'background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%)' :'color: #64748b'"
+        (click)="filterType.set('All')"
       >
         All
       </button>
       <button
-        class="px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
-        style="color: #64748b"
+        class="px-4 py-1.5 rounded-lg text-sm font-medium text-white transition-all"
+         [style]="filterType() ==='Income' ? 'background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%)' :'color: #64748b'"
+        (click)="filterType.set('Income')"
       >
         Income
       </button>
       <button
-        class="px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
-        style="color: #64748b"
+        class="px-4 py-1.5 rounded-lg text-sm font-medium text-white transition-all"
+        [style]="filterType() ==='Expense' ? 'background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%)' :'color: #64748b'"
+        (click)="filterType.set('Expense')"
       >
         Expense
       </button>
@@ -129,7 +132,9 @@
     class="bg-white rounded-2xl overflow-hidden"
     style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
   >
-    <app-table [columns]="columns()" [rows]="rows()" (editRow)="onEditRow($event)" (deleteRow)="onDeleteRow($event)"></app-table>
+    <app-table [columns]="columns()" [rows]="filteredRows()" (editRow)="onEditRow($event)"
+     /* (deleteRow)="onDeleteRow($event)" */
+     ></app-table>
   </div>
 </div>
 

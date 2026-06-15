@@ -2,11 +2,27 @@
   "transaction": [
     {
       "date": "2026-06-10",
-      "description": "Salary",
+      "description": "",
       "category": "salary",
       "amount": 15000,
       "type": "Income",
       "id": 1
+    },
+    {
+      "date": "2026-06-14",
+      "description": "Marine drive",
+      "category": "food",
+      "amount": 530,
+      "type": "Expense",
+      "id": 2
+    },
+    {
+      "date": "2026-06-13",
+      "description": "Recharge",
+      "category": "bill",
+      "amount": 299,
+      "type": "Expense",
+      "id": 3
     }
   ],
   "columns": [
