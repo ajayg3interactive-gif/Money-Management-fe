@@ -1,7 +1,8 @@
 import { NgClass } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ExpenseReport, Totals, TransactionService } from '../../../core/services/transaction.service';
+import { ExpenseReport, Totals, Transaction, TransactionService } from '../../../core/services/transaction.service';
 import { BudgetStatusModal } from "../budget-status-modal/budget-status-modal";
+import { AddTransactionModal } from "../../transactions/add-transaction-modal/add-transaction-modal";
 import { Budget, BudgetService } from '../../../core/services/budget.service';
 import { Category, CategoryService } from '../../../core/services/category.service';
 
@@ -16,6 +17,7 @@ interface BudgetStatusRow {
 
 
 interface RecentTx {
+  id: string | number;
   description: string;
   category: string;
   amount: number;
@@ -26,7 +28,7 @@ interface RecentTx {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NgClass, BudgetStatusModal],
+  imports: [NgClass, BudgetStatusModal, AddTransactionModal],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -42,8 +44,12 @@ export class Dashboard implements OnInit {
 
   budgets = signal<Budget[]>([]);
   categories = signal<Category[]>([]);
+  transactions = signal<Transaction[]>([]);
 
   budgetStatusModal = signal(false) ;
+
+  transactionModal = signal(false);
+  selectedTransaction = signal<Transaction | null>(null);
 
   budgetStatusList = computed<BudgetStatusRow[]>(() => {
     const spendByCategory = new Map(this.spendingPerMonth().map(s => [s.label, s.total]));
@@ -63,6 +69,35 @@ export class Dashboard implements OnInit {
     });
   });
 
+  recentTransactions = computed<RecentTx[]>(() => {
+    const categoryLookup = new Map(this.categories().map(c => [c.value, c.label]));
+
+    return [...this.transactions()]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5)
+      .map((tx, index) => {
+        const signedAmount = tx.type === 'Income' ? tx.amount : -tx.amount;
+        const categoryLabel = categoryLookup.get(tx.category) ?? tx.category;
+        const description = tx.description?.trim() || categoryLabel;
+        const initials = description
+          .split(' ')
+          .filter(Boolean)
+          .slice(0, 2)
+          .map(word => word[0]?.toUpperCase())
+          .join('') || '?';
+
+        return {
+          id: tx.id ?? index,
+          description,
+          category: categoryLabel,
+          amount: signedAmount,
+          date: this.formatRelativeDate(tx.date),
+          color: this.color[index % this.color.length],
+          initials,
+        };
+      });
+  });
+
   ngOnInit() {
     this.transactionService.getTotals().subscribe(data => {
       this.totals.set(data);
@@ -73,7 +108,14 @@ export class Dashboard implements OnInit {
     this.categoryService.getCategories().subscribe(data => {
       this.categories.set(data)
     })
+    this.loadTransactions();
     this.loadBudgets();
+  }
+
+  loadTransactions() {
+    this.transactionService.getTransactions().subscribe(data => {
+      this.transactions.set(data);
+    })
   }
 
   loadBudgets() {
@@ -89,6 +131,22 @@ export class Dashboard implements OnInit {
     }
   }
 
+  handleTransactionModal(open: boolean) {
+    this.transactionModal.set(open);
+    this.selectedTransaction.set(null);
+  }
+
+  refreshSummary() {
+    this.transactionService.getTotals().subscribe(data => {
+      this.totals.set(data);
+    })
+    this.transactionService.getExpenseReport().subscribe(data => {
+      this.spendingPerMonth.set(data)
+    })
+    this.loadTransactions();
+  }
+
+
   now = new Date();
   currentMonth = this.now.toLocaleDateString('en-US', { month: "long" });
 
@@ -96,50 +154,21 @@ export class Dashboard implements OnInit {
     '#5B6EF5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#64748B'
   ]
 
-  recentTransactions: RecentTx[] = [
-    {
-      description: 'Grocery Shopping',
-      category: 'Food',
-      amount: -85,
-      date: 'Today, 9:45 AM',
-      color: '#5B6EF5',
-      initials: 'GS',
-    },
-    {
-      description: 'Salary Deposit',
-      category: 'Income',
-      amount: 4100,
-      date: 'Today, 8:00 AM',
-      color: '#10B981',
-      initials: 'SD',
-    },
-    {
-      description: 'Uber Ride',
-      category: 'Transport',
-      amount: -24,
-      date: 'Yesterday, 6:30 PM',
-      color: '#F59E0B',
-      initials: 'UR',
-    },
-    {
-      description: 'Netflix Subscription',
-      category: 'Entertainment',
-      amount: -15,
-      date: 'Yesterday, 2:00 AM',
-      color: '#EF4444',
-      initials: 'NF',
-    },
-    {
-      description: 'Electricity Bill',
-      category: 'Utilities',
-      amount: -120,
-      date: '2 days ago',
-      color: '#8B5CF6',
-      initials: 'EB',
-    },
-  ];
-
   formatAmount(amount: number): string {
     return 'Rs ' + Math.abs(amount).toLocaleString('en-IN');
+  }
+
+  formatRelativeDate(date: string): string {
+    const txDate = new Date(date);
+    const today = new Date();
+    const msPerDay = 24 * 60 * 60 * 1000;
+
+    const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+    const diffDays = Math.round((startOfDay(today) - startOfDay(txDate)) / msPerDay);
+
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays > 1) return `${diffDays} days ago`;
+    return txDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
   }
 }

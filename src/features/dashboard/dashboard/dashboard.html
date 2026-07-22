@@ -31,6 +31,7 @@
         This Month
       </button>
       <button
+        (click)="handleTransactionModal(true)"
         class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all active:scale-95"
         style="
           background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%);
@@ -330,7 +331,7 @@
     </div>
 
     <div>
-      @for (tx of recentTransactions; track tx.description) {
+      @for (tx of recentTransactions(); track tx.id) {
         <div
           class="flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-slate-50"
           style="border-bottom: 1px solid #f8fafc"
@@ -380,13 +381,26 @@
             {{ tx.amount > 0 ? '+' : '' }}{{ formatAmount(tx.amount) }}
           </span>
         </div>
+      } @empty {
+        <p style="color: #94a3b8; font-size: 12px; text-align: center; margin: 24px 0">
+          No transactions yet.
+        </p>
       }
     </div>
   </div>
 </div>
 
 @if (budgetStatusModal()) {
-  <app-budget-status-modal 
+  <app-budget-status-modal
   (closemodal)="handleModal($event)"
   ></app-budget-status-modal>
+}
+
+@if (transactionModal()) {
+  <app-add-transaction-modal
+    [editData]="selectedTransaction()"
+    (closemodal)="handleTransactionModal($event)"
+    (transactionAdded)="refreshSummary()"
+    (transactionUpdated)="refreshSummary()"
+  ></app-add-transaction-modal>
 }
