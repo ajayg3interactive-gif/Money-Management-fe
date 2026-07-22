@@ -1,6 +1,6 @@
-import { NgClass } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ExpenseReport, Totals, Transaction, TransactionService } from '../../../core/services/transaction.service';
+import { ExpenseReport, SavingsRate, Totals, Transaction, TransactionService } from '../../../core/services/transaction.service';
 import { BudgetStatusModal } from "../budget-status-modal/budget-status-modal";
 import { AddTransactionModal } from "../../transactions/add-transaction-modal/add-transaction-modal";
 import { Budget, BudgetService } from '../../../core/services/budget.service';
@@ -28,7 +28,7 @@ interface RecentTx {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NgClass, BudgetStatusModal, AddTransactionModal],
+  imports: [NgClass, DecimalPipe, BudgetStatusModal, AddTransactionModal],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -41,6 +41,8 @@ export class Dashboard implements OnInit {
   totals = signal<Totals[]>([]);
 
   spendingPerMonth = signal<ExpenseReport[]>([]);
+
+  savingsRate = signal<SavingsRate>({ netIncome: 0, totalExpenses: 0, netSavings: 0, rate: 0 });
 
   budgets = signal<Budget[]>([]);
   categories = signal<Category[]>([]);
@@ -105,6 +107,9 @@ export class Dashboard implements OnInit {
     this.transactionService.getExpenseReport().subscribe(data => {
       this.spendingPerMonth.set(data)
     })
+    this.transactionService.getSavingsRate().subscribe(data => {
+      this.savingsRate.set(data)
+    })
     this.categoryService.getCategories().subscribe(data => {
       this.categories.set(data)
     })
@@ -143,6 +148,9 @@ export class Dashboard implements OnInit {
     this.transactionService.getExpenseReport().subscribe(data => {
       this.spendingPerMonth.set(data)
     })
+    this.transactionService.getSavingsRate().subscribe(data => {
+      this.savingsRate.set(data)
+    })
     this.loadTransactions();
   }
 
@@ -153,6 +161,10 @@ export class Dashboard implements OnInit {
   color = [
     '#5B6EF5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#64748B'
   ]
+
+  clampPercentage(value: number): number {
+    return Math.min(100, Math.max(0, value));
+  }
 
   formatAmount(amount: number): string {
     return 'Rs ' + Math.abs(amount).toLocaleString('en-IN');

@@ -43,6 +43,13 @@ export interface BudgetStatus {
     maximum: number
 }
 
+export interface SavingsRate {
+    netIncome: number,
+    totalExpenses: number,
+    netSavings: number,
+    rate: number
+}
+
 export interface ColumnGroup {
     [key: string]: TransactionColumn[];
 }
@@ -120,6 +127,31 @@ export class TransactionService {
             })
 
         )
+    }
+
+    getSavingsRate(): Observable<SavingsRate> {
+        return this.getTransactionsPermonth().pipe(
+            map(transactions => {
+
+                const totalIncome = transactions
+                    .filter(t => t.type === 'Income')
+                    .reduce((sum, t) => sum + t.amount, 0);
+
+                const billOrRentExpense = transactions
+                    .filter(t => t.type === 'Expense' && /bill|rent/i.test(t.category))
+                    .reduce((sum, t) => sum + t.amount, 0);
+
+                const totalExpenses = transactions
+                    .filter(t => t.type === 'Expense')
+                    .reduce((sum, t) => sum + t.amount, 0);
+
+                const netIncome = totalIncome - billOrRentExpense;
+                const netSavings = netIncome - totalExpenses;
+                const rate = netIncome > 0 ? (netSavings / netIncome) * 100 : 0;
+
+                return { netIncome, totalExpenses, netSavings, rate };
+            })
+        );
     }
 
     getExpenseReport(): Observable<ExpenseReport[]> {
