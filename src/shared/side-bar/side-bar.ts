@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -10,6 +11,21 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class SideBar {
   private sanitizer = inject(DomSanitizer);
+  protected authService = inject(AuthService);
+
+  protected initials(name: string | undefined): string {
+    if (!name) return '?';
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase();
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
 
   private icon(paths: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(
