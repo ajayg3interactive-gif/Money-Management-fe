@@ -3,7 +3,7 @@
   style="background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px)"
 >
   <div
-    class="w-full bg-white rounded-2xl overflow-hidden"
+    class="w-full bg-white rounded-2xl"
     style="max-width: 440px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18)"
   >
     <div
@@ -52,28 +52,14 @@
         >
           Category
         </label>
-        <select
-          [ngModel]="category()"
-          (ngModelChange)="category.set($event)"
-          style="
-            width: 100%;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 10px 12px;
-            font-size: 13.5px;
-            color: #334155;
-            background: #f8fafc;
-            outline: none;
-            cursor: pointer;
-            -webkit-appearance: none;
-            appearance: none;
-          "
-        >
-          <option value="" disabled selected>Select…</option>
-          @for (cat of categories(); track cat.value) {
-            <option [value]="cat.value">{{ cat.label }}</option>
-          }
-        </select>
+        <app-category-dropdown
+          [categories]="categories()"
+          [value]="category()"
+          [showEditIcon]="true"
+          [editableValues]="editableCategoryValues()"
+          (valueChange)="onCategorySelected($event)"
+          (edit)="onCategoryEdit($event)"
+        ></app-category-dropdown>
       </div>
       <div>
         <label
@@ -117,13 +103,6 @@
 
     </div>
     <div class="flex items-center gap-3 px-6 pb-6 pt-2">
-      <!-- <button
-        (click)="closeModal()"
-        class="flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-95"
-        style="border: 1.5px solid #e2e8f0; color: #475569; background: white"
-      >
-        Cancel
-      </button> -->
       <button
         class="flex-1 py-3 rounded-xl text-white text-sm font-semibold transition-all active:scale-95"
         style="

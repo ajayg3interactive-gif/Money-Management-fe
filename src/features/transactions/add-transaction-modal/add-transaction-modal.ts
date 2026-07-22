@@ -4,10 +4,11 @@ import { Transaction, TransactionService } from '../../../core/services/transact
 import { ToastService } from '../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../core/utils/api-error';
 import { Category, CategoryService } from '../../../core/services/category.service';
+import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
 
 @Component({
   selector: 'app-add-transaction-modal',
-  imports: [FormsModule],
+  imports: [FormsModule, CategoryDropdown],
   templateUrl: './add-transaction-modal.html',
   styleUrl: './add-transaction-modal.css',
 })

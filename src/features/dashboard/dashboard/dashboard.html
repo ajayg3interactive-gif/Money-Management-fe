@@ -277,114 +277,30 @@
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 14px">
-          <!-- Monthly -->
-          <div class="flex items-center gap-3">
-            <div
-              class="rounded-lg flex items-center justify-center shrink-0"
-              style="width: 34px; height: 34px; background: #eef0ff"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#5B6EF5"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-            </div>
-            <div class="flex-1">
-              <div class="flex justify-between items-center mb-1">
-                <span style="color: #64748b; font-size: 12px; font-weight: 500"
-                  >Monthly Budget</span
-                >
-                <span style="color: #1e293b; font-size: 11px; font-weight: 600"
-                  >Rs 5,000 / 6,000</span
-                >
-              </div>
-              <div class="rounded-full overflow-hidden" style="height: 5px; background: #f1f5f9">
-                <div class="h-full rounded-full" style="width: 83%; background: #f59e0b"></div>
+          @for (item of budgetStatusList(); track item.id) {
+            <div class="flex items-center gap-3">
+              <div class="rounded-full shrink-0" [style.background]="item.color" style="width: 8px; height: 8px; margin: 0 13px"></div>
+              <div class="flex-1">
+                <div class="flex justify-between items-center mb-1">
+                  <span style="color: #64748b; font-size: 12px; font-weight: 500">{{ item.label }}</span>
+                  <span style="color: #1e293b; font-size: 11px; font-weight: 600"
+                    >{{ formatAmount(item.spend) }} / {{ formatAmount(item.maximum) }}</span
+                  >
+                </div>
+                <div class="rounded-full overflow-hidden" style="height: 5px; background: #f1f5f9">
+                  <div
+                    class="h-full rounded-full"
+                    [style.width.%]="item.percentage"
+                    [style.background]="item.color"
+                  ></div>
+                </div>
               </div>
             </div>
-          </div>
-
-          <!-- Food -->
-          <div class="flex items-center gap-3">
-            <div
-              class="rounded-lg flex items-center justify-center shrink-0"
-              style="width: 34px; height: 34px; background: #ecfdf5"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#10B981"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
-                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
-                <line x1="6" y1="1" x2="6" y2="4" />
-                <line x1="10" y1="1" x2="10" y2="4" />
-                <line x1="14" y1="1" x2="14" y2="4" />
-              </svg>
-            </div>
-            <div class="flex-1">
-              <div class="flex justify-between items-center mb-1">
-                <span style="color: #64748b; font-size: 12px; font-weight: 500">Food Budget</span>
-                <span style="color: #1e293b; font-size: 11px; font-weight: 600"
-                  >Rp 1,200 / 1,500</span
-                >
-              </div>
-              <div class="rounded-full overflow-hidden" style="height: 5px; background: #f1f5f9">
-                <div class="h-full rounded-full" style="width: 80%; background: #10b981"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Transport -->
-          <div class="flex items-center gap-3">
-            <div
-              class="rounded-lg flex items-center justify-center shrink-0"
-              style="width: 34px; height: 34px; background: #fff7ed"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#F59E0B"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="1" y="3" width="15" height="13" rx="1" />
-                <path d="M16 8h4l3 5v3h-7V8z" />
-                <circle cx="5.5" cy="18.5" r="2.5" />
-                <circle cx="18.5" cy="18.5" r="2.5" />
-              </svg>
-            </div>
-            <div class="flex-1">
-              <div class="flex justify-between items-center mb-1">
-                <span style="color: #64748b; font-size: 12px; font-weight: 500">Transport</span>
-                <span style="color: #1e293b; font-size: 11px; font-weight: 600"
-                  >Rp 850 / 1,000</span
-                >
-              </div>
-              <div class="rounded-full overflow-hidden" style="height: 5px; background: #f1f5f9">
-                <div class="h-full rounded-full" style="width: 85%; background: #f59e0b"></div>
-              </div>
-            </div>
-          </div>
+          } @empty {
+            <p style="color: #94a3b8; font-size: 12px; text-align: center; margin: 8px 0">
+              No budgets added yet. Click "On Track" to add one.
+            </p>
+          }
         </div>
       </div>
     </div>

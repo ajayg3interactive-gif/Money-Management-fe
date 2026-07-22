@@ -1,7 +1,18 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { BudgetStatus, ExpenseReport, Totals, TransactionService } from '../../../core/services/transaction.service';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ExpenseReport, Totals, TransactionService } from '../../../core/services/transaction.service';
 import { BudgetStatusModal } from "../budget-status-modal/budget-status-modal";
+import { Budget, BudgetService } from '../../../core/services/budget.service';
+import { Category, CategoryService } from '../../../core/services/category.service';
+
+interface BudgetStatusRow {
+  id: string;
+  label: string;
+  spend: number;
+  maximum: number;
+  percentage: number;
+  color: string;
+}
 
 
 interface RecentTx {
@@ -22,14 +33,35 @@ interface RecentTx {
 export class Dashboard implements OnInit {
 
   private transactionService = inject(TransactionService)
+  private budgetService = inject(BudgetService);
+  private categoryService = inject(CategoryService);
 
   totals = signal<Totals[]>([]);
 
   spendingPerMonth = signal<ExpenseReport[]>([]);
 
-  budgetStatusPerMonth = signal<BudgetStatus[]>([]);
+  budgets = signal<Budget[]>([]);
+  categories = signal<Category[]>([]);
 
   budgetStatusModal = signal(false) ;
+
+  budgetStatusList = computed<BudgetStatusRow[]>(() => {
+    const spendByCategory = new Map(this.spendingPerMonth().map(s => [s.label, s.total]));
+
+    return this.budgets().map((budget, index) => {
+      const categoryInfo = this.categories().find(c => c.value === budget.category);
+      const spend = spendByCategory.get(budget.category) ?? 0;
+
+      return {
+        id: budget.id ?? budget.category,
+        label: categoryInfo ? categoryInfo.label : budget.category,
+        spend,
+        maximum: budget.maximum,
+        percentage: budget.maximum > 0 ? Math.min(100, (spend / budget.maximum) * 100) : 0,
+        color: this.color[index % this.color.length],
+      };
+    });
+  });
 
   ngOnInit() {
     this.transactionService.getTotals().subscribe(data => {
@@ -38,15 +70,23 @@ export class Dashboard implements OnInit {
     this.transactionService.getExpenseReport().subscribe(data => {
       this.spendingPerMonth.set(data)
     })
+    this.categoryService.getCategories().subscribe(data => {
+      this.categories.set(data)
+    })
+    this.loadBudgets();
+  }
 
-    this.transactionService.getBudgetStatus().subscribe(data => {
-      this.budgetStatusPerMonth.set(data)
-      // console.log(data)
+  loadBudgets() {
+    this.budgetService.getBudgets().subscribe(data => {
+      this.budgets.set(data)
     })
   }
 
   handleModal(open: boolean) {
     this.budgetStatusModal.set(open);
+    if (!open) {
+      this.loadBudgets();
+    }
   }
 
   now = new Date();

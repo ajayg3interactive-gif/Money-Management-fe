@@ -5,7 +5,7 @@
 >
   <!-- Modal -->
   <div
-    class="w-full bg-white rounded-2xl overflow-hidden"
+    class="w-full bg-white rounded-2xl"
     style="max-width: 440px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18)"
   >
     <!-- Header -->
@@ -128,28 +128,11 @@
           >
             Category
           </label>
-          <select
-            [ngModel]="category()"
-            (ngModelChange)="category.set($event)"
-            style="
-              width: 100%;
-              border: 1.5px solid #e2e8f0;
-              border-radius: 12px;
-              padding: 10px 12px;
-              font-size: 13.5px;
-              color: #334155;
-              background: #f8fafc;
-              outline: none;
-              cursor: pointer;
-              -webkit-appearance: none;
-              appearance: none;
-            "
-          >
-            <option value="" disabled selected>Select…</option>
-            @for (cat of categories(); track cat.value) {
-              <option [value]="cat.value">{{ cat.label }}</option>
-            }
-          </select>
+          <app-category-dropdown
+            [categories]="categories()"
+            [value]="category()"
+            (valueChange)="category.set($event)"
+          ></app-category-dropdown>
         </div>
         <div>
           <label
