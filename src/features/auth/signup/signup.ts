@@ -48,7 +48,7 @@ export class Signup {
 
   fieldClass(controlName: string, hasPaddingRight = false): string {
     const ctrl = this.signupForm.get(controlName)!;
-    const base = `w-full pl-10 ${hasPaddingRight ? 'pr-10' : 'pr-4'} py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all duration-200`;
+    const base = `w-full pl-10 ${hasPaddingRight ? 'pr-10' : 'pr-4'} py-3 border rounded-xl text-sm focus:outline-none focus:ring-2`;
     return ctrl.invalid && ctrl.touched
       ? `${base} border-red-300 bg-red-50 focus:ring-red-200`
       : `${base} border-gray-200 focus:border-indigo-400 focus:ring-indigo-100 bg-white`;
