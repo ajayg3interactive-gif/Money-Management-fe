@@ -3,12 +3,13 @@ import { SideBar } from "../shared/side-bar/side-bar";
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ToastComponent } from '../shared/toast/toast';
 
 const AUTH_ROUTES = ['/login', '/signup'];
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SideBar],
+  imports: [RouterOutlet, SideBar, ToastComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

@@ -9,6 +9,8 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { extractErrorMessage } from '../../../core/utils/api-error';
 
 function passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
   const pass = group.get('password')?.value;
@@ -25,6 +27,7 @@ export class Signup {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private authService = inject(AuthService);
+  private toast = inject(ToastService);
 
   signupForm: FormGroup = this.fb.group(
     {
@@ -36,7 +39,6 @@ export class Signup {
     { validators: passwordMatchValidator }
   );
 
-  message: { type: 'success' | 'error'; text: string } | null = null;
   showPassword = false;
   showConfirmPassword = false;
   isSubmitting = false;
@@ -61,7 +63,6 @@ export class Signup {
     }
 
     this.isSubmitting = true;
-    this.message = null;
 
     const { name, email, password } = this.signupForm.value as {
       name: string; email: string; password: string;
@@ -69,14 +70,11 @@ export class Signup {
 
     this.authService.register(name, email, password).subscribe({
       next: () => {
-        this.message = { type: 'success', text: 'Account created! Redirecting to sign-in…' };
-        setTimeout(() => this.router.navigate(['/login']), 1500);
+        this.toast.success('Account created! Redirecting to sign in…');
+        this.router.navigate(['/login']);
       },
       error: (err) => {
-        this.message = {
-          type: 'error',
-          text: err?.error?.error ?? 'Could not create account. Please try again.',
-        };
+        this.toast.error(extractErrorMessage(err, 'Could not create account. Please try again.'));
         this.isSubmitting = false;
       },
     });

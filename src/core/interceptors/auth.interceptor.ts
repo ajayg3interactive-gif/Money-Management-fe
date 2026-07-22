@@ -4,6 +4,7 @@ import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 const API_ORIGIN = 'http://localhost:3000';
+const AUTH_FLOW_ENDPOINTS = ['/api/auth/login', '/api/auth/register', '/api/auth/me'];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (!req.url.startsWith(API_ORIGIN)) {
@@ -15,8 +16,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authedReq).pipe(
     catchError((err: unknown) => {
-      const isAuthCheck = req.url.endsWith('/api/auth/me');
-      if (err instanceof HttpErrorResponse && err.status === 401 && !isAuthCheck) {
+      const isAuthFlowRequest = AUTH_FLOW_ENDPOINTS.some(path => req.url.endsWith(path));
+      if (err instanceof HttpErrorResponse && err.status === 401 && !isAuthFlowRequest) {
         authService.handleUnauthorized();
       }
       return throwError(() => err);

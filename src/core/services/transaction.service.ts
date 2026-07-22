@@ -219,7 +219,9 @@ export class TransactionService {
     }
 
     addTransaction(transaction: Transaction): Observable<Transaction> {
-        return this.http.post<Transaction>(this.apiUrl + "/transaction", transaction)
+        return this.http
+            .post<{ success: true; data: Transaction }>(this.apiUrl + "/transaction", transaction)
+            .pipe(map(res => res.data));
     }
 
     updateTransaction(id: number, transaction: Transaction): Observable<Transaction> {

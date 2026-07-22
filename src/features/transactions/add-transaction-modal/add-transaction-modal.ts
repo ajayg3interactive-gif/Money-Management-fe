@@ -1,6 +1,8 @@
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Transaction, TransactionService } from '../../../core/services/transaction.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { extractErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   selector: 'app-add-transaction-modal',
@@ -10,6 +12,7 @@ import { Transaction, TransactionService } from '../../../core/services/transact
 })
 export class AddTransactionModal {
   private transactionService = inject(TransactionService);
+  private toast = inject(ToastService);
 
   @Input() editData: Transaction | null = null;
   @Output() closemodal = new EventEmitter();
@@ -73,10 +76,11 @@ export class AddTransactionModal {
       // ← ADD new
       this.transactionService.addTransaction(transaction).subscribe({
         next: (saved) => {
+          this.toast.success('Transaction added successfully.');
           this.transactionAdded.emit(saved);
           this.closeModal();
         },
-        error: (err) => console.error('Failed to save:', err)
+        error: (err) => this.toast.error(extractErrorMessage(err, 'Could not save transaction. Please try again.'))
       });
     }
   }

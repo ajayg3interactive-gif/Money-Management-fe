@@ -1,7 +1,8 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, catchError, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
+import { ToastService } from './toast.service';
 
 export interface AuthUser {
     id: string;
@@ -9,10 +10,16 @@ export interface AuthUser {
     email: string;
 }
 
+interface ApiSuccess<T> {
+    success: true;
+    data: T;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     private http = inject(HttpClient);
     private router = inject(Router);
+    private toast = inject(ToastService);
     private apiUrl = 'http://localhost:3000/api/auth';
 
     private _currentUser = signal<AuthUser | null>(null);
@@ -25,14 +32,20 @@ export class AuthService {
 
     register(name: string, email: string, password: string): Observable<AuthUser> {
         return this.http
-            .post<AuthUser>(`${this.apiUrl}/register`, { name, email, password }, { withCredentials: true })
-            .pipe(tap(user => this._currentUser.set(user)));
+            .post<ApiSuccess<AuthUser>>(`${this.apiUrl}/register`, { name, email, password }, { withCredentials: true })
+            .pipe(
+                map(res => res.data),
+                tap(user => this._currentUser.set(user))
+            );
     }
 
     login(email: string, password: string): Observable<AuthUser> {
         return this.http
-            .post<AuthUser>(`${this.apiUrl}/login`, { email, password }, { withCredentials: true })
-            .pipe(tap(user => this._currentUser.set(user)));
+            .post<ApiSuccess<AuthUser>>(`${this.apiUrl}/login`, { email, password }, { withCredentials: true })
+            .pipe(
+                map(res => res.data),
+                tap(user => this._currentUser.set(user))
+            );
     }
 
     logout(): void {
@@ -44,7 +57,8 @@ export class AuthService {
 
     /** Asks the server whether the httpOnly session cookie is still valid. Call once on app start. */
     fetchCurrentUser(): Observable<AuthUser | null> {
-        return this.http.get<AuthUser>(`${this.apiUrl}/me`, { withCredentials: true }).pipe(
+        return this.http.get<ApiSuccess<AuthUser>>(`${this.apiUrl}/me`, { withCredentials: true }).pipe(
+            map(res => res.data),
             tap(user => {
                 this._currentUser.set(user);
                 this._resolved.set(true);
@@ -66,6 +80,7 @@ export class AuthService {
 
     private finishLogout(): void {
         this._currentUser.set(null);
+        this.toast.success('Logged out successfully.');
         this.router.navigate(['/login']);
     }
 }
