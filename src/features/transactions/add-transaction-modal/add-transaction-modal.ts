@@ -1,8 +1,9 @@
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Transaction, TransactionService } from '../../../core/services/transaction.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../core/utils/api-error';
+import { Category, CategoryService } from '../../../core/services/category.service';
 
 @Component({
   selector: 'app-add-transaction-modal',
@@ -10,9 +11,10 @@ import { extractErrorMessage } from '../../../core/utils/api-error';
   templateUrl: './add-transaction-modal.html',
   styleUrl: './add-transaction-modal.css',
 })
-export class AddTransactionModal {
+export class AddTransactionModal implements OnInit {
   private transactionService = inject(TransactionService);
   private toast = inject(ToastService);
+  private categoryService = inject(CategoryService);
 
   @Input() editData: Transaction | null = null;
   @Output() closemodal = new EventEmitter();
@@ -25,6 +27,13 @@ export class AddTransactionModal {
   category = signal('');
   date = signal('');
   description = signal('');
+  categories = signal<Category[]>([]);
+
+  ngOnInit() {
+    this.categoryService.getCategories().subscribe(categories => {
+      this.categories.set(categories);
+    });
+  }
 
   ngOnChanges() {
     if (this.editData) {

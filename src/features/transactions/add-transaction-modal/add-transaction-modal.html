@@ -146,14 +146,9 @@
             "
           >
             <option value="" disabled selected>Select…</option>
-            <option value="food">Food &amp; Dining</option>
-            <option value="transport">Transport</option>
-            <option value="bill">Bills/Rent</option>
-            <option value="salary">Salary</option>
-            <option value="shopping">Shopping</option>
-            <option value="entertainment">Entertainment</option>
-            <option value="health">Health</option>
-            <option value="other">Other</option>
+            @for (cat of categories(); track cat.value) {
+              <option [value]="cat.value">{{ cat.label }}</option>
+            }
           </select>
         </div>
         <div>

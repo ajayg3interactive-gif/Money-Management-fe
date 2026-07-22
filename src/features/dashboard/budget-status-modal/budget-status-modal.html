@@ -1,0 +1,139 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center p-4"
+  style="background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px)"
+>
+  <div
+    class="w-full bg-white rounded-2xl overflow-hidden"
+    style="max-width: 440px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18)"
+  >
+    <div
+      class="flex items-center justify-between px-6 py-5"
+      style="border-bottom: 1px solid #f1f5f9"
+    >
+      <div>
+        <h2 style="color: #0f172a; font-size: 17px; font-weight: 700; margin: 0 0 3px">
+          Add Budgets
+        </h2>
+        <p style="color: #94a3b8; font-size: 12px; margin: 0">Record a new budget</p>
+      </div>
+      <button
+        (click)="closeModal()"
+        class="flex items-center justify-center rounded-full transition-all"
+        style="width: 32px; height: 32px; color: #94a3b8; background: transparent"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="px-6 pt-5 pb-2" style="display: flex; flex-direction: column; gap: 16px">
+      <div>
+        <label
+          style="
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+          "
+        >
+          Category
+        </label>
+        <select
+          [ngModel]="category()"
+          (ngModelChange)="category.set($event)"
+          style="
+            width: 100%;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 13.5px;
+            color: #334155;
+            background: #f8fafc;
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+          "
+        >
+          <option value="" disabled selected>Select…</option>
+          @for (cat of categories(); track cat.value) {
+            <option [value]="cat.value">{{ cat.label }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label
+          style="
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+          "
+        >
+          Maximum Amount
+        </label>
+        <div
+          class="flex items-center gap-2 rounded-xl px-4 py-3 transition-all"
+          style="border: 1.5px solid #e2e8f0; background: #f8fafc"
+        >
+          <span style="color: #94a3b8; font-size: 14px; font-weight: 600; user-select: none"
+            >&#8377;</span
+          >
+          <input
+            type="number"
+            placeholder="0"
+            class="no-spinner"
+            [ngModel]="amount()"
+            (ngModelChange)="amount.set($event)"
+            style="
+              flex: 1;
+              background: transparent;
+              border: none;
+              outline: none;
+              font-size: 22px;
+              font-weight: 700;
+              color: #1e293b;
+            "
+          />
+        </div>
+      </div>
+
+    </div>
+    <div class="flex items-center gap-3 px-6 pb-6 pt-2">
+      <!-- <button
+        (click)="closeModal()"
+        class="flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-95"
+        style="border: 1.5px solid #e2e8f0; color: #475569; background: white"
+      >
+        Cancel
+      </button> -->
+      <button
+        class="flex-1 py-3 rounded-xl text-white text-sm font-semibold transition-all active:scale-95"
+        style="
+          background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%);
+          box-shadow: 0 2px 8px rgba(91, 110, 245, 0.35);
+        "
+        (click)="handleSave()"
+      >
+         Save 
+      </button>
+    </div>
+  </div>
+</div>

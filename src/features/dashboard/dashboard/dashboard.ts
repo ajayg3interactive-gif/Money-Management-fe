@@ -1,6 +1,7 @@
 import { NgClass } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { BudgetStatus, ExpenseReport, Totals, TransactionService } from '../../../core/services/transaction.service';
+import { BudgetStatusModal } from "../budget-status-modal/budget-status-modal";
 
 
 interface RecentTx {
@@ -14,7 +15,7 @@ interface RecentTx {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NgClass],
+  imports: [NgClass, BudgetStatusModal],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -28,7 +29,7 @@ export class Dashboard implements OnInit {
 
   budgetStatusPerMonth = signal<BudgetStatus[]>([]);
 
-
+  budgetStatusModal = signal(false) ;
 
   ngOnInit() {
     this.transactionService.getTotals().subscribe(data => {
@@ -40,8 +41,12 @@ export class Dashboard implements OnInit {
 
     this.transactionService.getBudgetStatus().subscribe(data => {
       this.budgetStatusPerMonth.set(data)
-      console.log(data)
+      // console.log(data)
     })
+  }
+
+  handleModal(open: boolean) {
+    this.budgetStatusModal.set(open);
   }
 
   now = new Date();

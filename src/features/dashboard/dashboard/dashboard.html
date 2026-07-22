@@ -261,7 +261,7 @@
       >
         <div class="flex items-center justify-between mb-4">
           <p style="color: #1e293b; font-size: 14px; font-weight: 600">Budget Status</p>
-          <span
+          <button
             style="
               color: #d97706;
               background: #fef3c7;
@@ -270,9 +270,10 @@
               padding: 2px 10px;
               border-radius: 99px;
             "
+            (click)="handleModal(true)"
           >
             On Track
-          </span>
+        </button>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 14px">
@@ -303,7 +304,7 @@
                   >Monthly Budget</span
                 >
                 <span style="color: #1e293b; font-size: 11px; font-weight: 600"
-                  >Rp 5,000 / 6,000</span
+                  >Rs 5,000 / 6,000</span
                 >
               </div>
               <div class="rounded-full overflow-hidden" style="height: 5px; background: #f1f5f9">
@@ -467,3 +468,9 @@
     </div>
   </div>
 </div>
+
+@if (budgetStatusModal()) {
+  <app-budget-status-modal 
+  (closemodal)="handleModal($event)"
+  ></app-budget-status-modal>
+}
