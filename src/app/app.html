@@ -1,6 +1,10 @@
-<div class="flex overflow-hidden" style="height: 100vh; background: #F1F5F9">
-  <app-side-bar></app-side-bar>
-  <main class="flex-1 overflow-y-auto" style="background: #F1F5F9">
-    <router-outlet></router-outlet>
-  </main>
-</div>
+@if (isAuthRoute()) {
+  <router-outlet></router-outlet>
+} @else {
+  <div class="flex overflow-hidden" style="height: 100vh; background: #F1F5F9">
+    <app-side-bar></app-side-bar>
+    <main class="flex-1 overflow-y-auto" style="background: #F1F5F9">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+}

@@ -133,7 +133,7 @@
     style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
   >
     <app-table [columns]="columns()" [rows]="filteredRows()" (editRow)="onEditRow($event)"
-     /* (deleteRow)="onDeleteRow($event)" */
+     (deleteRow)="onDeleteRow($event)"
      ></app-table>
   </div>
 </div>
