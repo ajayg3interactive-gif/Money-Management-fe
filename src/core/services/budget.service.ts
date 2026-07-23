@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
+import { environment } from "../../environments/environment";
 
 export interface Budget {
     id?: string;
@@ -11,7 +12,7 @@ export interface Budget {
 @Injectable({ providedIn: 'root' })
 export class BudgetService {
     private http = inject(HttpClient);
-    private apiUrl = 'http://localhost:3000/api/budgets';
+    private apiUrl = environment.apiOrigin + '/api/budgets';
 
     getBudgets(): Observable<Budget[]> {
         return this.http.get<{ success: true; data: Budget[] }>(this.apiUrl)

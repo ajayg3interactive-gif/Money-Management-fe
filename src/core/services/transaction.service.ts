@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
+import { environment } from "../../environments/environment";
 
 export interface Transaction {
     id?: number;
@@ -57,7 +58,7 @@ export interface ColumnGroup {
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
     private http = inject(HttpClient);
-    private apiUrl = 'http://localhost:3000/api/transactions';
+    private apiUrl = environment.apiOrigin + '/api/transactions';
 
     now = new Date();
     currentMonth = this.now.getMonth();

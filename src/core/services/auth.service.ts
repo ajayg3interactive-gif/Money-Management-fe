@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import { ToastService } from './toast.service';
+import { environment } from '../../environments/environment';
 
 export interface AuthUser {
     id: string;
@@ -20,7 +21,7 @@ export class AuthService {
     private http = inject(HttpClient);
     private router = inject(Router);
     private toast = inject(ToastService);
-    private apiUrl = 'http://localhost:3000/api/auth';
+    private apiUrl = environment.apiOrigin + '/api/auth';
 
     private _currentUser = signal<AuthUser | null>(null);
     private _resolved = signal(false);

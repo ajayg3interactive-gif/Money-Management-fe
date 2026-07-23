@@ -4,8 +4,8 @@
     <tr style="border-bottom: 1px solid #f1f5f9">
       @for (col of sortedColumns; track col.key) {
         <th
+        [style.text-align]="col.key === 'action' ? 'center' : 'left'"
           style="
-            text-align: left;
             padding: 14px 20px;
             font-size: 11px;
             font-weight: 600;
@@ -31,7 +31,7 @@
         @for (col of sortedColumns; track col.key) {
           <td style="padding: 14px 20px; vertical-align: middle">
             @if (col.key === 'action') {
-              <div class="row-actions flex items-center gap-2">
+              <div class="row-actions flex items-center justify-center gap-2">
                 <button
                   class="flex items-center gap-1.5 rounded-lg text-xs font-semibold transition-colors"
                   (click)="editRow.emit(row)"
@@ -87,7 +87,7 @@
               </span>
             } @else if (col.key === 'amount') {
               <span style="font-size: 13.5px; font-weight: 700; color: #1e293b">
-                Rp {{ getCellValue(row, col.key) }}
+                Rs {{ getCellValue(row, col.key) }}
               </span>
             } @else if (col.key === 'date') {
               <span style="font-size: 13px; color: #64748b">
@@ -95,7 +95,7 @@
               </span>
             } @else {
               <span style="font-size: 13.5px; color: #334155; font-weight: 500">
-                {{ getCellValue(row, col.key) }}
+                {{ getCellValue(row, col.key) }} 
               </span>
             }
           </td>

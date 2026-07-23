@@ -18,6 +18,6 @@ export class Table {
   }
 
   getCellValue(row: Record<string, any>, key: string): any {
-    return row[key];
+    return row[key] || "-";
   }
 }

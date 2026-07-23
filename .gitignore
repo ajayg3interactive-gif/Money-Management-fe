@@ -48,6 +48,9 @@ Thumbs.db
 .env.test.local
 .env.production.local
 
+# Auto-generated from .env, see scripts/generate-env.js
+src/environments/environment.ts
+
 # Logs
 logs
 *.log

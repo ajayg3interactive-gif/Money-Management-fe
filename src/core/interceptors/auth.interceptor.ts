@@ -2,8 +2,9 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { environment } from '../../environments/environment';
 
-const API_ORIGIN = 'http://localhost:3000';
+const API_ORIGIN = environment.apiOrigin;
 const AUTH_FLOW_ENDPOINTS = ['/api/auth/login', '/api/auth/register', '/api/auth/me'];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {

@@ -1,0 +1,172 @@
+<div class="p-6" style="min-height: 100vh; background: #f1f5f9">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <p style="color: #64748b; font-size: 13px">Recurring &amp; Scheduled</p>
+      <h1 style="color: #0f172a; font-size: 24px; font-weight: 700; margin: 2px 0 0">Plan</h1>
+    </div>
+    <div class="flex items-center gap-3 bg-white rounded-xl px-2 py-2" style="border: 1px solid #e2e8f0">
+      <button
+        (click)="prevMonth()"
+        class="flex items-center justify-center rounded-lg transition-all"
+        style="width: 30px; height: 30px; color: #475569"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </button>
+      <span style="color: #1e293b; font-size: 13.5px; font-weight: 600; min-width: 140px; text-align: center">
+        {{ monthLabel() }}
+      </span>
+      <button
+        (click)="nextMonth()"
+        class="flex items-center justify-center rounded-lg transition-all"
+        style="width: 30px; height: 30px; color: #475569"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-5 lg:grid-cols-4">
+    <!-- Calendar (3/4) -->
+    <div
+      class="lg:col-span-3 bg-white rounded-2xl p-5"
+      style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
+    >
+      <!-- Weekday header -->
+      <div class="grid grid-cols-7 mb-2">
+        @for (wd of weekDays; track wd) {
+          <div style="color: #94a3b8; font-size: 11px; font-weight: 600; text-align: center; padding: 6px 0">
+            {{ wd }}
+          </div>
+        }
+      </div>
+
+      <!-- Day cells -->
+      <div class="grid grid-cols-7 gap-1.5">
+        @for (cell of calendarCells(); track $index) {
+          @if (cell) {
+            <div
+              (click)="openAddModal(cell.date)"
+              class="rounded-xl p-2 transition-all cursor-pointer"
+              [style.background]="cell.isToday ? '#eef0ff' : '#f8fafc'"
+              [style.border]="cell.isToday ? '1.5px solid #5b6ef5' : '1px solid #f1f5f9'"
+              style="min-height: 88px; display: flex; flex-direction: column; gap: 4px"
+            >
+              <span
+                style="font-size: 12px; font-weight: 600"
+                [style.color]="cell.isToday ? '#5b6ef5' : '#334155'"
+              >
+                {{ cell.day }}
+              </span>
+              <div style="display: flex; flex-direction: column; gap: 3px; overflow: hidden">
+                @for (occ of cell.occurrences.slice(0, 3); track occ.ruleId) {
+                  <span
+                    (click)="toggleHold(occ, $event)"
+                    class="truncate"
+                    style="
+                      font-size: 10px;
+                      font-weight: 600;
+                      padding: 2px 6px;
+                      border-radius: 99px;
+                      color: #fff;
+                      cursor: pointer;
+                    "
+                    [style.background]="statusColor(occ.status)"
+                    [title]="occ.description || occ.category"
+                  >
+                    {{ formatAmount(occ.amount) }}
+                  </span>
+                }
+                @if (cell.occurrences.length > 3) {
+                  <span style="font-size: 10px; color: #94a3b8">+{{ cell.occurrences.length - 3 }} more</span>
+                }
+              </div>
+            </div>
+          } @else {
+            <div></div>
+          }
+        }
+      </div>
+
+      <!-- Legend -->
+      <div class="flex items-center gap-4 mt-4" style="font-size: 11px; color: #64748b">
+        <span class="flex items-center gap-1.5">
+          <span class="rounded-full" style="width: 8px; height: 8px; background: #5b6ef5"></span>
+          Pending
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="rounded-full" style="width: 8px; height: 8px; background: #f59e0b"></span>
+          Held
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="rounded-full" style="width: 8px; height: 8px; background: #10b981"></span>
+          Posted
+        </span>
+        <span style="color: #cbd5e1">&middot;</span>
+        <span>Click a date to add an auto transaction. Click a badge to hold/unhold it.</span>
+      </div>
+    </div>
+
+    <!-- Rules list (1/4) -->
+    <div
+      class="bg-white rounded-2xl p-5"
+      style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
+    >
+      <h2 style="color: #0f172a; font-size: 15px; font-weight: 600; margin: 0 0 12px">
+        Auto Transactions
+      </h2>
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        @for (rule of rules(); track rule.id) {
+          <div class="rounded-xl p-3" style="border: 1px solid #f1f5f9; background: #f8fafc">
+            <div class="flex items-center justify-between mb-1">
+              <span style="color: #1e293b; font-size: 12.5px; font-weight: 600">
+                {{ formatAmount(rule.amount) }}
+              </span>
+              <button
+                (click)="toggleRuleActive(rule)"
+                class="rounded-full transition-all"
+                style="font-size: 10px; font-weight: 600; padding: 2px 8px"
+                [style.color]="rule.active ? '#059669' : '#94a3b8'"
+                [style.background]="rule.active ? '#d1fae5' : '#f1f5f9'"
+              >
+                {{ rule.active ? 'Active' : 'Paused' }}
+              </button>
+            </div>
+            <p style="color: #64748b; font-size: 11.5px; margin: 0 0 2px; text-transform: capitalize">
+              {{ rule.category }} &middot; {{ rule.type }}
+            </p>
+            <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px">
+              @if (rule.frequency === 'monthly-same-day') {
+                Monthly on day {{ rule.startDate.slice(8, 10) }}
+              } @else {
+                Every {{ rule.interval }} days
+              }
+            </p>
+            <button
+              (click)="deleteRule(rule)"
+              style="color: #ef4444; font-size: 11px; font-weight: 600; background: transparent"
+            >
+              Remove
+            </button>
+          </div>
+        } @empty {
+          <p style="color: #94a3b8; font-size: 12px; text-align: center; margin: 12px 0">
+            No auto transactions yet. Click a date on the calendar to add one.
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (addModalOpen()) {
+  <app-add-recurring-modal
+    [startDate]="selectedDate()"
+    (closemodal)="closeAddModal()"
+    (ruleAdded)="onRuleAdded()"
+  ></app-add-recurring-modal>
+}
