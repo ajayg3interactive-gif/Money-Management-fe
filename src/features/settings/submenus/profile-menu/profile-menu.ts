@@ -4,10 +4,11 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../../core/utils/api-error';
 import { environment } from '../../../../environments/environment';
+import { IconComponent } from "../../../../icons.component";
 
 @Component({
   selector: 'profile-menu',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, IconComponent],
   templateUrl: './profile-menu.html',
   styleUrl: './profile-menu.css',
 })
