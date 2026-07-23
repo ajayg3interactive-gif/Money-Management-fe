@@ -4,7 +4,7 @@ import { ProfileMenu } from "./submenus/profile-menu/profile-menu";
 import { NgComponentOutlet } from '@angular/common';
 import { CurrentBalanceMenu } from './submenus/current-balance-menu/current-balance-menu';
 import { SecurityMenu } from './submenus/security-menu/security-menu';
-import { IconComponent, IconName } from "../../icons.component";
+import { IconComponent, IconName } from "../../shared/icons/icons.component";
 
 @Component({
   selector: 'app-settings',

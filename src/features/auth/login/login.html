@@ -1,15 +1,12 @@
-<div class="auth-flip-stage min-h-screen flex items-center justify-center p-4" style="background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%)">
+<div class="auth-flip-stage min-h-screen flex items-center justify-center p-4"
+  style="background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%)">
   <div class="auth-flip-card bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
 
     <!-- Header -->
     <div class="text-center mb-8">
       <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-           style="background: linear-gradient(135deg, #5B6EF5 0%, #8B5CF6 100%)">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-             fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="1" x2="12" y2="23" />
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-        </svg>
+        style="background: linear-gradient(135deg, #5B6EF5 0%, #8B5CF6 100%)">
+        <app-icon name="dollarIcon" [size]="20" class="text-white" />
       </div>
       <h1 class="text-2xl font-bold text-gray-800">Welcome Back</h1>
       <p class="text-gray-500 mt-1 text-sm">Sign in to FinTrack</p>
@@ -22,35 +19,22 @@
         <label class="block text-sm font-medium text-gray-700 mb-1.5" for="email">Email Address</label>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
+            <app-icon name="mail" class="text-gray-400" [size]="19" />
           </div>
-          <input id="email" type="email" formControlName="email"
-                 placeholder="you@example.com"
-                 [class]="fieldClass('email')" />
+          <input id="email" type="email" formControlName="email" placeholder="you@example.com"
+            [class]="fieldClass('email')" />
         </div>
         @if (email.touched && email.hasError('required')) {
-          <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Email is required.
-          </p>
+        <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+          <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
+          Email is required.
+        </p>
         }
         @if (email.touched && email.hasError('email')) {
-          <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Please enter a valid email address.
-          </p>
+        <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+          <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
+          Please enter a valid email address.
+        </p>
         }
       </div>
 
@@ -59,79 +43,51 @@
         <label class="block text-sm font-medium text-gray-700 mb-1.5" for="password">Password</label>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
+            <app-icon name="lockIcon" class="text-gray-400" [size]="20" />
           </div>
-          <input id="password" [type]="showPassword ? 'text' : 'password'"
-                 formControlName="password" placeholder="Min. 6 characters"
-                 [class]="fieldClass('password', true)" />
+          <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
+            placeholder="Min. 6 characters" [class]="fieldClass('password', true)" />
           <button type="button" (click)="togglePassword()"
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
-                  [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
             @if (showPassword) {
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-              </svg>
+            <app-icon name="eyeCloseIcon" />
             } @else {
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
+            <app-icon name="eyeOpenIcon" />
             }
           </button>
         </div>
         @if (password.touched && password.hasError('required')) {
-          <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Password is required.
-          </p>
+        <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+          <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
+          Password is required.
+        </p>
         }
         @if (password.touched && password.hasError('minlength')) {
-          <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Password must be at least 6 characters.
-          </p>
+        <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+          <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
+          Password must be at least 6 characters.
+        </p>
         }
       </div>
 
       <!-- Forgot password -->
       <div class="flex justify-end mb-6">
         <button type="button"
-                class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors hover:underline">
-          Forgot password?
+          class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors hover:underline">
+          Forgot password ?
         </button>
       </div>
-
       <!-- Submit -->
       <button type="submit" [disabled]="isSubmitting"
-              class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
         @if (isSubmitting) {
-          <span class="flex items-center justify-center gap-2">
-            <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg"
-                 fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-            </svg>
-            Signing In…
-          </span>
+        <span class="flex items-center justify-center gap-2">
+          <app-icon name="loadingIcon" class="animate-spin" />
+          Signing In…
+        </span>
         } @else {
-          Sign In
+        Sign In
         }
       </button>
     </form>
@@ -145,7 +101,7 @@
 
     <!-- Sign Up -->
     <a routerLink="/signup"
-       class="block w-full text-center bg-white hover:bg-gray-50 active:bg-gray-100 text-indigo-600 font-semibold py-3 px-4 rounded-xl border-2 border-indigo-200 hover:border-indigo-400 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+      class="block w-full text-center bg-white hover:bg-gray-50 active:bg-gray-100 text-indigo-600 font-semibold py-3 px-4 rounded-xl border-2 border-indigo-200 hover:border-indigo-400 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
       Create an Account
     </a>
 

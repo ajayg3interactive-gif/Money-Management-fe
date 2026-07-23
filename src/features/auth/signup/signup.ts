@@ -11,6 +11,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../core/utils/api-error';
+import { IconComponent } from "../../../shared/icons/icons.component";
 
 function passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
   const pass = group.get('password')?.value;
@@ -20,7 +21,7 @@ function passwordMatchValidator(group: AbstractControl): ValidationErrors | null
 
 @Component({
   selector: 'app-signup',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, IconComponent],
   templateUrl: './signup.html',
 })
 export class Signup {

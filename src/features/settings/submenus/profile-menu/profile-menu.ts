@@ -4,7 +4,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../../core/utils/api-error';
 import { environment } from '../../../../environments/environment';
-import { IconComponent } from "../../../../icons.component";
+import { IconComponent } from "../../../../shared/icons/icons.component";
 
 @Component({
   selector: 'profile-menu',
