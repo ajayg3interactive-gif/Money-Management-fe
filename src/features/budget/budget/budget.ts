@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Table } from '../../../shared/table/table';
 import { Budget as BudgetModel, BudgetColumn, BudgetService } from '../../../core/services/budget.service';
-import { BudgetStatusModal } from '../../dashboard/budget-status-modal/budget-status-modal';
+import { BudgetStatusModal } from '../budget-status-modal/budget-status-modal';
 import { Category, CategoryService } from '../../../core/services/category.service';
 
 @Component({

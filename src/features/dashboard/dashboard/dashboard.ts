@@ -1,7 +1,7 @@
 import { DecimalPipe, NgClass } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ExpenseReport, SavingsRate, Totals, Transaction, TransactionService } from '../../../core/services/transaction.service';
-import { BudgetStatusModal } from "../budget-status-modal/budget-status-modal";
+import { BudgetStatusModal } from "../../budget/budget-status-modal/budget-status-modal";
 import { AddTransactionModal } from "../../transactions/add-transaction-modal/add-transaction-modal";
 import { Budget, BudgetService } from '../../../core/services/budget.service';
 import { Category, CategoryService } from '../../../core/services/category.service';

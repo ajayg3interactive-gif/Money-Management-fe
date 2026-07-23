@@ -9,6 +9,8 @@ export interface AuthUser {
     id: string;
     name: string;
     email: string;
+    phone: string | null;
+    avatarUrl: string | null;
 }
 
 interface ApiSuccess<T> {
@@ -70,6 +72,35 @@ export class AuthService {
                 return of(null);
             })
         );
+    }
+
+    updateProfile(name: string, email: string, phone: string | null): Observable<AuthUser> {
+        return this.http
+            .put<ApiSuccess<AuthUser>>(`${this.apiUrl}/me`, { name, email, phone }, { withCredentials: true })
+            .pipe(
+                map(res => res.data),
+                tap(user => this._currentUser.set(user))
+            );
+    }
+
+    uploadAvatar(file: File): Observable<AuthUser> {
+        const formData = new FormData();
+        formData.append('avatar', file);
+        return this.http
+            .post<ApiSuccess<AuthUser>>(`${this.apiUrl}/me/avatar`, formData, { withCredentials: true })
+            .pipe(
+                map(res => res.data),
+                tap(user => this._currentUser.set(user))
+            );
+    }
+
+    deleteAvatar(): Observable<AuthUser> {
+        return this.http
+            .delete<ApiSuccess<AuthUser>>(`${this.apiUrl}/me/avatar`, { withCredentials: true })
+            .pipe(
+                map(res => res.data),
+                tap(user => this._currentUser.set(user))
+            );
     }
 
     /** Called by the HTTP interceptor when a request comes back 401 mid-session. */

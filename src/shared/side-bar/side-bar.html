@@ -66,10 +66,15 @@
   <!-- User Profile -->
   <div class="px-3 pb-4 pt-3" style="border-top: 1px solid rgba(255,255,255,0.05)">
     <div class="user-profile-btn flex items-center gap-3 px-3 py-2.5 rounded-xl">
-      <div class="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0"
-           style="background: linear-gradient(135deg, #5B6EF5 0%, #8B5CF6 100%); font-size: 11px; font-weight: 700">
-        {{ initials(authService.currentUser()?.name) }}
-      </div>
+      @if (avatarUrl()) {
+        <img [src]="avatarUrl()" alt="Profile picture"
+             class="w-8 h-8 rounded-full object-cover shrink-0" />
+      } @else {
+        <div class="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0"
+             style="background: linear-gradient(135deg, #5B6EF5 0%, #8B5CF6 100%); font-size: 11px; font-weight: 700">
+          {{ initials(authService.currentUser()?.name) }}
+        </div>
+      }
       <div class="flex-1 min-w-0">
         <p style="color: #e2e8f0; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ authService.currentUser()?.name ?? 'Guest' }}</p>
         <p style="color: #475569; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ authService.currentUser()?.email ?? '' }}</p>

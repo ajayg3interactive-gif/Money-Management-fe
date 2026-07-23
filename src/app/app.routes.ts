@@ -7,6 +7,7 @@ import { Login } from '../features/auth/login/login';
 import { Signup } from '../features/auth/signup/signup';
 import { authGuard } from '../core/guards/auth.guard';
 import { guestGuard } from '../core/guards/guest.guard';
+import { Settings } from '../features/settings/settings';
 
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard] },
@@ -15,4 +16,5 @@ export const routes: Routes = [
     { path: 'transaction', component: Transactions, canActivate: [authGuard] },
     { path: 'plan', component: Plan, canActivate: [authGuard] },
     { path: 'budget', component: Budget, canActivate: [authGuard] },
+    {path:'settings',component: Settings , canActivate:[authGuard]}
 ];

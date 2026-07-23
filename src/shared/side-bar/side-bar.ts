@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '../../core/services/auth.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-side-bar',
@@ -12,6 +13,11 @@ import { AuthService } from '../../core/services/auth.service';
 export class SideBar {
   private sanitizer = inject(DomSanitizer);
   protected authService = inject(AuthService);
+
+  protected avatarUrl(): string | null {
+    const avatarUrl = this.authService.currentUser()?.avatarUrl;
+    return avatarUrl ? `${environment.apiOrigin}${avatarUrl}` : null;
+  }
 
   protected initials(name: string | undefined): string {
     if (!name) return '?';
