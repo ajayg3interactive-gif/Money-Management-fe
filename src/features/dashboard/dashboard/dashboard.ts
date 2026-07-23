@@ -5,6 +5,8 @@ import { BudgetStatusModal } from "../budget-status-modal/budget-status-modal";
 import { AddTransactionModal } from "../../transactions/add-transaction-modal/add-transaction-modal";
 import { Budget, BudgetService } from '../../../core/services/budget.service';
 import { Category, CategoryService } from '../../../core/services/category.service';
+import { DropdownOption, DropdownService } from '../../../core/services/dropdown.service';
+import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
 
 interface BudgetStatusRow {
   id: string;
@@ -28,7 +30,7 @@ interface RecentTx {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NgClass, DecimalPipe, BudgetStatusModal, AddTransactionModal],
+  imports: [NgClass, DecimalPipe, BudgetStatusModal, AddTransactionModal, CategoryDropdown],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -37,6 +39,10 @@ export class Dashboard implements OnInit {
   private transactionService = inject(TransactionService)
   private budgetService = inject(BudgetService);
   private categoryService = inject(CategoryService);
+  private dropdownService = inject(DropdownService);
+
+  months = signal<DropdownOption[]>([]);
+  selectedMonth = signal(new Date().getMonth() + 1);
 
   totals = signal<Totals[]>([]);
 
@@ -54,11 +60,9 @@ export class Dashboard implements OnInit {
   selectedTransaction = signal<Transaction | null>(null);
 
   budgetStatusList = computed<BudgetStatusRow[]>(() => {
-    const spendByCategory = new Map(this.spendingPerMonth().map(s => [s.label, s.total]));
-
     return this.budgets().map((budget, index) => {
       const categoryInfo = this.categories().find(c => c.value === budget.category);
-      const spend = spendByCategory.get(budget.category) ?? 0;
+      const spend = budget.spent ?? 0;
 
       return {
         id: budget.id ?? budget.category,
@@ -101,20 +105,33 @@ export class Dashboard implements OnInit {
   });
 
   ngOnInit() {
-    this.transactionService.getTotals().subscribe(data => {
-      this.totals.set(data);
-    })
-    this.transactionService.getExpenseReport().subscribe(data => {
-      this.spendingPerMonth.set(data)
-    })
-    this.transactionService.getSavingsRate().subscribe(data => {
-      this.savingsRate.set(data)
+    this.loadMonthlySummary();
+    this.dropdownService.getOptions('month').subscribe(data => {
+      this.months.set(data);
     })
     this.categoryService.getCategories().subscribe(data => {
       this.categories.set(data)
     })
     this.loadTransactions();
     this.loadBudgets();
+  }
+
+  onMonthChange(value: string) {
+    this.selectedMonth.set(Number(value));
+    this.loadMonthlySummary();
+  }
+
+  loadMonthlySummary() {
+    const month = this.selectedMonth();
+    this.transactionService.getTotals(month).subscribe(data => {
+      this.totals.set(data);
+    })
+    this.transactionService.getExpenseReport(month).subscribe(data => {
+      this.spendingPerMonth.set(data)
+    })
+    this.transactionService.getSavingsRate(month).subscribe(data => {
+      this.savingsRate.set(data)
+    })
   }
 
   loadTransactions() {
@@ -142,21 +159,17 @@ export class Dashboard implements OnInit {
   }
 
   refreshSummary() {
-    this.transactionService.getTotals().subscribe(data => {
-      this.totals.set(data);
-    })
-    this.transactionService.getExpenseReport().subscribe(data => {
-      this.spendingPerMonth.set(data)
-    })
-    this.transactionService.getSavingsRate().subscribe(data => {
-      this.savingsRate.set(data)
-    })
+    this.loadMonthlySummary();
     this.loadTransactions();
   }
 
 
   now = new Date();
-  currentMonth = this.now.toLocaleDateString('en-US', { month: "long" });
+
+  currentMonth(): string {
+    return new Date(this.now.getFullYear(), this.selectedMonth() - 1, 1)
+      .toLocaleDateString('en-US', { month: 'long' });
+  }
 
   color = [
     '#5B6EF5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#64748B'

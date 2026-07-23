@@ -2,34 +2,19 @@
   <!-- Page Header -->
   <div class="flex items-center justify-between mb-7">
     <div>
-      <p style="color: #64748b; font-size: 13px">{{ currentMonth }}</p>
+      <p style="color: #64748b; font-size: 13px">{{ currentMonth() }}</p>
       <h1 style="color: #0f172a; font-size: 24px; font-weight: 700; margin: 2px 0 0">
         Financial Overview
       </h1>
     </div>
     <div class="flex items-center gap-3">
-      <button
-        class="flex items-center gap-2 px-4 py-2 bg-white rounded-xl text-sm font-medium transition-all"
-        style="color: #475569; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05)"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <rect x="3" y="4" width="18" height="18" rx="2" />
-          <line x1="16" y1="2" x2="16" y2="6" />
-          <line x1="8" y1="2" x2="8" y2="6" />
-          <line x1="3" y1="10" x2="21" y2="10" />
-        </svg>
-        This Month
-      </button>
+      <div style="width: 160px">
+        <app-category-dropdown
+          [categories]="months()"
+          [value]="selectedMonth() + ''"
+          (valueChange)="onMonthChange($event)"
+        ></app-category-dropdown>
+      </div>
       <button
         (click)="handleTransactionModal(true)"
         class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all active:scale-95"
@@ -167,7 +152,7 @@
             Spending Report
           </h2>
           <p style="color: #94a3b8; font-size: 12px; margin: 0">
-            Category breakdown for {{ currentMonth }}
+            Category breakdown for {{ currentMonth() }}
           </p>
         </div>
         <!-- <button

@@ -64,8 +64,9 @@ export class TransactionService {
     currentMonth = this.now.getMonth();
     currentYear = this.now.getFullYear();
 
-    getTotals(): Observable<Totals[]> {
-        return this.getTransactionsPermonth().pipe(
+    /** @param month 1-12, defaults to the current month */
+    getTotals(month?: number): Observable<Totals[]> {
+        return this.getTransactionsPermonth(month).pipe(
             map(transactions => {
 
                 const totalIncome = transactions
@@ -130,8 +131,9 @@ export class TransactionService {
         )
     }
 
-    getSavingsRate(): Observable<SavingsRate> {
-        return this.getTransactionsPermonth().pipe(
+    /** @param month 1-12, defaults to the current month */
+    getSavingsRate(month?: number): Observable<SavingsRate> {
+        return this.getTransactionsPermonth(month).pipe(
             map(transactions => {
 
                 const totalIncome = transactions
@@ -155,8 +157,9 @@ export class TransactionService {
         );
     }
 
-    getExpenseReport(): Observable<ExpenseReport[]> {
-        return this.getTransactionsPermonth().pipe(
+    /** @param month 1-12, defaults to the current month */
+    getExpenseReport(month?: number): Observable<ExpenseReport[]> {
+        return this.getTransactionsPermonth(month).pipe(
             map(transactions => {
 
                 const grouped = transactions
@@ -188,8 +191,9 @@ export class TransactionService {
         );
     }
 
-    getBudgetStatus(): Observable<BudgetStatus[]> {
-        return this.getTransactionsPermonth().pipe(
+    /** @param month 1-12, defaults to the current month */
+    getBudgetStatus(month?: number): Observable<BudgetStatus[]> {
+        return this.getTransactionsPermonth(month).pipe(
              map(transactions => {
 
                 const grouped = transactions
@@ -221,20 +225,20 @@ export class TransactionService {
 
     }
     
-    getTransactionsPermonth(): Observable<Transaction[]> {
+    /** @param month 1-12, defaults to the current month. Year is always the current year. */
+    getTransactionsPermonth(month?: number): Observable<Transaction[]> {
         const res = this.http.get<Transaction[]>(this.apiUrl + "/transaction");
 
+        const now = new Date();
+        const targetMonth = month ? month - 1 : now.getMonth();
+        const targetYear = now.getFullYear();
+
         return res.pipe(map(transactions => {
-
-            const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
-
             return transactions.filter(transaction => {
                 const transactionDate = new Date(transaction.date);
                 return (
-                    transactionDate.getMonth() === currentMonth &&
-                    transactionDate.getFullYear() === currentYear
+                    transactionDate.getMonth() === targetMonth &&
+                    transactionDate.getFullYear() === targetYear
                 )
             })
         }))

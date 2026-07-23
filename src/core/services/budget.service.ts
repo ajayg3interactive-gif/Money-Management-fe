@@ -7,6 +7,15 @@ export interface Budget {
     id?: string;
     category: string;
     maximum: number;
+    /** Amount already spent in this category this month. Computed server-side; only present on GET responses. */
+    spent?: number;
+}
+
+export interface BudgetColumn {
+    position: number,
+    key: string,
+    label: string,
+    view: boolean
 }
 
 @Injectable({ providedIn: 'root' })
@@ -33,5 +42,13 @@ export class BudgetService {
 
     deleteBudget(id: string): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
+
+    getBudgetColumns(): Observable<BudgetColumn[]> {
+        return this.http.get<{ budget?: BudgetColumn[] }[]>(environment.apiOrigin + '/api/transactions/columns')
+            .pipe(map(data => {
+                const found = data.find(item => item.hasOwnProperty('budget'));
+                return found?.budget ?? [];
+            }));
     }
 }

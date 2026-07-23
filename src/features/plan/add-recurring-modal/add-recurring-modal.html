@@ -5,13 +5,13 @@
 >
   <!-- Modal -->
   <div
-    class="w-full bg-white rounded-2xl"
-    style="max-width: 460px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18); max-height: 90vh; overflow-y: auto"
+    class="w-full bg-white rounded-2xl flex flex-col"
+    style="max-width: 460px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18); max-height: 90vh"
   >
     <!-- Header -->
     <div
       class="flex items-center justify-between px-6 py-5"
-      style="border-bottom: 1px solid #f1f5f9"
+      style="border-bottom: 1px solid #f1f5f9; flex-shrink: 0"
     >
       <div>
         <h2 style="color: #0f172a; font-size: 17px; font-weight: 700; margin: 0 0 3px">
@@ -43,176 +43,39 @@
       </button>
     </div>
 
-    <!-- Type Toggle -->
-    <div class="px-6 pt-5">
-      <div class="flex gap-2 p-1 rounded-xl" style="background: #f1f5f9">
-        <button
-          class="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
-          [style]="
-            type() === 'Expense'
-              ? 'background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); color: #fff'
-              : 'color: #64748b'
-          "
-          (click)="setType('Expense')"
-        >
-          Expense
-        </button>
-        <button
-          class="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
-          [style]="
-            type() === 'Income'
-              ? 'background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: #fff'
-              : 'color: #64748b'
-          "
-          (click)="setType('Income')"
-        >
-          Income
-        </button>
-      </div>
-    </div>
-
-    <!-- Form -->
-    <div class="px-6 pt-5 pb-2" style="display: flex; flex-direction: column; gap: 16px">
-      <!-- Amount -->
-      <div>
-        <label
-          style="
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: #64748b;
-            letter-spacing: 0.07em;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-          "
-        >
-          Amount
-        </label>
-        <div
-          class="flex items-center gap-2 rounded-xl px-4 py-3 transition-all"
-          style="border: 1.5px solid #e2e8f0; background: #f8fafc"
-        >
-          <span style="color: #94a3b8; font-size: 14px; font-weight: 600; user-select: none"
-            >&#8377;</span
-          >
-          <input
-            type="number"
-            placeholder="0"
-            class="no-spinner"
-            [ngModel]="amount()"
-            (ngModelChange)="amount.set($event)"
-            style="
-              flex: 1;
-              background: transparent;
-              border: none;
-              outline: none;
-              font-size: 22px;
-              font-weight: 700;
-              color: #1e293b;
-            "
-          />
-        </div>
-      </div>
-
-      <!-- Category -->
-      <div>
-        <label
-          style="
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: #64748b;
-            letter-spacing: 0.07em;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-          "
-        >
-          Category
-        </label>
-        <app-category-dropdown
-          [categories]="categories()"
-          [value]="category()"
-          (valueChange)="category.set($event)"
-        ></app-category-dropdown>
-      </div>
-
-      <!-- Frequency -->
-      <div>
-        <label
-          style="
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: #64748b;
-            letter-spacing: 0.07em;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-          "
-        >
-          Repeats
-        </label>
+    <div style="overflow-y: auto; flex: 1">
+      <!-- Type Toggle -->
+      <div class="px-6 pt-5">
         <div class="flex gap-2 p-1 rounded-xl" style="background: #f1f5f9">
           <button
-            class="flex-1 py-2 rounded-lg text-xs font-semibold transition-all"
+            class="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
             [style]="
-              frequency() === 'monthly-same-day'
-                ? 'background: #fff; color: #1e293b; box-shadow: 0 1px 3px rgba(0,0,0,0.08)'
+              type() === 'Expense'
+                ? 'background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); color: #fff'
                 : 'color: #64748b'
             "
-            (click)="setFrequency('monthly-same-day')"
+            (click)="setType('Expense')"
           >
-            Same day every month
+            Expense
           </button>
           <button
-            class="flex-1 py-2 rounded-lg text-xs font-semibold transition-all"
+            class="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
             [style]="
-              frequency() === 'every-n-days'
-                ? 'background: #fff; color: #1e293b; box-shadow: 0 1px 3px rgba(0,0,0,0.08)'
+              type() === 'Income'
+                ? 'background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: #fff'
                 : 'color: #64748b'
             "
-            (click)="setFrequency('every-n-days')"
+            (click)="setType('Income')"
           >
-            Every N days
+            Income
           </button>
         </div>
       </div>
 
-      <!-- Interval + End Date -->
-      <div class="grid grid-cols-2 gap-3">
-        @if (frequency() === 'every-n-days') {
-          <div>
-            <label
-              style="
-                display: block;
-                font-size: 11px;
-                font-weight: 600;
-                color: #64748b;
-                letter-spacing: 0.07em;
-                text-transform: uppercase;
-                margin-bottom: 8px;
-              "
-            >
-              Every (days)
-            </label>
-            <input
-              type="number"
-              min="1"
-              [ngModel]="interval()"
-              (ngModelChange)="interval.set($event)"
-              style="
-                width: 100%;
-                border: 1.5px solid #e2e8f0;
-                border-radius: 12px;
-                padding: 10px 12px;
-                font-size: 13.5px;
-                color: #334155;
-                background: #f8fafc;
-                outline: none;
-              "
-            />
-          </div>
-        }
-        <div [style.gridColumn]="frequency() === 'every-n-days' ? 'auto' : 'span 2'">
+      <!-- Form -->
+      <div class="px-6 pt-5 pb-2" style="display: flex; flex-direction: column; gap: 16px">
+        <!-- Amount -->
+        <div>
           <label
             style="
               display: block;
@@ -224,69 +87,208 @@
               margin-bottom: 8px;
             "
           >
-            End Date
+            Amount
+          </label>
+          <div
+            class="flex items-center gap-2 rounded-xl px-4 py-3 transition-all"
+            style="border: 1.5px solid #e2e8f0; background: #f8fafc"
+          >
+            <span style="color: #94a3b8; font-size: 14px; font-weight: 600; user-select: none"
+              >&#8377;</span
+            >
+            <input
+              type="number"
+              placeholder="0"
+              class="no-spinner"
+              [ngModel]="amount()"
+              (ngModelChange)="amount.set($event)"
+              style="
+                flex: 1;
+                background: transparent;
+                border: none;
+                outline: none;
+                font-size: 22px;
+                font-weight: 700;
+                color: #1e293b;
+              "
+            />
+          </div>
+        </div>
+
+        <!-- Category -->
+        <div>
+          <label
+            style="
+              display: block;
+              font-size: 11px;
+              font-weight: 600;
+              color: #64748b;
+              letter-spacing: 0.07em;
+              text-transform: uppercase;
+              margin-bottom: 8px;
+            "
+          >
+            Category
+          </label>
+          <app-category-dropdown
+            [categories]="categories()"
+            [value]="category()"
+            (valueChange)="category.set($event)"
+          ></app-category-dropdown>
+        </div>
+
+        <!-- Frequency -->
+        <div>
+          <label
+            style="
+              display: block;
+              font-size: 11px;
+              font-weight: 600;
+              color: #64748b;
+              letter-spacing: 0.07em;
+              text-transform: uppercase;
+              margin-bottom: 8px;
+            "
+          >
+            Repeats
+          </label>
+          <div class="flex gap-2 p-1 rounded-xl" style="background: #f1f5f9">
+            <button
+              class="flex-1 py-2 rounded-lg text-xs font-semibold transition-all"
+              [style]="
+                frequency() === 'monthly-same-day'
+                  ? 'background: #fff; color: #1e293b; box-shadow: 0 1px 3px rgba(0,0,0,0.08)'
+                  : 'color: #64748b'
+              "
+              (click)="setFrequency('monthly-same-day')"
+            >
+              Same day every month
+            </button>
+            <button
+              class="flex-1 py-2 rounded-lg text-xs font-semibold transition-all"
+              [style]="
+                frequency() === 'every-n-days'
+                  ? 'background: #fff; color: #1e293b; box-shadow: 0 1px 3px rgba(0,0,0,0.08)'
+                  : 'color: #64748b'
+              "
+              (click)="setFrequency('every-n-days')"
+            >
+              Every N days
+            </button>
+          </div>
+        </div>
+
+        <!-- Interval + End Date -->
+        <div class="grid grid-cols-2 gap-3">
+          @if (frequency() === 'every-n-days') {
+            <div>
+              <label
+                style="
+                  display: block;
+                  font-size: 11px;
+                  font-weight: 600;
+                  color: #64748b;
+                  letter-spacing: 0.07em;
+                  text-transform: uppercase;
+                  margin-bottom: 8px;
+                "
+              >
+                Every (days)
+              </label>
+              <input
+                type="number"
+                min="1"
+                [ngModel]="interval()"
+                (ngModelChange)="interval.set($event)"
+                style="
+                  width: 100%;
+                  border: 1.5px solid #e2e8f0;
+                  border-radius: 12px;
+                  padding: 10px 12px;
+                  font-size: 13.5px;
+                  color: #334155;
+                  background: #f8fafc;
+                  outline: none;
+                "
+              />
+            </div>
+          }
+          <div [style.gridColumn]="frequency() === 'every-n-days' ? 'auto' : 'span 2'">
+            <label
+              style="
+                display: block;
+                font-size: 11px;
+                font-weight: 600;
+                color: #64748b;
+                letter-spacing: 0.07em;
+                text-transform: uppercase;
+                margin-bottom: 8px;
+              "
+            >
+              End Date
+              <span
+                style="font-weight: 400; color: #cbd5e1; text-transform: none; letter-spacing: 0"
+                >&nbsp;(optional)</span
+              >
+            </label>
+            <input
+              type="date"
+              [ngModel]="endDate()"
+              (ngModelChange)="endDate.set($event)"
+              style="
+                width: 100%;
+                border: 1.5px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 10px 12px;
+                font-size: 13.5px;
+                color: #334155;
+                background: #f8fafc;
+                outline: none;
+                cursor: pointer;
+              "
+            />
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label
+            style="
+              display: block;
+              font-size: 11px;
+              font-weight: 600;
+              color: #64748b;
+              letter-spacing: 0.07em;
+              text-transform: uppercase;
+              margin-bottom: 8px;
+            "
+          >
+            Description
             <span style="font-weight: 400; color: #cbd5e1; text-transform: none; letter-spacing: 0"
               >&nbsp;(optional)</span
             >
           </label>
-          <input
-            type="date"
-            [ngModel]="endDate()"
-            (ngModelChange)="endDate.set($event)"
+          <textarea
+            placeholder="What is this auto transaction for?"
+            rows="2"
+            [ngModel]="description()"
+            (ngModelChange)="description.set($event)"
             style="
               width: 100%;
               border: 1.5px solid #e2e8f0;
               border-radius: 12px;
-              padding: 10px 12px;
+              padding: 12px;
               font-size: 13.5px;
               color: #334155;
               background: #f8fafc;
               outline: none;
-              cursor: pointer;
+              resize: none;
+              font-family: inherit;
             "
-          />
+          ></textarea>
         </div>
       </div>
-
-      <!-- Description -->
-      <div>
-        <label
-          style="
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: #64748b;
-            letter-spacing: 0.07em;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-          "
-        >
-          Description
-          <span style="font-weight: 400; color: #cbd5e1; text-transform: none; letter-spacing: 0"
-            >&nbsp;(optional)</span
-          >
-        </label>
-        <textarea
-          placeholder="What is this auto transaction for?"
-          rows="2"
-          [ngModel]="description()"
-          (ngModelChange)="description.set($event)"
-          style="
-            width: 100%;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 12px;
-            font-size: 13.5px;
-            color: #334155;
-            background: #f8fafc;
-            outline: none;
-            resize: none;
-            font-family: inherit;
-          "
-        ></textarea>
-      </div>
     </div>
-
     <!-- Footer -->
     <div class="flex items-center gap-3 px-6 pb-6 pt-2">
       <button

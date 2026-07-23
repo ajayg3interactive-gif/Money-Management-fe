@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CategoryService, Category } from '../../../core/services/category.service';
 import { Budget, BudgetService } from '../../../core/services/budget.service';
@@ -17,6 +17,8 @@ export class BudgetStatusModal implements OnInit {
   private categoryService = inject(CategoryService);
   private budgetService = inject(BudgetService);
   private toast = inject(ToastService);
+
+  @Input() presetCategory: string | null = null;
 
   @Output() closemodal = new EventEmitter();
   @Output() budgetAdded = new EventEmitter<Budget>();
@@ -50,6 +52,9 @@ export class BudgetStatusModal implements OnInit {
   loadBudgets() {
     this.budgetService.getBudgets().subscribe(budgets => {
       this.budgets.set(budgets);
+      if (this.presetCategory) {
+        this.onCategorySelected(this.presetCategory);
+      }
     });
   }
 

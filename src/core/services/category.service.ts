@@ -1,7 +1,6 @@
-import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
-import { environment } from "../../environments/environment";
+import { Observable } from "rxjs";
+import { DropdownService } from "./dropdown.service";
 
 export interface Category {
     _id?: string;
@@ -11,11 +10,9 @@ export interface Category {
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
-    private http = inject(HttpClient);
-    private apiUrl = environment.apiOrigin + '/api/categories';
+    private dropdownService = inject(DropdownService);
 
     getCategories(): Observable<Category[]> {
-        return this.http.get<{ success: true; data: Category[] }>(this.apiUrl)
-            .pipe(map(res => res.data));
+        return this.dropdownService.getOptions('category');
     }
 }
