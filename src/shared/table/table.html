@@ -87,7 +87,7 @@
               </span>
             } @else if (col.key === 'amount' || col.key === 'maximum' || col.key === 'spent') {
               <span style="font-size: 13.5px; font-weight: 700; color: #1e293b">
-                Rs {{ getCellValue(row, col.key) }}
+                {{ authService.currencySymbol() }} {{ getCellValue(row, col.key) }}
               </span>
             } @else if (col.key === 'date') {
               <span style="font-size: 13px; color: #64748b">

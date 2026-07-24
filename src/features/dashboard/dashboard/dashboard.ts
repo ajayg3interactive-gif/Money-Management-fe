@@ -7,6 +7,7 @@ import { Budget, BudgetService } from '../../../core/services/budget.service';
 import { Category, CategoryService } from '../../../core/services/category.service';
 import { DropdownOption, DropdownService } from '../../../core/services/dropdown.service';
 import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
+import { AuthService } from '../../../core/services/auth.service';
 
 interface BudgetStatusRow {
   id: string;
@@ -40,6 +41,7 @@ export class Dashboard implements OnInit {
   private budgetService = inject(BudgetService);
   private categoryService = inject(CategoryService);
   private dropdownService = inject(DropdownService);
+  private authService = inject(AuthService);
 
   months = signal<DropdownOption[]>([]);
   selectedMonth = signal(new Date().getMonth() + 1);
@@ -180,7 +182,7 @@ export class Dashboard implements OnInit {
   }
 
   formatAmount(amount: number): string {
-    return 'Rs ' + Math.abs(amount).toLocaleString('en-IN');
+    return this.authService.currencySymbol() + ' ' + Math.abs(amount).toLocaleString('en-IN');
   }
 
   formatRelativeDate(date: string): string {

@@ -7,6 +7,7 @@ import {
 import { ToastService } from '../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../core/utils/api-error';
 import { AddRecurringModal } from '../add-recurring-modal/add-recurring-modal';
+import { AuthService } from '../../../core/services/auth.service';
 
 interface DayCell {
   day: number;
@@ -24,6 +25,7 @@ interface DayCell {
 export class Plan implements OnInit {
   private recurringService = inject(RecurringTransactionService);
   private toast = inject(ToastService);
+  private authService = inject(AuthService);
 
   private now = new Date();
   viewYear = signal(this.now.getFullYear());
@@ -172,7 +174,7 @@ export class Plan implements OnInit {
   }
 
   formatAmount(amount: number): string {
-    return 'Rs ' + Math.abs(amount).toLocaleString('en-IN');
+    return this.authService.currencySymbol() + ' ' + Math.abs(amount).toLocaleString('en-IN');
   }
 
   statusColor(status: Occurrence['status']): string {

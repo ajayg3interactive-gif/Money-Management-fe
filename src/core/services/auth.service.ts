@@ -11,6 +11,8 @@ export interface AuthUser {
     email: string;
     phone: string | null;
     avatarUrl: string | null;
+    currency: string;
+    currencySymbol: string;
 }
 
 interface ApiSuccess<T> {
@@ -30,6 +32,8 @@ export class AuthService {
 
     readonly currentUser = this._currentUser.asReadonly();
     readonly isLoggedIn = computed(() => this._currentUser() !== null);
+    /** Currency symbol for the logged-in user's preferred currency (set via Settings > Current Balance); defaults to '$'. */
+    readonly currencySymbol = computed(() => this._currentUser()?.currencySymbol ?? '$');
     /** True once the initial session check (against the httpOnly cookie) has completed. */
     readonly resolved = this._resolved.asReadonly();
 

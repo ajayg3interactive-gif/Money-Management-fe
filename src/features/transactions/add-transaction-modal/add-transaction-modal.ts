@@ -5,6 +5,7 @@ import { ToastService } from '../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../core/utils/api-error';
 import { Category, CategoryService } from '../../../core/services/category.service';
 import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-add-transaction-modal',
@@ -16,6 +17,7 @@ export class AddTransactionModal implements OnInit {
   private transactionService = inject(TransactionService);
   private toast = inject(ToastService);
   private categoryService = inject(CategoryService);
+  authService = inject(AuthService);
 
   @Input() editData: Transaction | null = null;
   @Output() closemodal = new EventEmitter();

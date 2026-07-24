@@ -5,6 +5,7 @@ import { Budget, BudgetService } from '../../../core/services/budget.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../core/utils/api-error';
 import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-budget-status-modal',
@@ -17,6 +18,7 @@ export class BudgetStatusModal implements OnInit {
   private categoryService = inject(CategoryService);
   private budgetService = inject(BudgetService);
   private toast = inject(ToastService);
+  authService = inject(AuthService);
 
   @Input() presetCategory: string | null = null;
 

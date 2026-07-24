@@ -4,6 +4,7 @@ import { IconComponent } from "../../../../shared/icons/icons.component";
 import { CurrencyDropdown } from '../../../../shared/currency-dropdown/currency-dropdown';
 import { BalanceService, Currency } from '../../../../core/services/balance.service';
 import { ToastService } from '../../../../core/services/toast.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { extractErrorMessage } from '../../../../core/utils/api-error';
 
 @Component({
@@ -15,6 +16,7 @@ import { extractErrorMessage } from '../../../../core/utils/api-error';
 export class CurrentBalanceMenu implements OnInit {
   private balanceService = inject(BalanceService);
   private toast = inject(ToastService);
+  private authService = inject(AuthService);
 
   currencies = signal<Currency[]>([]);
   currency = signal('USD');
@@ -51,6 +53,7 @@ export class CurrentBalanceMenu implements OnInit {
         next: () => {
           this.saving.set(false);
           this.toast.success('Current balance saved successfully.');
+          this.authService.fetchCurrentUser().subscribe();
         },
         error: (err) => {
           this.saving.set(false);
