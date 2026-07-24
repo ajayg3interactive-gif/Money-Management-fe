@@ -16,6 +16,16 @@ const AUTH_ROUTES = ['/login', '/signup'];
 export class App {
   protected readonly title = signal('Money-Management');
 
+  protected readonly isSidebarOpen = signal(false);
+
+  protected toggleSidebar(): void {
+    this.isSidebarOpen.update((open) => !open);
+  }
+
+  protected closeSidebar(): void {
+    this.isSidebarOpen.set(false);
+  }
+
   private router = inject(Router);
 
   private currentUrl = toSignal(

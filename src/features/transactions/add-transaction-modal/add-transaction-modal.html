@@ -5,12 +5,12 @@
 >
   <!-- Modal -->
   <div
-    class="w-full bg-white rounded-2xl"
-    style="max-width: 440px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18)"
+    class="w-full bg-white rounded-2xl flex flex-col"
+    style="max-width: 440px; max-height: 90vh; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18)"
   >
     <!-- Header -->
     <div
-      class="flex items-center justify-between px-6 py-5"
+      class="flex items-center justify-between px-6 py-5 shrink-0"
       style="border-bottom: 1px solid #f1f5f9"
     >
       <div>
@@ -41,6 +41,8 @@
       </button>
     </div>
 
+    <!-- Scrollable body -->
+    <div class="flex-1 overflow-y-auto min-h-0">
     <!-- Type Toggle -->
     <div class="px-6 pt-5">
       <div class="flex gap-2 p-1 rounded-xl" style="background: #f1f5f9">
@@ -205,9 +207,10 @@
         ></textarea>
       </div>
     </div>
+    </div>
 
     <!-- Footer -->
-    <div class="flex items-center gap-3 px-6 pb-6 pt-2">
+    <div class="flex items-center gap-3 px-6 pb-6 pt-2 shrink-0">
       <button
         (click)="closeModal()"
         class="flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-95"

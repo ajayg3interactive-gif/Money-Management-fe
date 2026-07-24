@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '../../core/services/auth.service';
@@ -13,8 +13,15 @@ import { IconComponent,IconName } from "../icons/icons.component";
   styleUrl: './side-bar.css',
 })
 export class SideBar {
+  @Input() isOpen = false;
+  @Output() closeMenu = new EventEmitter<void>();
+
   private sanitizer = inject(DomSanitizer);
   protected authService = inject(AuthService);
+
+  onNavClick(): void {
+    this.closeMenu.emit();
+  }
 
   protected avatarUrl(): string | null {
     const avatarUrl = this.authService.currentUser()?.avatarUrl;

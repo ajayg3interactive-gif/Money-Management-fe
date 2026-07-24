@@ -1,14 +1,14 @@
-<div class="p-6" style="min-height: 100vh; background: #f1f5f9">
+<div class="p-4 md:p-6" style="min-height: 100vh; background: #f1f5f9">
   <!-- Page Header -->
-  <div class="flex items-center justify-between mb-7">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-7">
     <div>
       <p style="color: #64748b; font-size: 13px">{{ currentMonth() }}</p>
       <h1 style="color: #0f172a; font-size: 24px; font-weight: 700; margin: 2px 0 0">
         Financial Overview
       </h1>
     </div>
-    <div class="flex items-center gap-3">
-      <div style="width: 160px">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div class="w-full sm:w-40">
         <app-category-dropdown
           [categories]="months()"
           [value]="selectedMonth() + ''"
@@ -17,7 +17,7 @@
       </div>
       <button
         (click)="handleTransactionModal(true)"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all active:scale-95"
+        class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all active:scale-95 w-full sm:w-auto"
         style="
           background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%);
           box-shadow: 0 2px 8px rgba(91, 110, 245, 0.35);
@@ -348,7 +348,7 @@
           </div>
           <!-- Category badge -->
           <span
-            class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full"
+            class="hidden sm:inline-flex shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full"
             [style.color]="tx.color"
             [style.background]="tx.color + '18'"
           >
@@ -357,7 +357,7 @@
           <!-- Amount -->
           <span
             class="shrink-0 font-bold text-sm"
-            style="min-width: 80px; text-align: right"
+            style="min-width: 70px; text-align: right"
             [class.text-emerald-600]="tx.amount > 0"
             [style.color]="tx.amount < 0 ? '#1e293b' : null"
           >
