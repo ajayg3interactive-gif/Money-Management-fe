@@ -23,11 +23,27 @@ export interface Totals {
     id: number,
     label: string,
     amount: number,
-    percent: number,
+    percent: number | null,
     trend: 'up' | 'down',
     gradientFrom: string,
     gradientTo: string,
 
+}
+
+export interface DashboardSummary {
+    month: number,
+    year: number,
+    currentBalance: number,
+    totalBalance: number,
+    monthlyIncome: number,
+    monthlyExpense: number,
+    totalSavings: number,
+    trends: {
+        totalBalance: number | null,
+        monthlyIncome: number | null,
+        monthlyExpense: number | null,
+        totalSavings: number | null,
+    },
 }
 
 export interface ExpenseReport {
@@ -65,69 +81,57 @@ export class TransactionService {
     currentYear = this.now.getFullYear();
 
     /** @param month 1-12, defaults to the current month */
+    getSummary(month?: number): Observable<DashboardSummary> {
+        const params = month ? `?month=${month}` : '';
+        return this.http.get<{ success: true; data: DashboardSummary }>(`${environment.apiOrigin}/api/dashboard/summary${params}`)
+            .pipe(map(res => res.data));
+    }
+
+    /** @param month 1-12, defaults to the current month */
     getTotals(month?: number): Observable<Totals[]> {
-        return this.getTransactionsPermonth(month).pipe(
-            map(transactions => {
-
-                const totalIncome = transactions
-                    .filter(t => t.type === "Income")
-                    .reduce((sum, t) => sum + t.amount, 0)
-
-                const totalExpense = transactions
-                    .filter(t => t.type === "Expense")
-                    .reduce((sum, t) => sum + t.amount, 0)
-
-
-                const income = transactions
-                    .filter(t => t.type === "Income")
-                    .reduce((sum, t) => sum + t.amount, 0);
-
-                const expense = transactions
-                    .filter(t => t.type === 'Expense')
-                    .reduce((sum, t) => sum + t.amount, 0)
+        return this.getSummary(month).pipe(
+            map(summary => {
+                const trend = (percent: number | null): 'up' | 'down' => percent !== null && percent < 0 ? 'down' : 'up';
 
                 return [
                     {
                         id: 1,
                         label: 'Total Balance',
-                        amount: income - expense,
-                        percent: 12.5,
-                        trend: 'up',
+                        amount: summary.totalBalance,
+                        percent: summary.trends.totalBalance,
+                        trend: trend(summary.trends.totalBalance),
                         gradientFrom: '#5B6EF5',
                         gradientTo: '#8B5CF6',
                     },
                     {
                         id: 2,
                         label: 'Monthly Income',
-                        amount: income,
-                        percent: 5.2,
-                        trend: 'up',
+                        amount: summary.monthlyIncome,
+                        percent: summary.trends.monthlyIncome,
+                        trend: trend(summary.trends.monthlyIncome),
                         gradientFrom: '#059669',
                         gradientTo: '#34D399',
                     },
                     {
                         id: 3,
                         label: 'Monthly Expenses',
-                        amount: expense,
-                        percent: 8.3,
-                        trend: 'down',
+                        amount: summary.monthlyExpense,
+                        percent: summary.trends.monthlyExpense,
+                        trend: trend(summary.trends.monthlyExpense),
                         gradientFrom: '#DC2626',
                         gradientTo: '#F87171',
                     },
                     {
                         id: 4,
                         label: 'Total Savings',
-                        amount: totalIncome - totalExpense,
-                        percent: 15.8,
-                        trend: 'up',
+                        amount: summary.totalSavings,
+                        percent: summary.trends.totalSavings,
+                        trend: trend(summary.trends.totalSavings),
                         gradientFrom: '#D97706',
                         gradientTo: '#FBBF24',
                     },
-
-
                 ]
             })
-
         )
     }
 

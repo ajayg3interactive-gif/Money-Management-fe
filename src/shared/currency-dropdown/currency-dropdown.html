@@ -1,0 +1,109 @@
+<div style="position: relative">
+  <button
+    type="button"
+    (click)="toggleOpen()"
+    style="
+      width: 100%;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13.5px;
+      text-align: left;
+      color: #334155;
+      background: #f8fafc;
+      outline: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    "
+  >
+    @if (value && selected(); as sel) {
+      <span style="display: flex; align-items: center; gap: 8px; color: #334155">
+        <span class="fi fi-{{ sel.countryCode.toLowerCase() }}" style="border-radius: 3px"></span>
+        {{ sel.code }} - {{ sel.name }}
+      </span>
+    } @else {
+      <span style="color: #94a3b8">{{ placeholder }}</span>
+    }
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#94a3b8"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  </button>
+
+  @if (open()) {
+    <div
+      (click)="closeDropdown()"
+      style="position: fixed; inset: 0; z-index: 9"
+    ></div>
+    <div
+      style="
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        z-index: 10;
+        background: white;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+        max-height: 260px;
+        display: flex;
+        flex-direction: column;
+      "
+    >
+      <div style="padding: 8px; border-bottom: 1px solid #f1f5f9">
+        <input
+          type="text"
+          placeholder="Search by code or country…"
+          [ngModel]="search()"
+          (ngModelChange)="search.set($event)"
+          (click)="$event.stopPropagation()"
+          style="
+            width: 100%;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 13px;
+            color: #334155;
+            outline: none;
+          "
+        />
+      </div>
+      <div style="overflow-y: auto">
+        @for (currency of filteredCurrencies(); track currency.code) {
+          <div
+            (click)="selectCurrency(currency)"
+            class="currency-dropdown-option"
+            style="
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              padding: 10px 12px;
+              font-size: 13.5px;
+              color: #334155;
+              cursor: pointer;
+            "
+          >
+            <span class="fi fi-{{ currency.countryCode.toLowerCase() }}" style="border-radius: 3px"></span>
+            <span>{{ currency.code }} - {{ currency.name }}</span>
+          </div>
+        } @empty {
+          <p style="color: #94a3b8; font-size: 12.5px; text-align: center; margin: 16px 0">
+            No currencies match "{{ search() }}"
+          </p>
+        }
+      </div>
+    </div>
+  }
+</div>
