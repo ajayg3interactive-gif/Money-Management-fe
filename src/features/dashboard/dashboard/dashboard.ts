@@ -1,5 +1,7 @@
 import { DecimalPipe, NgClass } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { ProductTourService } from '../../../shared/product-tour/product-tour.service';
 import { ExpenseReport, SavingsRate, Totals, Transaction, TransactionService } from '../../../core/services/transaction.service';
 import { BudgetStatusModal } from "../../budget/budget-status-modal/budget-status-modal";
 import { AddTransactionModal } from "../../transactions/add-transaction-modal/add-transaction-modal";
@@ -31,7 +33,7 @@ interface RecentTx {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NgClass, DecimalPipe, BudgetStatusModal, AddTransactionModal, CategoryDropdown],
+  imports: [NgClass, DecimalPipe, BudgetStatusModal, AddTransactionModal, CategoryDropdown, RouterLink],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -42,6 +44,7 @@ export class Dashboard implements OnInit {
   private categoryService = inject(CategoryService);
   private dropdownService = inject(DropdownService);
   private authService = inject(AuthService);
+  private productTourService = inject(ProductTourService);
 
   months = signal<DropdownOption[]>([]);
   selectedMonth = signal(new Date().getMonth() + 1);
@@ -116,6 +119,11 @@ export class Dashboard implements OnInit {
     })
     this.loadTransactions();
     this.loadBudgets();
+    this.startProductTour();
+  }
+
+  private startProductTour() {
+    this.productTourService.startTour('dashboard-onboarding');
   }
 
   onMonthChange(value: string) {

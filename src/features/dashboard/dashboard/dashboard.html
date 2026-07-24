@@ -17,6 +17,7 @@
       </div>
       <button
         (click)="handleTransactionModal(true)"
+        data-tour="add-transaction"
         class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all active:scale-99 w-full sm:w-auto"
         style="
           background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%);
@@ -255,6 +256,7 @@
               border-radius: 99px;
             "
             (click)="handleModal(true)"
+            data-tour="add-budget"
           >
             Add Budget
         </button>
@@ -306,6 +308,7 @@
         <p style="color: #94a3b8; font-size: 12px; margin: 0">Your latest financial activity</p>
       </div>
       <button
+        routerLink="/transaction"
         class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
         style="color: #5b6ef5; background: #eef0ff"
       >
