@@ -8,6 +8,7 @@ import { ToastService } from '../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../core/utils/api-error';
 import { AddRecurringModal } from '../add-recurring-modal/add-recurring-modal';
 import { AuthService } from '../../../core/services/auth.service';
+import { ProductTourService } from '../../../shared/product-tour/product-tour.service';
 
 interface DayCell {
   day: number;
@@ -26,6 +27,7 @@ export class Plan implements OnInit {
   private recurringService = inject(RecurringTransactionService);
   private toast = inject(ToastService);
   private authService = inject(AuthService);
+  private productTourService = inject(ProductTourService);
 
   private now = new Date();
   viewYear = signal(this.now.getFullYear());
@@ -73,18 +75,56 @@ export class Plan implements OnInit {
     return cells;
   });
 
+  /** Ruleid+date of the first occurrence badge rendered on the calendar, used to anchor the tour. */
+  firstOccurrenceKey = computed<string | null>(() => {
+    for (const cell of this.calendarCells()) {
+      if (cell && cell.occurrences.length > 0) {
+        const occ = cell.occurrences[0];
+        return `${occ.ruleId}-${occ.date}`;
+      }
+    }
+    return null;
+  });
+
+  isFirstOccurrence(occ: Occurrence): boolean {
+    return `${occ.ruleId}-${occ.date}` === this.firstOccurrenceKey();
+  }
+
+  /** Shown as a stand-in on the 1st of the month during the tour when no real occurrence
+   * exists yet to highlight - never persisted, removed as soon as the tour ends. */
+  demoBadgeActive = signal(false);
+
   ngOnInit() {
-    this.loadOccurrences();
+    // Wait for real occurrence data before deciding whether a demo badge is needed,
+    // so the tour never shows one alongside an actual occurrence.
+    this.loadOccurrences(() => this.startProductTour());
     this.loadRules();
+  }
+
+  private startProductTour() {
+    // Skip entirely if this tour has already run - otherwise the demo badge would
+    // flash on every page load/refresh even though no tour is actually starting.
+    if (this.productTourService.hasSeenTour('plan-onboarding')) {
+      return;
+    }
+
+    if (!this.firstOccurrenceKey()) {
+      this.demoBadgeActive.set(true);
+    }
+
+    this.productTourService.startTour('plan-onboarding', {
+      onDestroyed: () => this.demoBadgeActive.set(false),
+    });
   }
 
   private formatDate(d: Date): string {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   }
 
-  loadOccurrences() {
+  loadOccurrences(onLoaded?: () => void) {
     this.recurringService.getOccurrences(this.viewMonth(), this.viewYear()).subscribe(data => {
       this.occurrences.set(data);
+      onLoaded?.();
     });
   }
 

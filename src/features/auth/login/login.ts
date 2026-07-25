@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -23,8 +23,8 @@ export class Login {
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  showPassword = false;
-  isSubmitting = false;
+  showPassword = signal(false);
+  isSubmitting = signal(false);
 
   get email() { return this.loginForm.get('email')!; }
   get password() { return this.loginForm.get('password')!; }
@@ -38,7 +38,7 @@ export class Login {
   }
 
   togglePassword(): void {
-    this.showPassword = !this.showPassword;
+    this.showPassword.set(!this.showPassword());
   }
 
   onSubmit(): void {
@@ -47,7 +47,7 @@ export class Login {
       return;
     }
 
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
 
     const { email, password } = this.loginForm.value as { email: string; password: string };
 
@@ -59,7 +59,7 @@ export class Login {
       },
       error: (err) => {
         this.toast.error(extractErrorMessage(err, 'Invalid email or password. Please try again.'));
-                                                                                                                                           this.isSubmitting = false;
+        this.isSubmitting.set(false);
       },
     });
   }

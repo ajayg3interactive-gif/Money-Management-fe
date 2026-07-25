@@ -12,7 +12,7 @@
       <p class="text-gray-500 mt-1 text-sm">Join FinTrack - it only takes a minute</p>
     </div>
 
-    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate>
+    <form [formGroup]="detailsForm" (ngSubmit)="sendOtp()" novalidate>
 
       <!-- Name -->
       <div class="mb-5">
@@ -21,7 +21,8 @@
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <app-icon name="user" class="text-gray-400" [size]="19" />
           </div>
-          <input id="name" type="text" formControlName="name" placeholder="Jane Doe" [class]="fieldClass('name')" />
+          <input id="name" type="text" formControlName="name" placeholder="Jane Doe"
+            [class]="fieldClass(detailsForm, 'name')" />
         </div>
         @if (name.touched && name.hasError('required')) {
         <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
@@ -45,7 +46,14 @@
             <app-icon name="mail" class="text-gray-400" />
           </div>
           <input id="email" type="email" formControlName="email" placeholder="you@example.com"
-            [class]="fieldClass('email')" />
+            [class]="fieldClass(detailsForm, 'email', step() !== 'details')" />
+          @if (step() !== 'details') {
+          <button type="button" (click)="changeEmail()"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600 transition-colors"
+            aria-label="Change email">
+            <app-icon name="edit" [size]="16" />
+          </button>
+          }
         </div>
         @if (email.touched && email.hasError('required')) {
         <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
@@ -59,6 +67,82 @@
           Please enter a valid email address.
         </p>
         }
+        @if (step() !== 'details') {
+        <p class="mt-1.5 text-xs text-gray-400 flex items-center gap-1">
+          Email locked. Use the edit icon to change it.
+        </p>
+        }
+      </div>
+
+      @if (step() === 'details') {
+      <button type="submit" [disabled]="sendingOtp()"
+        class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mb-2">
+        @if (sendingOtp()) {
+        <span class="flex items-center justify-center gap-2">
+          <app-icon name="loadingIcon" class="animate-spin" />
+          Sending OTP…
+        </span>
+        } @else {
+        Send OTP
+        }
+      </button>
+      }
+    </form>
+
+    <!-- OTP -->
+    @if (step() === 'otp') {
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-gray-700 mb-1.5">Enter Verification Code</label>
+      <p class="text-xs text-gray-500 mb-3">We sent a 6-digit code to {{ email.value }}</p>
+
+      <div class="flex justify-between gap-2 mb-2" (paste)="onOtpPaste($event)">
+        @for (digit of otpDigits(); track $index) {
+        <input #otpInput type="text" inputmode="numeric" maxlength="1" [value]="digit"
+          (input)="onOtpInput($index, $event)" (keydown)="onOtpKeydown($index, $event)"
+          class="w-11 h-12 text-center text-lg font-semibold border rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:border-indigo-400 focus:ring-indigo-100" />
+        }
+      </div>
+
+      @if (otpError()) {
+      <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+        <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
+        {{ otpError() }}
+      </p>
+      }
+
+      <div class="flex items-center justify-between mt-3">
+        <button type="button" (click)="resendOtp()" [disabled]="resendCooldown() > 0 || resendingOtp()"
+          class="text-xs font-medium text-indigo-600 hover:underline disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed">
+          @if (resendingOtp()) {
+          Resending…
+          } @else if (resendCooldown() > 0) {
+          Resend code in {{ resendCooldown() }}s
+          } @else {
+          Resend code
+          }
+        </button>
+      </div>
+
+      <button type="button" (click)="verifyOtp()" [disabled]="verifyingOtp()"
+        class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        @if (verifyingOtp()) {
+        <span class="flex items-center justify-center gap-2">
+          <app-icon name="loadingIcon" class="animate-spin" />
+          Verifying…
+        </span>
+        } @else {
+        Verify Email
+        }
+      </button>
+    </div>
+    }
+
+    <!-- Password -->
+    @if (step() === 'password') {
+    <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="mb-5 flex items-center gap-1.5 text-xs font-medium text-green-600">
+        <app-icon name="shieldTickIcon" [size]="14" />
+        Email verified
       </div>
 
       <!-- Password -->
@@ -68,12 +152,12 @@
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <app-icon name="lockIcon" class="text-gray-400" [size]="20" />
           </div>
-          <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
-            placeholder="Min. 6 characters" [class]="fieldClass('password', true)" />
-          <button type="button" (click)="showPassword = !showPassword"
+          <input id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+            placeholder="Min. 6 characters" [class]="fieldClass(passwordForm, 'password', true)" />
+          <button type="button" (click)="showPassword.set(!showPassword())"
             class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
-            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-            @if (showPassword) {
+            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+            @if (showPassword()) {
             <app-icon name="eyeCloseIcon" />
             } @else {
             <app-icon name="eyeOpenIcon" />
@@ -103,13 +187,13 @@
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <app-icon name="shieldTickIcon" class="text-gray-400" />
           </div>
-          <input id="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'"
+          <input id="confirmPassword" [type]="showConfirmPassword() ? 'text' : 'password'"
             formControlName="confirmPassword" placeholder="Re-enter your password"
-            [class]="fieldClass('confirmPassword', true)" />
-          <button type="button" (click)="showConfirmPassword = !showConfirmPassword"
+            [class]="fieldClass(passwordForm, 'confirmPassword', true)" />
+          <button type="button" (click)="showConfirmPassword.set(!showConfirmPassword())"
             class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
-            [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'">
-            @if (showConfirmPassword) {
+            [attr.aria-label]="showConfirmPassword() ? 'Hide password' : 'Show password'">
+            @if (showConfirmPassword()) {
             <app-icon name="eyeCloseIcon" />
             } @else {
             <app-icon name="eyeOpenIcon" />
@@ -123,7 +207,7 @@
         </p>
         }
         @if (confirmPassword.touched && !confirmPassword.hasError('required') &&
-        signupForm.hasError('passwordMismatch')) {
+        passwordForm.hasError('passwordMismatch')) {
         <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
           <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
           Passwords do not match.
@@ -132,9 +216,9 @@
       </div>
 
       <!-- Submit -->
-      <button type="submit" [disabled]="isSubmitting"
+      <button type="submit" [disabled]="isSubmitting()"
         class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-        @if (isSubmitting) {
+        @if (isSubmitting()) {
         <span class="flex items-center justify-center gap-2">
           <app-icon name="loadingIcon" class="animate-spin" />
           Creating Account…
@@ -144,6 +228,7 @@
         }
       </button>
     </form>
+    }
 
     <!-- Divider -->
     <div class="flex items-center my-6">

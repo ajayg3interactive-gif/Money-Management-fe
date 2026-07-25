@@ -37,6 +37,18 @@ export class AuthService {
     /** True once the initial session check (against the httpOnly cookie) has completed. */
     readonly resolved = this._resolved.asReadonly();
 
+    sendOtp(name: string, email: string): Observable<{ email: string }> {
+        return this.http
+            .post<ApiSuccess<{ email: string }>>(`${this.apiUrl}/send-otp`, { name, email }, { withCredentials: true })
+            .pipe(map(res => res.data));
+    }
+
+    verifyOtp(email: string, otp: string): Observable<{ email: string; verified: boolean }> {
+        return this.http
+            .post<ApiSuccess<{ email: string; verified: boolean }>>(`${this.apiUrl}/verify-otp`, { email, otp }, { withCredentials: true })
+            .pipe(map(res => res.data));
+    }
+
     register(name: string, email: string, password: string): Observable<AuthUser> {
         return this.http
             .post<ApiSuccess<AuthUser>>(`${this.apiUrl}/register`, { name, email, password }, { withCredentials: true })
