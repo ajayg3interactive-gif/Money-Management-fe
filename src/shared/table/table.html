@@ -2,7 +2,7 @@
 <table style="width: 100%; min-width: 640px; border-collapse: collapse">
   <!-- Header -->
   <thead>
-    <tr class="border-border" style="border-bottom: 1px solid">
+    <tr class="border-border border-b" >
       @for (col of sortedColumns; track col.key) {
         <th
         [style.text-align]="col.key === 'action' ? 'center' : 'left'"
@@ -26,8 +26,8 @@
   <tbody>
     @for (row of rows; track row) {
       <tr
-        class="table-row border-border"
-        style="border-bottom: 1px solid; transition: background 0.15s ease"
+        class="table-row border-b border-border"
+        style="transition: background 0.15s ease"
       >
         @for (col of sortedColumns; track col.key) {
           <td style="padding: 14px 20px; vertical-align: middle">
