@@ -23,8 +23,16 @@ export class BudgetService {
     private http = inject(HttpClient);
     private apiUrl = environment.apiOrigin + '/api/budgets';
 
-    getBudgets(): Observable<Budget[]> {
-        return this.http.get<{ success: true; data: Budget[] }>(this.apiUrl)
+    /**
+     * @param month 1-12, defaults to the current month
+     * @param year defaults to the current year
+     */
+    getBudgets(month?: number, year?: number): Observable<Budget[]> {
+        const query = new URLSearchParams();
+        if (month) query.set('month', String(month));
+        if (year) query.set('year', String(year));
+        const params = query.toString() ? `?${query.toString()}` : '';
+        return this.http.get<{ success: true; data: Budget[] }>(`${this.apiUrl}${params}`)
             .pipe(map(res => res.data));
     }
 

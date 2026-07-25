@@ -3,10 +3,11 @@ import { Table } from '../../../shared/table/table';
 import { Budget as BudgetModel, BudgetColumn, BudgetService } from '../../../core/services/budget.service';
 import { BudgetStatusModal } from '../budget-status-modal/budget-status-modal';
 import { Category, CategoryService } from '../../../core/services/category.service';
+import { YearMonthFilter } from '../../../shared/year-month-filter/year-month-filter';
 
 @Component({
   selector: 'app-budget',
-  imports: [Table, BudgetStatusModal],
+  imports: [Table, BudgetStatusModal, YearMonthFilter],
   templateUrl: './budget.html',
   styleUrl: './budget.css',
 })
@@ -20,6 +21,10 @@ export class Budget implements OnInit {
   openModal = signal(false);
   selectedCategory = signal<string | null>(null);
   searchTerm = signal('');
+  filterYear = signal(new Date().getFullYear());
+  filterMonth = signal(new Date().getMonth() + 1);
+
+  years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 
   filteredRows = computed<BudgetModel[]>(() => {
     const term = this.searchTerm().trim().toLowerCase();
@@ -43,9 +48,19 @@ export class Budget implements OnInit {
   }
 
   loadBudgets() {
-    this.budgetService.getBudgets().subscribe(data => {
+    this.budgetService.getBudgets(this.filterMonth(), this.filterYear()).subscribe(data => {
       this.rows.set(data);
     });
+  }
+
+  onYearChange(year: number | null) {
+    this.filterYear.set(year ?? new Date().getFullYear());
+    this.loadBudgets();
+  }
+
+  onMonthChange(month: number | null) {
+    this.filterMonth.set(month ?? new Date().getMonth() + 1);
+    this.loadBudgets();
   }
 
   handleModal(open: boolean) {

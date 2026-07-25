@@ -72,29 +72,16 @@
       />
     </div>
 
-    <!-- Sort/Filter Button -->
-    <button
-      class="flex items-center gap-2 bg-white rounded-xl px-3 py-2.5 text-sm font-medium transition-all"
-      style="color: #475569; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="15"
-        height="15"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <line x1="21" y1="10" x2="7" y2="10" />
-        <line x1="21" y1="6" x2="3" y2="6" />
-        <line x1="21" y1="14" x2="3" y2="14" />
-        <line x1="21" y1="18" x2="7" y2="18" />
-      </svg>
-      Filter
-    </button>
+    <!-- Year/Month Filter -->
+    <app-year-month-filter
+      [years]="years"
+      [selectedYear]="filterYear()"
+      [selectedMonth]="filterMonth()"
+      [allowAllYears]="false"
+      [allowAllMonths]="false"
+      (yearChange)="onYearChange($event)"
+      (monthChange)="onMonthChange($event)"
+    ></app-year-month-filter>
   </div>
 
   <!-- Table Card -->

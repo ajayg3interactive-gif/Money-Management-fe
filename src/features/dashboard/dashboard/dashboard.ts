@@ -129,6 +129,7 @@ export class Dashboard implements OnInit {
   onMonthChange(value: string) {
     this.selectedMonth.set(Number(value));
     this.loadMonthlySummary();
+    this.loadBudgets();
   }
 
   loadMonthlySummary() {
@@ -151,7 +152,7 @@ export class Dashboard implements OnInit {
   }
 
   loadBudgets() {
-    this.budgetService.getBudgets().subscribe(data => {
+    this.budgetService.getBudgets(this.selectedMonth()).subscribe(data => {
       this.budgets.set(data)
     })
   }
@@ -190,7 +191,7 @@ export class Dashboard implements OnInit {
   }
 
   formatAmount(amount: number): string {
-    return this.authService.currencySymbol() + ' ' + Math.abs(amount).toLocaleString('en-IN');
+    return this.authService.currencySymbol() + ' ' + amount.toLocaleString('en-IN');
   }
 
   formatRelativeDate(date: string): string {
