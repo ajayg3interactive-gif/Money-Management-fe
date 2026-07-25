@@ -55,7 +55,7 @@ export class Login {
       next: () => {
         this.toast.success('Login successful! Redirecting…');
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-        this.router.navigateByUrl(returnUrl ?? '/');
+        this.router.navigateByUrl(returnUrl ?? '/', { state: { fromLogin: true } });
       },
       error: (err) => {
         this.toast.error(extractErrorMessage(err, 'Invalid email or password. Please try again.'));

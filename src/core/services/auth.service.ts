@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import { ToastService } from './toast.service';
+import { ProductTourService } from '../../shared/product-tour/product-tour.service';
 import { environment } from '../../environments/environment';
 
 export interface AuthUser {
@@ -13,6 +14,8 @@ export interface AuthUser {
     avatarUrl: string | null;
     currency: string;
     currencySymbol: string;
+    dashboardTourSeen: boolean;
+    planTourSeen: boolean;
 }
 
 interface ApiSuccess<T> {
@@ -25,6 +28,7 @@ export class AuthService {
     private http = inject(HttpClient);
     private router = inject(Router);
     private toast = inject(ToastService);
+    private productTourService = inject(ProductTourService);
     private apiUrl = environment.apiOrigin + '/api/auth';
 
     private _currentUser = signal<AuthUser | null>(null);
@@ -119,6 +123,15 @@ export class AuthService {
             );
     }
 
+    markTourSeen(tourId: string, seen = true): Observable<AuthUser> {
+        return this.http
+            .patch<ApiSuccess<AuthUser>>(`${this.apiUrl}/me/tour`, { tourId, seen }, { withCredentials: true })
+            .pipe(
+                map(res => res.data),
+                tap(user => this._currentUser.set(user))
+            );
+    }
+
     /** Called by the HTTP interceptor when a request comes back 401 mid-session. */
     handleUnauthorized(): void {
         this._currentUser.set(null);
@@ -128,6 +141,7 @@ export class AuthService {
 
     private finishLogout(): void {
         this._currentUser.set(null);
+        this.productTourService.clearAll();
         this.toast.success('Logged out successfully.');
         this.router.navigate(['/login']);
     }

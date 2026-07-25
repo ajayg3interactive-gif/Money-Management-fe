@@ -31,6 +31,14 @@ export class ProductTourService {
     localStorage.removeItem(this.storagePrefix + tourId);
   }
 
+  /** Clears every tour's "seen" flag - call on logout so the next account to sign in
+   * on this browser isn't affected by the previous user's tour progress. */
+  clearAll(): void {
+    for (const tourId of Object.keys(TOURS)) {
+      this.resetTour(tourId);
+    }
+  }
+
   startTour(tourId: string, options?: Partial<Config>): void {
     if (this.hasSeenTour(tourId)) {
       return;

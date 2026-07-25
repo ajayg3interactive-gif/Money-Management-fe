@@ -123,7 +123,25 @@ export class Dashboard implements OnInit {
   }
 
   private startProductTour() {
-    this.productTourService.startTour('dashboard-onboarding');
+    // Only auto-run for accounts that haven't completed it yet - once seen, it's only
+    // reachable again via Help > Tutorial.
+    if (this.authService.currentUser()?.dashboardTourSeen) {
+      return;
+    }
+
+    const run = () => this.productTourService.startTour('dashboard-onboarding', {
+      onDestroyed: () => this.authService.markTourSeen('dashboard-onboarding').subscribe(),
+    });
+
+    // Only delay when landing here straight off a login redirect - that's the one path
+    // where the "Login successful" toast (top-right, same corner as the first tour target)
+    // would otherwise overlap the popover. Triggered replays (Help > Tutorial) start at once.
+    const fromLogin = !!(history.state as { fromLogin?: boolean } | null)?.fromLogin;
+    if (fromLogin) {
+      setTimeout(run, 3800);
+    } else {
+      run();
+    }
   }
 
   onMonthChange(value: string) {

@@ -102,9 +102,10 @@ export class Plan implements OnInit {
   }
 
   private startProductTour() {
-    // Skip entirely if this tour has already run - otherwise the demo badge would
-    // flash on every page load/refresh even though no tour is actually starting.
-    if (this.productTourService.hasSeenTour('plan-onboarding')) {
+    // Skip entirely if this account has already completed it - otherwise the demo badge
+    // would flash on every page load/refresh even though no tour is actually starting.
+    // Once seen, it's only reachable again via Help > Tutorial.
+    if (this.authService.currentUser()?.planTourSeen) {
       return;
     }
 
@@ -113,7 +114,10 @@ export class Plan implements OnInit {
     }
 
     this.productTourService.startTour('plan-onboarding', {
-      onDestroyed: () => this.demoBadgeActive.set(false),
+      onDestroyed: () => {
+        this.demoBadgeActive.set(false);
+        this.authService.markTourSeen('plan-onboarding').subscribe();
+      },
     });
   }
 
