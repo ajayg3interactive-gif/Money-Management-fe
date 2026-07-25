@@ -1,25 +1,24 @@
-<div class="auth-flip-stage min-h-screen flex items-center justify-center p-4"
-  style="background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%)">
-  <div class="auth-flip-card bg-white rounded-2xl shadow-xl w-full max-w-md p-6 sm:p-8">
+<div class="auth-flip-stage min-h-screen flex items-center justify-center p-4 bg-background">
+  <div class="auth-flip-card bg-surface rounded-2xl shadow-xl w-full max-w-md p-6 sm:p-8 border border-border">
 
     <!-- Header -->
     <div class="text-center mb-8">
       <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-        style="background: linear-gradient(135deg, #5B6EF5 0%, #8B5CF6 100%)">
+        style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)">
         <app-icon name="dollarIcon" [size]="20" class="text-white" />
       </div>
-      <h1 class="text-2xl font-bold text-gray-800">Welcome Back</h1>
-      <p class="text-gray-500 mt-1 text-sm">Sign in to FinTrack</p>
+      <h1 class="text-2xl font-bold text-text">Welcome Back</h1>
+      <p class="text-text-muted mt-1 text-sm">Sign in to FinTrack</p>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
 
       <!-- Email -->
       <div class="mb-5">
-        <label class="block text-sm font-medium text-gray-700 mb-1.5" for="email">Email Address</label>
+        <label class="block text-sm font-medium text-text mb-1.5" for="email">Email Address</label>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <app-icon name="mail" class="text-gray-400" [size]="19" />
+            <app-icon name="mail" class="text-text-muted" [size]="19" />
           </div>
           <input id="email" type="email" formControlName="email" placeholder="you@example.com"
             [class]="fieldClass('email')" />
@@ -40,15 +39,15 @@
 
       <!-- Password -->
       <div class="mb-2">
-        <label class="block text-sm font-medium text-gray-700 mb-1.5" for="password">Password</label>
+        <label class="block text-sm font-medium text-text mb-1.5" for="password">Password</label>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <app-icon name="lockIcon" class="text-gray-400" [size]="20" />
+            <app-icon name="lockIcon" class="text-text-muted" [size]="20" />
           </div>
           <input id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
             placeholder="Min. 6 characters" [class]="fieldClass('password', true)" />
           <button type="button" (click)="togglePassword()"
-            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-text-muted hover:text-text transition-colors"
             [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
             @if (showPassword()) {
             <app-icon name="eyeCloseIcon" />
@@ -74,13 +73,13 @@
       <!-- Forgot password -->
       <div class="flex justify-end mb-6">
         <button type="button"
-          class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors hover:underline">
+          class="text-sm text-primary hover:opacity-80 font-medium transition-colors hover:underline">
           Forgot password ?
         </button>
       </div>
       <!-- Submit -->
       <button type="submit" [disabled]="isSubmitting()"
-        class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        class="w-full bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2">
         @if (isSubmitting()) {
         <span class="flex items-center justify-center gap-2">
           <app-icon name="loadingIcon" class="animate-spin" />
@@ -94,22 +93,22 @@
 
     <!-- Divider -->
     <div class="flex items-center my-6">
-      <div class="flex-1 border-t border-gray-200"></div>
-      <span class="px-3 text-sm text-gray-400">or</span>
-      <div class="flex-1 border-t border-gray-200"></div>
+      <div class="flex-1 border-t border-border"></div>
+      <span class="px-3 text-sm text-text-muted">or</span>
+      <div class="flex-1 border-t border-border"></div>
     </div>
 
     <!-- Sign Up -->
     <a routerLink="/signup"
-      class="block w-full text-center bg-white hover:bg-gray-50 active:bg-gray-100 text-indigo-600 font-semibold py-3 px-4 rounded-xl border-2 border-indigo-200 hover:border-indigo-400 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+      class="block w-full text-center bg-surface hover:bg-[color-mix(in_srgb,var(--text)_4%,transparent)] text-primary font-semibold py-3 px-4 rounded-xl border-2 border-primary/30 hover:border-primary/60 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2">
       Create an Account
     </a>
 
-    <p class="text-center text-xs text-gray-400 mt-6">
+    <p class="text-center text-xs text-text-muted mt-6">
       By signing in, you agree to our
-      <a href="#" class="text-indigo-600 hover:underline">Terms of Service</a>
+      <a href="#" class="text-primary hover:underline">Terms of Service</a>
       and
-      <a href="#" class="text-indigo-600 hover:underline">Privacy Policy</a>
+      <a href="#" class="text-primary hover:underline">Privacy Policy</a>
     </p>
   </div>
 </div>

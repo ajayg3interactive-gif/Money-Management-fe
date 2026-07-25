@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { environment } from '../../environments/environment';
 // import { IconName } from '../icons/icons.component';
 import { IconComponent,IconName } from "../icons/icons.component";
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -18,6 +19,7 @@ export class SideBar {
 
   private sanitizer = inject(DomSanitizer);
   protected authService = inject(AuthService);
+  protected themeService = inject(ThemeService);
 
   onNavClick(): void {
     this.closeMenu.emit();

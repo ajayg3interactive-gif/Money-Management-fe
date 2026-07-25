@@ -23,9 +23,9 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
   font-size: 13px;
   font-weight: 500;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  color: #1e293b;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
   animation: toast-in 0.25s ease;
 }
 

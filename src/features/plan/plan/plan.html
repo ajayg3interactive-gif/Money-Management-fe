@@ -1,18 +1,17 @@
-<div class="p-4 md:p-6" style="min-height: 100vh; background: #f1f5f9">
+<div class="p-4 md:p-6 bg-background" style="min-height: 100vh">
   <!-- Page Header -->
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
     <div>
-      <p style="color: #64748b; font-size: 13px">Recurring &amp; Scheduled</p>
-      <h1 style="color: #0f172a; font-size: 24px; font-weight: 700; margin: 2px 0 0">Plan</h1>
+      <p class="text-text-muted" style="font-size: 13px">Recurring &amp; Scheduled</p>
+      <h1 class="text-text" style="font-size: 24px; font-weight: 700; margin: 2px 0 0">Plan</h1>
     </div>
     <div
-      class="flex items-center justify-between sm:justify-start gap-3 bg-white rounded-xl px-2 py-2 w-full sm:w-auto"
-      style="border: 1px solid #e2e8f0"
+      class="flex items-center justify-between sm:justify-start gap-3 bg-surface rounded-xl px-2 py-2 w-full sm:w-auto border border-border"
     >
       <button
         (click)="prevMonth()"
-        class="flex items-center justify-center rounded-lg transition-all"
-        style="width: 30px; height: 30px; color: #475569"
+        class="flex items-center justify-center rounded-lg transition-all text-text-muted"
+        style="width: 30px; height: 30px"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -29,8 +28,8 @@
         </svg>
       </button>
       <span
+        class="text-text"
         style="
-          color: #1e293b;
           font-size: 13.5px;
           font-weight: 600;
           min-width: 140px;
@@ -41,8 +40,8 @@
       </span>
       <button
         (click)="nextMonth()"
-        class="flex items-center justify-center rounded-lg transition-all"
-        style="width: 30px; height: 30px; color: #475569"
+        class="flex items-center justify-center rounded-lg transition-all text-text-muted"
+        style="width: 30px; height: 30px"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -64,8 +63,8 @@
   <div class="grid grid-cols-1 gap-5 lg:grid-cols-4">
     <!-- Calendar (3/4) -->
     <div
-      class="lg:col-span-3 bg-white rounded-2xl p-5"
-      style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
+      class="lg:col-span-3 bg-surface rounded-2xl p-5 border border-border"
+      style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05)"
     >
       <!-- Calendar grid (scrolls horizontally on narrow screens) -->
       <div class="overflow-x-auto max-w-full" style="-webkit-overflow-scrolling: touch">
@@ -74,8 +73,8 @@
           <div class="grid grid-cols-7 mb-2">
             @for (wd of weekDays; track wd) {
               <div
+                class="text-text-muted"
                 style="
-                  color: #94a3b8;
                   font-size: 11px;
                   font-weight: 600;
                   text-align: center;
@@ -95,13 +94,13 @@
                   (click)="openAddModal(cell.date)"
                   [attr.data-tour]="cell.day === 1 ? 'plan-first-date' : null"
                   class="rounded-xl p-2 transition-all cursor-pointer"
-                  [style.background]="cell.isToday ? '#eef0ff' : '#f8fafc'"
-                  [style.border]="cell.isToday ? '1.5px solid #5b6ef5' : '1px solid #f1f5f9'"
+                  [style.background]="cell.isToday ? 'color-mix(in srgb, var(--primary), transparent 90%)' : 'var(--background)'"
+                  [style.border]="cell.isToday ? '1.5px solid var(--primary)' : '1px solid var(--border)'"
                   style="min-height: 88px; display: flex; flex-direction: column; gap: 4px"
                 >
                   <span
                     style="font-size: 12px; font-weight: 600"
-                    [style.color]="cell.isToday ? '#5b6ef5' : '#334155'"
+                    [style.color]="cell.isToday ? 'var(--primary)' : 'var(--text)'"
                   >
                     {{ cell.day }}
                   </span>
@@ -126,7 +125,7 @@
                       </span>
                     }
                     @if (cell.occurrences.length > 3) {
-                      <span style="font-size: 10px; color: #94a3b8"
+                      <span class="text-text-muted" style="font-size: 10px"
                         >+{{ cell.occurrences.length - 3 }} more</span
                       >
                     }
@@ -160,8 +159,8 @@
 
       <!-- Legend -->
       <div
-        class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4"
-        style="font-size: 11px; color: #64748b"
+        class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4 text-text-muted"
+        style="font-size: 11px"
       >
         <span class="flex items-center gap-1.5">
           <span class="rounded-full" style="width: 8px; height: 8px; background: #5b6ef5"></span>
@@ -175,7 +174,7 @@
           <span class="rounded-full" style="width: 8px; height: 8px; background: #10b981"></span>
           Posted
         </span>
-        <span style="color: #cbd5e1">&middot;</span>
+        <span class="text-text-muted">&middot;</span>
         <span>Click a date to add an auto transaction. Click a badge to hold/unhold it.</span>
       </div>
     </div>
@@ -183,10 +182,10 @@
     <!-- Rules list (1/4) -->
     <div
       data-tour="plan-rules"
-      class="bg-white rounded-2xl p-5"
-      style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
+      class="bg-surface rounded-2xl p-5 border border-border"
+      style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05)"
     >
-      <h2 style="color: #0f172a; font-size: 15px; font-weight: 600; margin: 0 0 12px">
+      <h2 class="text-text" style="font-size: 15px; font-weight: 600; margin: 0 0 12px">
         Auto Transactions
       </h2>
       <div
@@ -200,27 +199,28 @@
         "
       >
         @for (rule of rules(); track rule.id) {
-          <div class="rounded-xl p-3" style="border: 1px solid #f1f5f9; background: #f8fafc">
+          <div class="rounded-xl p-3 border border-border bg-background">
             <div class="flex items-center justify-between mb-1">
-              <span style="color: #1e293b; font-size: 12.5px; font-weight: 600">
+              <span class="text-text" style="font-size: 12.5px; font-weight: 600">
                 {{ formatAmount(rule.amount) }}
               </span>
               <button
                 (click)="toggleRuleActive(rule)"
                 class="rounded-full transition-all"
                 style="font-size: 10px; font-weight: 600; padding: 2px 8px"
-                [style.color]="rule.active ? '#059669' : '#94a3b8'"
-                [style.background]="rule.active ? '#d1fae5' : '#f1f5f9'"
+                [style.color]="rule.active ? '#059669' : 'var(--text-muted)'"
+                [style.background]="rule.active ? '#d1fae5' : 'var(--border)'"
               >
                 {{ rule.active ? 'Active' : 'Paused' }}
               </button>
             </div>
             <p
-              style="color: #64748b; font-size: 11.5px; margin: 0 0 2px; text-transform: capitalize"
+              class="text-text-muted"
+              style="font-size: 11.5px; margin: 0 0 2px; text-transform: capitalize"
             >
               {{ rule.category }} &middot; {{ rule.type }}
             </p>
-            <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px">
+            <p class="text-text-muted" style="font-size: 11px; margin: 0 0 8px">
               @if (rule.frequency === 'monthly-same-day') {
                 Monthly on day {{ rule.startDate.slice(8, 10) }}
               } @else {
@@ -235,7 +235,7 @@
             </button>
           </div>
         } @empty {
-          <p style="color: #94a3b8; font-size: 12px; text-align: center; margin: 12px 0">
+          <p class="text-text-muted" style="font-size: 12px; text-align: center; margin: 12px 0">
             No auto transactions yet. Click a date on the calendar to add one.
           </p>
         }

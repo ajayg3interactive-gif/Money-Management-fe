@@ -5,26 +5,26 @@
 >
   <!-- Modal -->
   <div
-    class="w-full bg-white rounded-2xl flex flex-col"
+    class="w-full bg-surface rounded-2xl flex flex-col"
     style="max-width: 460px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18); max-height: 90vh"
   >
     <!-- Header -->
     <div
       class="flex items-center justify-between px-6 py-5"
-      style="border-bottom: 1px solid #f1f5f9; flex-shrink: 0"
+      style="border-bottom: 1px solid var(--border); flex-shrink: 0"
     >
       <div>
-        <h2 style="color: #0f172a; font-size: 17px; font-weight: 700; margin: 0 0 3px">
+        <h2 class="text-text" style="font-size: 17px; font-weight: 700; margin: 0 0 3px">
           Add Auto Transaction
         </h2>
-        <p style="color: #94a3b8; font-size: 12px; margin: 0">
+        <p style="color: var(--text-muted); font-size: 12px; margin: 0">
           Starts {{ startDate }} &middot; repeats automatically
         </p>
       </div>
       <button
         (click)="closeModal()"
         class="flex items-center justify-center rounded-full transition-all"
-        style="width: 32px; height: 32px; color: #94a3b8; background: transparent"
+        style="width: 32px; height: 32px; color: var(--text-muted); background: transparent"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -46,13 +46,13 @@
     <div style="overflow-y: auto; overflow-x: hidden;  flex: 1">
       <!-- Type Toggle -->
       <div class="px-6 pt-5">
-        <div class="flex gap-2 p-1 rounded-xl" style="background: #f1f5f9">
+        <div class="flex gap-2 p-1 rounded-xl" style="background: var(--border)">
           <button
             class="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
             [style]="
               type() === 'Expense'
-                ? 'background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); color: #fff'
-                : 'color: #64748b'
+                ? 'background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); color: #fff'
+                : 'color: var(--text-muted)'
             "
             (click)="setType('Expense')"
           >
@@ -62,8 +62,8 @@
             class="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
             [style]="
               type() === 'Income'
-                ? 'background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: #fff'
-                : 'color: #64748b'
+                ? 'background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); color: #fff'
+                : 'color: var(--text-muted)'
             "
             (click)="setType('Income')"
           >
@@ -81,7 +81,7 @@
               display: block;
               font-size: 11px;
               font-weight: 600;
-              color: #64748b;
+              color: var(--text-muted);
               letter-spacing: 0.07em;
               text-transform: uppercase;
               margin-bottom: 8px;
@@ -91,9 +91,9 @@
           </label>
           <div
             class="flex items-center gap-2 rounded-xl px-4 py-3 transition-all"
-            style="border: 1.5px solid #e2e8f0; background: #f8fafc"
+            style="border: 1.5px solid var(--border); background: var(--background)"
           >
-            <span style="color: #94a3b8; font-size: 14px; font-weight: 600; user-select: none"
+            <span style="color: var(--text-muted); font-size: 14px; font-weight: 600; user-select: none"
               >{{ authService.currencySymbol() }}</span
             >
             <input
@@ -109,7 +109,7 @@
                 outline: none;
                 font-size: 22px;
                 font-weight: 700;
-                color: #1e293b;
+                color: var(--text);
               "
             />
           </div>
@@ -122,7 +122,7 @@
               display: block;
               font-size: 11px;
               font-weight: 600;
-              color: #64748b;
+              color: var(--text-muted);
               letter-spacing: 0.07em;
               text-transform: uppercase;
               margin-bottom: 8px;
@@ -144,7 +144,7 @@
               display: block;
               font-size: 11px;
               font-weight: 600;
-              color: #64748b;
+              color: var(--text-muted);
               letter-spacing: 0.07em;
               text-transform: uppercase;
               margin-bottom: 8px;
@@ -152,13 +152,13 @@
           >
             Repeats
           </label>
-          <div class="flex gap-2 p-1 rounded-xl" style="background: #f1f5f9">
+          <div class="flex gap-2 p-1 rounded-xl" style="background: var(--border)">
             <button
               class="flex-1 py-2 rounded-lg text-xs font-semibold transition-all"
               [style]="
                 frequency() === 'monthly-same-day'
-                  ? 'background: #fff; color: #1e293b; box-shadow: 0 1px 3px rgba(0,0,0,0.08)'
-                  : 'color: #64748b'
+                  ? 'background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.08)'
+                  : 'color: var(--text-muted)'
               "
               (click)="setFrequency('monthly-same-day')"
             >
@@ -168,8 +168,8 @@
               class="flex-1 py-2 rounded-lg text-xs font-semibold transition-all"
               [style]="
                 frequency() === 'every-n-days'
-                  ? 'background: #fff; color: #1e293b; box-shadow: 0 1px 3px rgba(0,0,0,0.08)'
-                  : 'color: #64748b'
+                  ? 'background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.08)'
+                  : 'color: var(--text-muted)'
               "
               (click)="setFrequency('every-n-days')"
             >
@@ -187,7 +187,7 @@
                   display: block;
                   font-size: 11px;
                   font-weight: 600;
-                  color: #64748b;
+                  color: var(--text-muted);
                   letter-spacing: 0.07em;
                   text-transform: uppercase;
                   margin-bottom: 8px;
@@ -202,12 +202,12 @@
                 (ngModelChange)="interval.set($event)"
                 style="
                   width: 100%;
-                  border: 1.5px solid #e2e8f0;
+                  border: 1.5px solid var(--border);
                   border-radius: 12px;
                   padding: 10px 12px;
                   font-size: 13.5px;
-                  color: #334155;
-                  background: #f8fafc;
+                  color: var(--text);
+                  background: var(--background);
                   outline: none;
                 "
               />
@@ -219,7 +219,7 @@
                 display: block;
                 font-size: 11px;
                 font-weight: 600;
-                color: #64748b;
+                color: var(--text-muted);
                 letter-spacing: 0.07em;
                 text-transform: uppercase;
                 margin-bottom: 8px;
@@ -227,7 +227,7 @@
             >
               End Date
               <span
-                style="font-weight: 400; color: #cbd5e1; text-transform: none; letter-spacing: 0"
+                style="font-weight: 400; color: var(--text-muted); text-transform: none; letter-spacing: 0"
                 >&nbsp;(optional)</span
               >
             </label>
@@ -237,12 +237,12 @@
               (ngModelChange)="endDate.set($event)"
               style="
                 width: 100%;
-                border: 1.5px solid #e2e8f0;
+                border: 1.5px solid var(--border);
                 border-radius: 12px;
                 padding: 10px 12px;
                 font-size: 13.5px;
-                color: #334155;
-                background: #f8fafc;
+                color: var(--text);
+                background: var(--background);
                 outline: none;
                 cursor: pointer;
               "
@@ -257,14 +257,14 @@
               display: block;
               font-size: 11px;
               font-weight: 600;
-              color: #64748b;
+              color: var(--text-muted);
               letter-spacing: 0.07em;
               text-transform: uppercase;
               margin-bottom: 8px;
             "
           >
             Description
-            <span style="font-weight: 400; color: #cbd5e1; text-transform: none; letter-spacing: 0"
+            <span style="font-weight: 400; color: var(--text-muted); text-transform: none; letter-spacing: 0"
               >&nbsp;(optional)</span
             >
           </label>
@@ -275,12 +275,12 @@
             (ngModelChange)="description.set($event)"
             style="
               width: 100%;
-              border: 1.5px solid #e2e8f0;
+              border: 1.5px solid var(--border);
               border-radius: 12px;
               padding: 12px;
               font-size: 13.5px;
-              color: #334155;
-              background: #f8fafc;
+              color: var(--text);
+              background: var(--background);
               outline: none;
               resize: none;
               font-family: inherit;
@@ -293,16 +293,16 @@
     <div class="flex items-center gap-3 px-6 pb-6 pt-2">
       <button
         (click)="closeModal()"
-        class="flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-99"
-        style="border: 1.5px solid #e2e8f0; color: #475569; background: white"
+        class="flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-99 bg-surface text-text-muted"
+        style="border: 1.5px solid var(--border)"
       >
         Cancel
       </button>
       <button
         class="flex-1 py-3 rounded-xl text-white text-sm font-semibold transition-all active:scale-99"
         style="
-          background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%);
-          box-shadow: 0 2px 8px rgba(91, 110, 245, 0.35);
+          background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+          box-shadow: 0 2px 8px color-mix(in srgb, var(--primary), transparent 65%);
         "
         (click)="handleSave()"
       >

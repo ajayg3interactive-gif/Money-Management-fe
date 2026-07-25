@@ -5,24 +5,24 @@
 >
   <!-- Modal -->
   <div
-    class="w-full bg-white rounded-2xl flex flex-col"
+    class="w-full bg-surface rounded-2xl flex flex-col"
     style="max-width: 440px; max-height: 90vh; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18)"
   >
     <!-- Header -->
     <div
-      class="flex items-center justify-between px-6 py-5 shrink-0"
-      style="border-bottom: 1px solid #f1f5f9"
+      class="flex items-center justify-between px-6 py-5 shrink-0 border-border"
+      style="border-bottom: 1px solid"
     >
       <div>
-        <h2 style="color: #0f172a; font-size: 17px; font-weight: 700; margin: 0 0 3px">
+        <h2 class="text-text" style="font-size: 17px; font-weight: 700; margin: 0 0 3px">
           Add Transaction
         </h2>
-        <p style="color: #94a3b8; font-size: 12px; margin: 0">Record a new income or expense</p>
+        <p class="text-text-muted" style="font-size: 12px; margin: 0">Record a new income or expense</p>
       </div>
       <button
         (click)="closeModal()"
-        class="flex items-center justify-center rounded-full transition-all"
-        style="width: 32px; height: 32px; color: #94a3b8; background: transparent"
+        class="flex items-center justify-center rounded-full transition-all text-text-muted"
+        style="width: 32px; height: 32px; background: transparent"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -45,13 +45,13 @@
     <div class="flex-1 overflow-y min-h-0">
     <!-- Type Toggle -->
     <div class="px-6 pt-5">
-      <div class="flex gap-2 p-1 rounded-xl" style="background: #f1f5f9">
+      <div class="flex gap-2 p-1 rounded-xl bg-background">
         <button
           class="flex-1 py-2 rounded-lg text-sm font-semibold text-white transition-all"
           [style]="
             type() === 'Expense'
-              ? 'background: linear-gradient(135deg, #ef4444 0%, #f87171 100%)'
-              : 'color: #64748b'
+              ? 'background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)'
+              : 'color: var(--text-muted)'
           "
           (click)="setType('Expense')"
         >
@@ -61,8 +61,8 @@
           class="flex-1 py-2 rounded-lg text-sm font-semibold text-white transition-all"
           [style]="
             type() === 'Income'
-              ? 'background: linear-gradient(135deg, #ef4444 0%, #f87171 100%)'
-              : 'color: #64748b'
+              ? 'background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)'
+              : 'color: var(--text-muted)'
           "
           (click)="setType('Income')"
         >
@@ -80,7 +80,7 @@
             display: block;
             font-size: 11px;
             font-weight: 600;
-            color: #64748b;
+            color: var(--text-muted);
             letter-spacing: 0.07em;
             text-transform: uppercase;
             margin-bottom: 8px;
@@ -90,9 +90,9 @@
         </label>
         <div
           class="flex items-center gap-2 rounded-xl px-4 py-3 transition-all"
-          style="border: 1.5px solid #e2e8f0; background: #f8fafc"
+          style="border: 1.5px solid var(--border); background: var(--background)"
         >
-          <span style="color: #94a3b8; font-size: 14px; font-weight: 600; user-select: none"
+          <span style="color: var(--text-muted); font-size: 14px; font-weight: 600; user-select: none"
             >{{ authService.currencySymbol() }}</span
           >
           <input
@@ -108,7 +108,7 @@
               outline: none;
               font-size: 22px;
               font-weight: 700;
-              color: #1e293b;
+              color: var(--text);
             "
           />
         </div>
@@ -122,7 +122,7 @@
               display: block;
               font-size: 11px;
               font-weight: 600;
-              color: #64748b;
+              color: var(--text-muted);
               letter-spacing: 0.07em;
               text-transform: uppercase;
               margin-bottom: 8px;
@@ -142,7 +142,7 @@
               display: block;
               font-size: 11px;
               font-weight: 600;
-              color: #64748b;
+              color: var(--text-muted);
               letter-spacing: 0.07em;
               text-transform: uppercase;
               margin-bottom: 8px;
@@ -156,12 +156,12 @@
             (ngModelChange)="date.set($event)"
             style="
               width: 100%;
-              border: 1.5px solid #e2e8f0;
+              border: 1.5px solid var(--border);
               border-radius: 12px;
               padding: 10px 12px;
               font-size: 13.5px;
-              color: #334155;
-              background: #f8fafc;
+              color: var(--text);
+              background: var(--background);
               outline: none;
               cursor: pointer;
             "
@@ -176,14 +176,14 @@
             display: block;
             font-size: 11px;
             font-weight: 600;
-            color: #64748b;
+            color: var(--text-muted);
             letter-spacing: 0.07em;
             text-transform: uppercase;
             margin-bottom: 8px;
           "
         >
           Description
-          <span style="font-weight: 400; color: #cbd5e1; text-transform: none; letter-spacing: 0"
+          <span class="text-text-muted" style="font-weight: 400; text-transform: none; letter-spacing: 0"
             >&nbsp;(optional)</span
           >
         </label>
@@ -194,12 +194,12 @@
           (ngModelChange)="description.set($event)"
           style="
             width: 100%;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             border-radius: 12px;
             padding: 12px;
             font-size: 13.5px;
-            color: #334155;
-            background: #f8fafc;
+            color: var(--text);
+            background: var(--background);
             outline: none;
             resize: none;
             font-family: inherit;
@@ -213,16 +213,16 @@
     <div class="flex items-center gap-3 px-6 pb-6 pt-2 shrink-0">
       <button
         (click)="closeModal()"
-        class="flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-99"
-        style="border: 1.5px solid #e2e8f0; color: #475569; background: white"
+        class="flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-99 text-text-muted bg-surface"
+        style="border: 1.5px solid var(--border)"
       >
         Cancel
       </button>
       <button
         class="flex-1 py-3 rounded-xl text-white text-sm font-semibold transition-all active:scale-99"
         style="
-          background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%);
-          box-shadow: 0 2px 8px rgba(91, 110, 245, 0.35);
+          background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+          box-shadow: 0 2px 8px color-mix(in srgb, var(--primary), transparent 65%);
         "
         (click)="handleSave()"
       >

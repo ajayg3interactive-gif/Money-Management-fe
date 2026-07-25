@@ -4,6 +4,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ToastComponent } from '../shared/toast/toast';
+import { ThemeService } from '../core/services/theme.service';
 
 const AUTH_ROUTES = ['/login', '/signup'];
 
@@ -14,6 +15,8 @@ const AUTH_ROUTES = ['/login', '/signup'];
   styleUrl: './app.css'
 })
 export class App {
+  private themeService = inject(ThemeService);
+
   protected readonly title = signal('Money-Management');
 
   protected readonly isSidebarOpen = signal(false);

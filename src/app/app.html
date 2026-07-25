@@ -3,7 +3,7 @@
 @if (isAuthRoute()) {
   <router-outlet></router-outlet>
 } @else {
-  <div class="flex overflow-hidden relative" style="height: 100vh; background: #F1F5F9">
+  <div class="flex overflow-hidden relative bg-background" style="height: 100vh">
     <app-side-bar [isOpen]="isSidebarOpen()" (closeMenu)="closeSidebar()"></app-side-bar>
 
     @if (isSidebarOpen()) {
@@ -15,11 +15,11 @@
     }
 
     <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
-      <header class="flex items-center gap-3 px-4 shrink-0 border-b border-slate-200 bg-white md:hidden" style="height: 56px">
+      <header class="flex items-center gap-3 px-4 shrink-0 border-b border-border bg-surface md:hidden" style="height: 56px">
         <button
           type="button"
           (click)="toggleSidebar()"
-          class="flex items-center justify-center shrink-0 rounded-lg text-slate-600 hover:bg-slate-100"
+          class="flex items-center justify-center shrink-0 rounded-lg text-text-muted hover:bg-[color-mix(in_srgb,var(--text)_5%,transparent)]"
           style="width: 44px; height: 44px; margin-left: -8px"
           aria-label="Open menu"
           [attr.aria-expanded]="isSidebarOpen()"
@@ -31,9 +31,9 @@
             <line x1="3" y1="18" x2="21" y2="18"/>
           </svg>
         </button>
-        <p class="text-sm font-semibold text-slate-800">FinTrack</p>
+        <p class="text-sm font-semibold text-text">FinTrack</p>
       </header>
-      <main class="flex-1 overflow-y-auto overflow-x-hidden" style="background: #F1F5F9">
+      <main class="flex-1 overflow-y-auto overflow-x-hidden bg-background">
         <router-outlet></router-outlet>
       </main>
     </div>

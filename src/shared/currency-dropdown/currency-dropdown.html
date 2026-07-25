@@ -4,13 +4,13 @@
     (click)="toggleOpen()"
     style="
       width: 100%;
-      border: 1.5px solid #e2e8f0;
+      border: 1.5px solid var(--border);
       border-radius: 12px;
       padding: 10px 12px;
       font-size: 13.5px;
       text-align: left;
-      color: #334155;
-      background: #f8fafc;
+      color: var(--text);
+      background: var(--background);
       outline: none;
       cursor: pointer;
       display: flex;
@@ -19,12 +19,12 @@
     "
   >
     @if (value && selected(); as sel) {
-      <span style="display: flex; align-items: center; gap: 8px; color: #334155">
+      <span style="display: flex; align-items: center; gap: 8px; color: var(--text)">
         <span class="fi fi-{{ sel.countryCode.toLowerCase() }}" style="border-radius: 3px"></span>
         {{ sel.code }} - {{ sel.name }}
       </span>
     } @else {
-      <span style="color: #94a3b8">{{ placeholder }}</span>
+      <span style="color: var(--text-muted)">{{ placeholder }}</span>
     }
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@
       height="14"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#94a3b8"
+      stroke="var(--text-muted)"
       stroke-width="2.5"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -53,8 +53,8 @@
         left: 0;
         right: 0;
         z-index: 10;
-        background: white;
-        border: 1.5px solid #e2e8f0;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
         border-radius: 12px;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
         max-height: 260px;
@@ -62,7 +62,7 @@
         flex-direction: column;
       "
     >
-      <div style="padding: 8px; border-bottom: 1px solid #f1f5f9">
+      <div class="border-border" style="padding: 8px; border-bottom: 1px solid">
         <input
           type="text"
           placeholder="Search by code or country…"
@@ -71,11 +71,11 @@
           (click)="$event.stopPropagation()"
           style="
             width: 100%;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             border-radius: 8px;
             padding: 7px 10px;
             font-size: 13px;
-            color: #334155;
+            color: var(--text);
             outline: none;
           "
         />
@@ -91,7 +91,7 @@
               gap: 8px;
               padding: 10px 12px;
               font-size: 13.5px;
-              color: #334155;
+              color: var(--text);
               cursor: pointer;
             "
           >
@@ -99,7 +99,7 @@
             <span>{{ currency.code }} - {{ currency.name }}</span>
           </div>
         } @empty {
-          <p style="color: #94a3b8; font-size: 12.5px; text-align: center; margin: 16px 0">
+          <p style="color: var(--text-muted); font-size: 12.5px; text-align: center; margin: 16px 0">
             No currencies match "{{ search() }}"
           </p>
         }

@@ -183,8 +183,24 @@ export class Dashboard implements OnInit {
   }
 
   color = [
-    '#5B6EF5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#64748B'
+    'var(--primary)',
+    'var(--accent)',
+    'var(--secondary)',
+    'color-mix(in srgb, var(--primary), var(--accent) 50%)',
+    'color-mix(in srgb, var(--secondary), var(--accent) 50%)',
+    'color-mix(in srgb, var(--primary), var(--secondary) 50%)',
   ]
+
+  cardGradients = [
+    'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
+    'linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%)',
+    'linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%)',
+    'linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)',
+  ]
+
+  cardGradient(index: number): string {
+    return this.cardGradients[index % this.cardGradients.length];
+  }
 
   clampPercentage(value: number): number {
     return Math.min(100, Math.max(0, value));

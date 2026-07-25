@@ -78,8 +78,8 @@ export class Signup {
     const ctrl = form.get(controlName)!;
     const base = `w-full pl-10 ${hasPaddingRight ? 'pr-10' : 'pr-4'} py-3 border rounded-xl text-sm focus:outline-none focus:ring-2`;
     return ctrl.invalid && ctrl.touched
-      ? `${base} border-red-300 bg-red-50 focus:ring-red-200`
-      : `${base} border-gray-200 focus:border-indigo-400 focus:ring-indigo-100 bg-white`;
+      ? `${base} border-red-300 bg-red-50 focus:ring-red-200 text-text`
+      : `${base} border-border focus:border-primary focus:ring-primary/20 bg-surface text-text`;
   }
 
   sendOtp(): void {

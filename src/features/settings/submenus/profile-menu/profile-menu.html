@@ -1,8 +1,8 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
   <!-- Main Profile Card -->
   <div class="lg:col-span-2">
-    <h2 class="text-xl font-bold text-gray-900">Profile</h2>
-    <p class="text-sm text-gray-500 mt-1 mb-4">
+    <h2 class="text-xl font-bold text-text">Profile</h2>
+    <p class="text-sm text-text-muted mt-1 mb-4">
       Update your personal information and profile photo.
     </p>
 
@@ -10,13 +10,13 @@
     <div class="flex flex-col items-center gap-3 mb-6">
       <div class="relative" style="width: 140px; height: 140px">
         <div
-          class="rounded-full overflow-hidden flex items-center justify-center"
-          style="width: 140px; height: 140px; background-color: #a1a1a14b"
+          class="rounded-full overflow-hidden flex items-center justify-center bg-secondary/30"
+          style="width: 140px; height: 140px"
         >
           @if (avatarUrl()) {
             <img [src]="avatarUrl()" alt="Profile picture" class="w-full h-full object-cover" />
           } @else {
-            <app-icon name="user" [size]="80" [strokeWidth]="1" class="text-gray-600" />
+            <app-icon name="user" [size]="80" [strokeWidth]="1" class="text-text-muted" />
           }
         </div>
 
@@ -24,7 +24,7 @@
           type="button"
           (click)="fileInput.click()"
           [disabled]="isUploadingAvatar()"
-          class="absolute bottom-0 right-0 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white rounded-full p-2 shadow-md transition-colors"
+          class="absolute bottom-0 right-0 bg-primary hover:opacity-90 disabled:opacity-60 text-white rounded-full p-2 shadow-md transition-colors"
           aria-label="Change profile picture"
           title="Change profile picture"
         >
@@ -58,10 +58,10 @@
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" novalidate>
       <!-- Full Name -->
       <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1.5" for="name">Full Name</label>
+        <label class="block text-sm font-medium text-text mb-1.5" for="name">Full Name</label>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <app-icon name="user" [size]="18" [strokeWidth]="2" class="text-gray-400" />
+            <app-icon name="user" [size]="18" [strokeWidth]="2" class="text-text-muted" />
           </div>
           <input
             id="name"
@@ -81,12 +81,12 @@
 
       <!-- Email -->
       <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1.5" for="email"
+        <label class="block text-sm font-medium text-text mb-1.5" for="email"
           >Email Address</label
         >
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <app-icon name="mail" [size]="19" class="text-gray-400" />
+            <app-icon name="mail" [size]="19" class="text-text-muted" />
           </div>
           <input
             id="email"
@@ -112,12 +112,12 @@
 
       <!-- Phone -->
       <div class="mb-2">
-        <label class="block text-sm font-medium text-gray-700 mb-1.5" for="phone"
+        <label class="block text-sm font-medium text-text mb-1.5" for="phone"
           >Phone Number</label
         >
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <app-icon name="phone" class="text-gray-400" [size]="18" />
+              <app-icon name="phone" class="text-text-muted" [size]="18" />
           </div>
           <input
             id="phone"
@@ -127,7 +127,7 @@
             [class]="fieldClass('phone')"
           />
         </div>
-        <p class="mt-1.5 text-xs text-gray-400">
+        <p class="mt-1.5 text-xs text-text-muted">
           Used for account communication and security alerts.
         </p>
       </div>
@@ -137,7 +137,7 @@
         <button
           type="submit"
           [disabled]="isSubmitting()"
-          class="w-40 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-6 rounded-xl transition-all active:scale-99 duration-200  hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          class="w-40 bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-6 rounded-xl transition-all active:scale-99 duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
         >
           @if (isSubmitting()) {
             <span class="flex items-center justify-center gap-2">
@@ -171,19 +171,49 @@
     </form>
   </div>
 
-  <!-- Sidebar Info Card -->
-  <div class="bg-indigo-50 rounded-2xl border border-indigo-100 p-6">
-    <div class="flex items-center gap-2 mb-2">
-      <span
-        class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs"
-      >
-        <app-icon name="exclamation" [strokeWidth]="1" [size]="14"></app-icon>
-      </span>
-      <h3 class="font-semibold text-indigo-700">Profile info</h3>
+  <!-- Sidebar -->
+  <div class="flex flex-col gap-4">
+    <!-- Appearance -->
+    <div class="bg-surface rounded-2xl border border-border p-6">
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <h3 class="font-semibold text-text">Appearance</h3>
+          <p class="text-sm text-text-muted mt-1">
+            {{ themeService.isDark() ? 'Dark mode' : 'Light mode' }}
+          </p>
+        </div>
+        <button
+          type="button"
+          role="switch"
+          [attr.aria-checked]="themeService.isDark()"
+          aria-label="Toggle dark mode"
+          (click)="themeService.toggle()"
+          class="relative inline-flex items-center shrink-0 rounded-full transition-colors bg-primary"
+          style="width: 44px; height: 24px"
+        >
+          <span
+            class="inline-block rounded-full bg-background transition-transform"
+            style="width: 18px; height: 18px"
+            [style.transform]="themeService.isDark() ? 'translateX(23px)' : 'translateX(3px)'"
+          ></span>
+        </button>
+      </div>
     </div>
-    <p class="text-sm text-indigo-900/80 leading-relaxed">
-      Keeping your profile details up to date helps us keep your account secure and ensures you
-      receive important notifications.
-    </p>
+
+    <!-- Sidebar Info Card -->
+    <div class="bg-accent/10 rounded-2xl border border-accent/20 p-6">
+      <div class="flex items-center gap-2 mb-2">
+        <span
+          class="flex items-center justify-center w-6 h-6 rounded-full bg-accent text-white text-xs"
+        >
+          <app-icon name="exclamation" [strokeWidth]="1" [size]="14"></app-icon>
+        </span>
+        <h3 class="font-semibold text-accent">Profile info</h3>
+      </div>
+      <p class="text-sm text-text-muted leading-relaxed">
+        Keeping your profile details up to date helps us keep your account secure and ensures you
+        receive important notifications.
+      </p>
+    </div>
   </div>
 </div>

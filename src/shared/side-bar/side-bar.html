@@ -1,32 +1,57 @@
 <aside
-  class="sidebar fixed inset-y-0 left-0 z-50 flex flex-col w-64 shrink-0 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:transition-none"
+  class="sidebar fixed inset-y-0 left-0 z-50 flex flex-col w-64 shrink-0 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:transition-none bg-surface"
   [class.translate-x-0]="isOpen"
   [class.-translate-x-full]="!isOpen"
   role="navigation"
   aria-label="Main"
-  style="background: #0F172A; height: 100vh; overflow-y: auto"
+  style="height: 100vh; overflow-y: auto"
 >
 
   <!-- Logo -->
-  <div class="flex items-center gap-3 px-5 border-b" style="height: 64px; border-color: rgba(255,255,255,0.05)">
+  <div class="flex items-center gap-3 px-5 border-b border-border" style="height: 64px">
     <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-         style="background: linear-gradient(135deg, #5B6EF5 0%, #8B5CF6 100%)">
+         style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
            fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="12" y1="1" x2="12" y2="23"/>
         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
       </svg>
     </div>
-    <div>
-      <p style="color: #fff; font-size: 15px; font-weight: 700; line-height: 1.2">FinTrack</p>
-      <p style="color: #475569; font-size: 11px; line-height: 1.2">Money Manager</p>
+    <div class="flex-1 min-w-0">
+      <p class="text-text" style="font-size: 15px; font-weight: 700; line-height: 1.2">FinTrack</p>
+      <p class="text-text-muted" style="font-size: 11px; line-height: 1.2">Money Manager</p>
     </div>
+    <button
+      type="button"
+      (click)="themeService.toggle()"
+      [title]="themeService.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+      class="shrink-0 flex items-center justify-center rounded-lg text-text-muted hover:text-text hover:bg-[color-mix(in_srgb,var(--text)_5%,transparent)]"
+      style="width: 32px; height: 32px"
+    >
+      @if (themeService.isDark()) {
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      }
+    </button>
   </div>
 
   <!-- Navigation -->
   <nav class="flex-1 px-3 py-5">
 
-    <p style="color: #334155; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0 12px; margin-bottom: 8px">
+    <p class="text-text-muted" style="font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0 12px; margin-bottom: 8px">
       Overview
     </p>
 
@@ -47,9 +72,9 @@
       }
     </ul>
 
-    <div style="margin: 20px 0; border-top: 1px solid rgba(255,255,255,0.05)"></div>
+    <div class="border-border" style="margin: 20px 0; border-top: 1px solid"></div>
 
-    <p style="color: #334155; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0 12px; margin-bottom: 8px">
+    <p class="text-text-muted" style="font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0 12px; margin-bottom: 8px">
       Account
     </p>
 
@@ -73,27 +98,27 @@
   </nav>
 
   <!-- User Profile -->
-  <div class="px-3 pb-4 pt-3" style="border-top: 1px solid rgba(255,255,255,0.05)">
+  <div class="px-3 pb-4 pt-3 border-t border-border">
     <div class="user-profile-btn flex items-center gap-3 px-3 py-2.5 rounded-xl">
       @if (avatarUrl()) {
         <img [src]="avatarUrl()" alt="Profile picture"
              class="w-8 h-8 rounded-full object-cover shrink-0" />
       } @else {
         <div class="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0"
-             style="background: linear-gradient(135deg, #5B6EF5 0%, #8B5CF6 100%); font-size: 11px; font-weight: 700">
+             style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); font-size: 11px; font-weight: 700">
           {{ initials(authService.currentUser()?.name) }}
         </div>
       }
       <div class="flex-1 min-w-0">
-        <p style="color: #e2e8f0; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ authService.currentUser()?.name ?? 'Guest' }}</p>
-        <p style="color: #475569; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ authService.currentUser()?.email ?? '' }}</p>
+        <p class="text-text" style="font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ authService.currentUser()?.name ?? 'Guest' }}</p>
+        <p class="text-text-muted" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ authService.currentUser()?.email ?? '' }}</p>
       </div>
       <button
         type="button"
         (click)="logout()"
         title="Log out"
-        class="shrink-0 flex items-center justify-center rounded-lg cursor-pointer min-w-11 min-h-11"
-        style="color: #64748b; background: transparent; border: none"
+        class="shrink-0 flex items-center justify-center rounded-lg cursor-pointer min-w-11 min-h-11 text-text-muted"
+        style="background: transparent; border: none"
       >
         <app-icon name="logoutIcon"  />
       </button>

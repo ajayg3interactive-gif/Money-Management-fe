@@ -1,6 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import 'tailwindcss';
 
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+}
+
+:root {
+  --background: #f6f5f3;
+  --text: #171712;
+  --primary: #514e3e;
+  --secondary: #a0aab6;
+  --accent: #786887;
+  --surface: color-mix(in srgb, var(--background), var(--text) 3%);
+  --border: color-mix(in srgb, var(--background), var(--text) 10%);
+  --text-muted: color-mix(in srgb, var(--text), var(--background) 45%);
+}
+
+.dark {
+  --background: #0c0b09;
+  --text: #edede8;
+  --primary: #c1beae;
+  --secondary: #49535f;
+  --accent: #887897;
+  --surface: color-mix(in srgb, var(--background), var(--text) 6%);
+  --border: color-mix(in srgb, var(--background), var(--text) 14%);
+  --text-muted: color-mix(in srgb, var(--text), var(--background) 40%);
+}
+
 @utility no-spinner {
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {

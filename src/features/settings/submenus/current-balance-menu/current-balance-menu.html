@@ -1,12 +1,12 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
   <!-- Main Card -->
   <div class="lg:col-span-2">
-    <h2 class="text-xl font-bold text-gray-900">Current Balance</h2>
-    <p class="text-sm text-gray-500 mt-1 mb-6">Enter your current balance to get started with FinTrack.</p>
+    <h2 class="text-xl font-bold text-text">Current Balance</h2>
+    <p class="text-sm text-text-muted mt-1 mb-6">Enter your current balance to get started with FinTrack.</p>
 
     <!-- Currency -->
     <div class="mb-5">
-      <label class="block text-sm font-medium text-gray-700 mb-1.5">Currency</label>
+      <label class="block text-sm font-medium text-text mb-1.5">Currency</label>
       <app-currency-dropdown
         [currencies]="currencies()"
         [value]="currency()"
@@ -16,10 +16,10 @@
 
     <!-- Current Balance Amount -->
     <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700 mb-1.5" for="amount">Current Balance Amount</label>
+      <label class="block text-sm font-medium text-text mb-1.5" for="amount">Current Balance Amount</label>
       <div class="relative">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <span class="text-sm font-semibold text-gray-500">{{ currencySymbol() }}</span>
+          <span class="text-sm font-semibold text-text-muted">{{ currencySymbol() }}</span>
         </div>
         <input
           id="amount"
@@ -30,18 +30,18 @@
           step="0.01"
           [ngModel]="amount()"
           (ngModelChange)="amount.set($event)"
-          class="w-full pl-10 pr-16 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+          class="w-full pl-10 pr-16 py-2.5 border border-border rounded-xl text-sm text-text placeholder-text-muted bg-surface focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-transparent transition-all"
         />
       </div>
-      <p class="mt-1.5 text-xs text-gray-400">Enter the total amount you currently have</p>
+      <p class="mt-1.5 text-xs text-text-muted">Enter the total amount you currently have</p>
     </div>
 
     <!-- Balance Date -->
     <div class="mb-2">
-      <label class="block text-sm font-medium text-gray-700 mb-1.5" for="balanceDate">Balance Date</label>
+      <label class="block text-sm font-medium text-text mb-1.5" for="balanceDate">Balance Date</label>
       <div class="relative">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
         </div>
@@ -50,15 +50,15 @@
           type="date"
           [ngModel]="date()"
           (ngModelChange)="date.set($event)"
-          class="w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-800 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+          class="w-full pl-10 pr-10 py-2.5 border border-border rounded-xl text-sm text-text bg-surface cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-transparent transition-all"
         />
         <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
         </div>
       </div>
-      <p class="mt-1.5 text-xs text-gray-400">Select the date of your current balance</p>
+      <p class="mt-1.5 text-xs text-text-muted">Select the date of your current balance</p>
     </div>
 
     <!-- Submit -->
@@ -67,7 +67,7 @@
         type="button"
         [disabled]="saving()"
         (click)="handleSave()"
-          class="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-6 rounded-xl transition-all active:scale-99 duration-200  hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          class="bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-6 rounded-xl transition-all active:scale-99 duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
       >
         Save Current Balance
       </button>
@@ -75,14 +75,14 @@
   </div>
 
   <!-- Sidebar Info Card -->
-  <div class="bg-indigo-50 rounded-2xl border border-indigo-100 p-6">
+  <div class="bg-accent/10 rounded-2xl border border-accent/20 p-6">
     <div class="flex items-center gap-2 mb-2">
-      <span class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs">
+      <span class="flex items-center justify-center w-6 h-6 rounded-full bg-accent text-white text-xs">
        <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
       </span>
-      <h3 class="font-semibold text-indigo-700">Why we need this ?</h3>
+      <h3 class="font-semibold text-accent">Why we need this ?</h3>
     </div>
-    <p class="text-sm text-indigo-900/80 leading-relaxed">
+    <p class="text-sm text-text-muted leading-relaxed">
       Adding your current balance helps us show accurate insights, budgets, and financial planning.
     </p>
   </div>

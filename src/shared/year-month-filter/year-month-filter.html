@@ -2,11 +2,11 @@
   <button
     type="button"
     (click)="toggleOpen()"
-    class="flex items-center gap-2 bg-white rounded-xl px-3 py-2.5 text-sm font-medium transition-all"
+    class="flex items-center gap-2 bg-surface rounded-xl px-3 py-2.5 text-sm font-medium transition-all"
     [style]="
       isActive()
-        ? 'color: #5b6ef5; border: 1.5px solid #5b6ef5; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)'
-        : 'color: #475569; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)'
+        ? 'color: var(--primary); border: 1.5px solid var(--primary); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)'
+        : 'color: var(--text-muted); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)'
     "
   >
     <svg
@@ -39,8 +39,8 @@
         top: calc(100% + 4px);
         right: 0;
         z-index: 10;
-        background: white;
-        border: 1.5px solid #e2e8f0;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
         border-radius: 12px;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
         padding: 14px;
@@ -52,7 +52,7 @@
     >
       <!-- Year dropdown -->
       <div style="position: relative">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 6px">
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px">
           Year
         </label>
         <button
@@ -60,13 +60,13 @@
           (click)="toggleYearOpen(); $event.stopPropagation()"
           style="
             width: 100%;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             border-radius: 10px;
             padding: 10px 12px;
             font-size: 13.5px;
             text-align: left;
-            color: #334155;
-            background: #f8fafc;
+            color: var(--text);
+            background: var(--background);
             outline: none;
             cursor: pointer;
             display: flex;
@@ -74,7 +74,7 @@
             justify-content: space-between;
           "
         >
-          <span [style.color]="selectedYear !== null ? '#334155' : '#94a3b8'">
+          <span [style.color]="selectedYear !== null ? 'var(--text)' : 'var(--text-muted)'">
             {{ selectedYear !== null ? selectedYear : 'All years' }}
           </span>
           <svg
@@ -83,7 +83,7 @@
             height="14"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#94a3b8"
+            stroke="var(--text-muted)"
             stroke-width="2.5"
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -101,8 +101,8 @@
               left: 0;
               right: 0;
               z-index: 11;
-              background: white;
-              border: 1.5px solid #e2e8f0;
+              background: var(--surface);
+              border: 1.5px solid var(--border);
               border-radius: 12px;
               box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
               max-height: 220px;
@@ -113,7 +113,7 @@
               <div
                 (click)="selectYear(null)"
                 class="year-month-dropdown-option"
-                style="padding: 10px 12px; font-size: 13.5px; color: #334155; cursor: pointer"
+                style="padding: 10px 12px; font-size: 13.5px; color: var(--text); cursor: pointer"
               >
                 All years
               </div>
@@ -122,7 +122,7 @@
               <div
                 (click)="selectYear(y)"
                 class="year-month-dropdown-option"
-                style="padding: 10px 12px; font-size: 13.5px; color: #334155; cursor: pointer"
+                style="padding: 10px 12px; font-size: 13.5px; color: var(--text); cursor: pointer"
               >
                 {{ y }}
               </div>
@@ -133,7 +133,7 @@
 
       <!-- Month dropdown -->
       <div style="position: relative">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 6px">
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px">
           Month
         </label>
         <button
@@ -141,13 +141,13 @@
           (click)="toggleMonthOpen(); $event.stopPropagation()"
           style="
             width: 100%;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             border-radius: 10px;
             padding: 10px 12px;
             font-size: 13.5px;
             text-align: left;
-            color: #334155;
-            background: #f8fafc;
+            color: var(--text);
+            background: var(--background);
             outline: none;
             cursor: pointer;
             display: flex;
@@ -155,7 +155,7 @@
             justify-content: space-between;
           "
         >
-          <span [style.color]="selectedMonth !== null ? '#334155' : '#94a3b8'">
+          <span [style.color]="selectedMonth !== null ? 'var(--text)' : 'var(--text-muted)'">
             {{ selectedMonth !== null ? monthLabel(selectedMonth) : 'All months' }}
           </span>
           <svg
@@ -164,7 +164,7 @@
             height="14"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#94a3b8"
+            stroke="var(--text-muted)"
             stroke-width="2.5"
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -182,8 +182,8 @@
               left: 0;
               right: 0;
               z-index: 11;
-              background: white;
-              border: 1.5px solid #e2e8f0;
+              background: var(--surface);
+              border: 1.5px solid var(--border);
               border-radius: 12px;
               box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
               max-height: 220px;
@@ -194,7 +194,7 @@
               <div
                 (click)="selectMonth(null)"
                 class="year-month-dropdown-option"
-                style="padding: 10px 12px; font-size: 13.5px; color: #334155; cursor: pointer"
+                style="padding: 10px 12px; font-size: 13.5px; color: var(--text); cursor: pointer"
               >
                 All months
               </div>
@@ -203,7 +203,7 @@
               <div
                 (click)="selectMonth(m.value)"
                 class="year-month-dropdown-option"
-                style="padding: 10px 12px; font-size: 13.5px; color: #334155; cursor: pointer"
+                style="padding: 10px 12px; font-size: 13.5px; color: var(--text); cursor: pointer"
               >
                 {{ m.label }}
               </div>
@@ -220,7 +220,7 @@
             align-self: flex-start;
             background: none;
             border: none;
-            color: #5b6ef5;
+            color: var(--primary);
             font-size: 12.5px;
             font-weight: 600;
             cursor: pointer;

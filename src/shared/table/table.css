@@ -1,5 +1,5 @@
 .table-row:hover {
-  background-color: #f8fafc;
+  background-color: color-mix(in srgb, var(--text), transparent 96%);
 }
 
 .table-row:last-child {

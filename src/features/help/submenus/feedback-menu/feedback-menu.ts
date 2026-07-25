@@ -36,8 +36,8 @@ export class FeedbackMenu {
   messageClass(): string {
     const base = 'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 resize-y';
     return this.message.invalid && this.message.touched
-      ? `${base} border-red-300 bg-red-50 focus:ring-red-200`
-      : `${base} border-gray-200 focus:border-indigo-400 focus:ring-indigo-100 bg-white`;
+      ? `${base} border-red-300 bg-red-50 focus:ring-red-200 text-text`
+      : `${base} border-border focus:border-primary focus:ring-primary/20 bg-surface text-text`;
   }
 
   onFilesSelected(event: Event): void {

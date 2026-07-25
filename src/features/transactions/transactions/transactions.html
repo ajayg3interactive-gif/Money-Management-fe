@@ -1,9 +1,9 @@
-<div class="p-4 md:p-6" style="min-height: 100vh; background: #f1f5f9">
+<div class="p-4 md:p-6 bg-background" style="min-height: 100vh">
   <!-- Page Header -->
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
     <div>
-      <p style="color: #64748b; font-size: 13px">Finance</p>
-      <h1 style="color: #0f172a; font-size: 24px; font-weight: 700; margin: 2px 0 0">
+      <p class="text-text-muted" style="font-size: 13px">Finance</p>
+      <h1 class="text-text" style="font-size: 24px; font-weight: 700; margin: 2px 0 0">
         Transactions
       </h1>
     </div>
@@ -11,8 +11,8 @@
       (click)="handleModal(true)"
       class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all active:scale-99 w-full sm:w-auto"
       style="
-        background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%);
-        box-shadow: 0 2px 8px rgba(91, 110, 245, 0.35);
+        background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+        box-shadow: 0 2px 8px color-mix(in srgb, var(--primary), transparent 65%);
       "
     >
       <svg
@@ -37,11 +37,8 @@
   <div class="flex flex-wrap items-center gap-3 mb-5">
     <!-- Search Input -->
     <div
-      class="flex items-center gap-2 bg-white rounded-xl px-3 py-2.5 flex-1 w-full sm:w-auto sm:min-w-50 sm:max-w-80"
-      style="
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-      "
+      class="flex items-center gap-2 bg-surface rounded-xl px-3 py-2.5 flex-1 w-full sm:w-auto sm:min-w-50 sm:max-w-80 border border-border"
+      style="box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +46,7 @@
         height="15"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#94a3b8"
+        stroke="var(--text-muted)"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -60,40 +57,39 @@
       <input
         type="text"
         placeholder="Search transactions…"
+        class="text-text placeholder:text-text-muted"
         style="
           flex: 1;
           font-size: 13.5px;
-          color: #334155;
           outline: none;
           border: none;
           background: transparent;
         "
-        class="placeholder:text-slate-400"
       />
     </div>
 
     <!-- Type Filter Tabs -->
     <div
-      class="flex items-center gap-1 bg-white rounded-xl p-1"
-      style="border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)"
+      class="flex items-center gap-1 bg-surface rounded-xl p-1 border border-border"
+      style="box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)"
     >
       <button
         class="px-4 py-1.5 rounded-lg text-sm font-semibold text-white transition-all"
-        [style]="filterType() ==='All' ? 'background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%)' :'color: #64748b'"
+        [style]="filterType() ==='All' ? 'background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)' :'color: var(--text-muted)'"
         (click)="filterType.set('All')"
       >
         All
       </button>
       <button
         class="px-4 py-1.5 rounded-lg text-sm font-medium text-white transition-all"
-         [style]="filterType() ==='Income' ? 'background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%)' :'color: #64748b'"
+         [style]="filterType() ==='Income' ? 'background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)' :'color: var(--text-muted)'"
         (click)="filterType.set('Income')"
       >
         Income
       </button>
       <button
         class="px-4 py-1.5 rounded-lg text-sm font-medium text-white transition-all"
-        [style]="filterType() ==='Expense' ? 'background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%)' :'color: #64748b'"
+        [style]="filterType() ==='Expense' ? 'background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)' :'color: var(--text-muted)'"
         (click)="filterType.set('Expense')"
       >
         Expense
@@ -112,8 +108,8 @@
 
   <!-- Table Card -->
   <div
-    class="bg-white rounded-2xl overflow-hidden"
-    style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
+    class="bg-surface rounded-2xl overflow-hidden border border-border"
+    style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05)"
   >
     <app-table [columns]="columns()" [rows]="filteredRows()" (editRow)="onEditRow($event)"
      (deleteRow)="onDeleteRow($event)"

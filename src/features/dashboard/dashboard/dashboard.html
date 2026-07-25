@@ -1,9 +1,9 @@
-<div class="p-4 md:p-6" style="min-height: 100vh; background: #f1f5f9">
+<div class="p-4 md:p-6 bg-background" style="min-height: 100vh">
   <!-- Page Header -->
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-7">
     <div>
-      <p style="color: #64748b; font-size: 13px">{{ currentMonth() }}</p>
-      <h1 style="color: #0f172a; font-size: 24px; font-weight: 700; margin: 2px 0 0">
+      <p class="text-text-muted" style="font-size: 13px">{{ currentMonth() }}</p>
+      <h1 class="text-text" style="font-size: 24px; font-weight: 700; margin: 2px 0 0">
         Financial Overview
       </h1>
     </div>
@@ -20,8 +20,8 @@
         data-tour="add-transaction"
         class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all active:scale-99 w-full sm:w-auto"
         style="
-          background: linear-gradient(135deg, #5b6ef5 0%, #8b5cf6 100%);
-          box-shadow: 0 2px 8px rgba(91, 110, 245, 0.35);
+          background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+          box-shadow: 0 2px 8px color-mix(in srgb, var(--primary), transparent 65%);
         "
       >
         <svg
@@ -45,12 +45,10 @@
 
   <!-- Summary Cards -->
   <div class="grid grid-cols-1 gap-5 mb-6 sm:grid-cols-2 lg:grid-cols-4">
-    @for (card of totals(); track card.id) {
+    @for (card of totals(); track card.id; let i = $index) {
       <div
         class="rounded-2xl p-5 relative overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
-        [style.background]="
-          'linear-gradient(135deg, ' + card.gradientFrom + ' 0%, ' + card.gradientTo + ' 100%)'
-        "
+        [style.background]="cardGradient(i)"
         style="box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12)"
       >
         <!-- Decorative circles -->
@@ -144,24 +142,18 @@
   <div class="grid grid-cols-1 gap-5 mb-5 lg:grid-cols-3">
     <!-- Spending Report (2/3) -->
     <div
-      class="lg:col-span-2 bg-white rounded-2xl p-5"
-      style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
+      class="lg:col-span-2 bg-surface rounded-2xl p-5 border border-border"
+      style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05)"
     >
       <div class="flex items-center justify-between mb-5">
         <div>
-          <h2 style="color: #0f172a; font-size: 15px; font-weight: 600; margin: 0 0 3px">
+          <h2 class="text-text" style="font-size: 15px; font-weight: 600; margin: 0 0 3px">
             Spending Report
           </h2>
-          <p style="color: #94a3b8; font-size: 12px; margin: 0">
+          <p class="text-text-muted" style="font-size: 12px; margin: 0">
             Category breakdown for {{ currentMonth() }}
           </p>
         </div>
-        <!-- <button
-          class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
-          style="color: #5b6ef5; background: #eef0ff"
-        >
-          View All
-        </button> -->
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 16px">
@@ -174,15 +166,15 @@
                   style="width: 8px; height: 8px"
                   [style.background]="color[cat.id]"
                 ></div>
-                <span style="color: #334155; font-size: 13px; font-weight: 500 ; text-transform:capitalize">{{
+                <span class="text-text" style="font-size: 13px; font-weight: 500 ; text-transform:capitalize">{{
                   cat.label
                 }}</span>
               </div>
               <div class="flex items-center gap-4">
-                <span style="color: #94a3b8; font-size: 12px">{{ cat?.percentage }}%</span>
+                <span class="text-text-muted" style="font-size: 12px">{{ cat?.percentage }}%</span>
                 <span
+                  class="text-text"
                   style="
-                    color: #1e293b;
                     font-size: 13px;
                     font-weight: 600;
                     min-width: 80px;
@@ -193,7 +185,7 @@
                 </span>
               </div>
             </div>
-            <div class="rounded-full overflow-hidden" style="height: 6px; background: #f1f5f9">
+            <div class="rounded-full overflow-hidden bg-border" style="height: 6px">
               <div
                 class="h-full rounded-full transition-all duration-700"
                 [style.width.%]="cat.percentage"
@@ -209,12 +201,12 @@
     <div class="flex flex-col gap-4">
       <!-- Savings Rate -->
       <div
-        class="bg-white rounded-2xl p-5"
-        style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
+        class="bg-surface rounded-2xl p-5 border border-border"
+        style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05)"
       >
         <p
+          class="text-text-muted"
           style="
-            color: #94a3b8;
             font-size: 11px;
             font-weight: 600;
             letter-spacing: 0.06em;
@@ -225,31 +217,31 @@
           Net Savings Rate
         </p>
         <div class="flex items-end gap-2 mb-3">
-          <span style="color: #0f172a; font-size: 32px; font-weight: 700; line-height: 1"
+          <span class="text-text" style="font-size: 32px; font-weight: 700; line-height: 1"
             >{{ savingsRate().rate | number: '1.0-1' }}%</span
           >
         </div>
-        <div class="rounded-full overflow-hidden" style="height: 8px; background: #f1f5f9">
+        <div class="rounded-full overflow-hidden bg-border" style="height: 8px">
           <div
             class="h-full rounded-full"
             [style.width.%]="clampPercentage(savingsRate().rate)"
-            style="background: linear-gradient(90deg, #5b6ef5 0%, #10b981 100%)"
+            style="background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%)"
           ></div>
         </div>
-        <p style="color: #94a3b8; font-size: 11px; margin-top: 8px">Goal: 60% savings rate</p>
+        <p class="text-text-muted" style="font-size: 11px; margin-top: 8px">Goal: 60% savings rate</p>
       </div>
 
       <!-- Budget Status -->
       <div
-        class="bg-white rounded-2xl p-5 flex-1"
-        style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
+        class="bg-surface rounded-2xl p-5 flex-1 border border-border"
+        style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05)"
       >
         <div class="flex items-center justify-between mb-4">
-          <p style="color: #1e293b; font-size: 14px; font-weight: 600">Budget Status</p>
+          <p class="text-text" style="font-size: 14px; font-weight: 600">Budget Status</p>
           <button
+            class="text-accent"
             style="
-              color: #d97706;
-              background: #fef3c7;
+              background: color-mix(in srgb, var(--accent), transparent 85%);
               font-size: 11px;
               font-weight: 600;
               padding: 2px 10px;
@@ -268,12 +260,12 @@
               <div class="rounded-full shrink-0" [style.background]="item.color" style="width: 8px; height: 8px; margin: 0 13px"></div>
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-1">
-                  <span style="color: #64748b; font-size: 12px; font-weight: 500">{{ item.label }}</span>
-                  <span style="color: #1e293b; font-size: 11px; font-weight: 600"
+                  <span class="text-text-muted" style="font-size: 12px; font-weight: 500">{{ item.label }}</span>
+                  <span class="text-text" style="font-size: 11px; font-weight: 600"
                     >{{ formatAmount(item.spend) }} / {{ formatAmount(item.maximum) }}</span
                   >
                 </div>
-                <div class="rounded-full overflow-hidden" style="height: 5px; background: #f1f5f9">
+                <div class="rounded-full overflow-hidden bg-border" style="height: 5px">
                   <div
                     class="h-full rounded-full"
                     [style.width.%]="item.percentage"
@@ -283,7 +275,7 @@
               </div>
             </div>
           } @empty {
-            <p style="color: #94a3b8; font-size: 12px; text-align: center; margin: 8px 0">
+            <p class="text-text-muted" style="font-size: 12px; text-align: center; margin: 8px 0">
               No budgets added yet. Click "Add Budget" to add one.
             </p>
           }
@@ -294,23 +286,22 @@
 
   <!-- Recent Transactions -->
   <div
-    class="bg-white rounded-2xl overflow-hidden"
-    style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9"
+    class="bg-surface rounded-2xl overflow-hidden border border-border"
+    style="box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05)"
   >
     <div
-      class="flex items-center justify-between px-5 py-4"
-      style="border-bottom: 1px solid #f8fafc"
+      class="flex items-center justify-between px-5 py-4 border-b border-border"
     >
       <div>
-        <h2 style="color: #0f172a; font-size: 15px; font-weight: 600; margin: 0 0 3px">
+        <h2 class="text-text" style="font-size: 15px; font-weight: 600; margin: 0 0 3px">
           Recent Transactions
         </h2>
-        <p style="color: #94a3b8; font-size: 12px; margin: 0">Your latest financial activity</p>
+        <p class="text-text-muted" style="font-size: 12px; margin: 0">Your latest financial activity</p>
       </div>
       <button
         routerLink="/transaction"
-        class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
-        style="color: #5b6ef5; background: #eef0ff"
+        class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors text-primary"
+        style="background: color-mix(in srgb, var(--primary), transparent 90%)"
       >
         See All
       </button>
@@ -319,24 +310,21 @@
     <div>
       @for (tx of recentTransactions(); track tx.id) {
         <div
-          class="flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-slate-50"
-          style="border-bottom: 1px solid #f8fafc"
+          class="flex items-center gap-4 px-5 py-3.5 transition-colors border-b border-border hover:bg-[color-mix(in_srgb,var(--text)_4%,transparent)]"
         >
           <!-- Avatar -->
           <div
             class="rounded-xl flex items-center justify-center text-white shrink-0"
             style="width: 40px; height: 40px; font-size: 11px; font-weight: 700"
-            [style.background]="
-              'linear-gradient(135deg, ' + tx.color + ' 0%, ' + tx.color + 'BB 100%)'
-            "
+            [style.background]="tx.color"
           >
             {{ tx.initials }}
           </div>
           <!-- Info -->
           <div class="flex-1 min-w-0">
             <p
+              class="text-text"
               style="
-                color: #1e293b;
                 font-size: 13.5px;
                 font-weight: 600;
                 margin: 0 0 2px;
@@ -347,13 +335,13 @@
             >
               {{ tx.description }}
             </p>
-            <p style="color: #94a3b8; font-size: 12px; margin: 0">{{ tx.date }}</p>
+            <p class="text-text-muted" style="font-size: 12px; margin: 0">{{ tx.date }}</p>
           </div>
           <!-- Category badge -->
           <span
             class="hidden sm:inline-flex shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full"
             [style.color]="tx.color"
-            [style.background]="tx.color + '18'"
+            [style.background]="'color-mix(in srgb, ' + tx.color + ', transparent 85%)'"
           >
             {{ tx.category }}
           </span>
@@ -362,13 +350,13 @@
             class="shrink-0 font-bold text-sm"
             style="min-width: 70px; text-align: right"
             [class.text-emerald-600]="tx.amount > 0"
-            [style.color]="tx.amount < 0 ? '#1e293b' : null"
+            [class.text-text]="tx.amount <= 0"
           >
             {{ tx.amount > 0 ? '+' : '' }}{{ formatAmount(tx.amount) }}
           </span>
         </div>
       } @empty {
-        <p style="color: #94a3b8; font-size: 12px; text-align: center; margin: 24px 0">
+        <p class="text-text-muted" style="font-size: 12px; text-align: center; margin: 24px 0">
           No transactions yet.
         </p>
       }
