@@ -24,7 +24,7 @@ export class ProfileMenu {
 
   profileForm: FormGroup = this.fb.group({
     name: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
+    email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
     phone: [''],
   });
 
@@ -53,7 +53,7 @@ export class ProfileMenu {
     const ctrl = this.profileForm.get(controlName)!;
     const base = 'w-full pl-10 pr-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2';
     return ctrl.invalid && ctrl.touched
-      ? `${base} border-red-300 bg-red-50 focus:ring-red-200 text-text`
+      ? `${base} border-red-300 focus:ring-red-200 text-text`
       : `${base} border-border focus:border-primary focus:ring-primary/20 bg-surface text-text`;
   }
 
@@ -99,9 +99,9 @@ export class ProfileMenu {
     }
 
     this.isSubmitting.set(true);
-    const { name, email, phone } = this.profileForm.value as { name: string; email: string; phone: string };
+    const { name, phone } = this.profileForm.value as { name: string; phone: string };
 
-    this.authService.updateProfile(name, email, phone || null).subscribe({
+    this.authService.updateProfile(name, phone || null).subscribe({
       next: () => {
         this.toast.success('Profile updated successfully.');
         this.isSubmitting.set(false);

@@ -93,7 +93,7 @@
                 <div
                   (click)="openAddModal(cell.date)"
                   [attr.data-tour]="cell.day === 1 ? 'plan-first-date' : null"
-                  class="rounded-xl p-2 transition-all cursor-pointer"
+                  class="group relative rounded-xl p-2 transition-all cursor-pointer"
                   [style.background]="cell.isToday ? 'color-mix(in srgb, var(--primary), transparent 90%)' : 'var(--background)'"
                   [style.border]="cell.isToday ? '1.5px solid var(--primary)' : '1px solid var(--border)'"
                   style="min-height: 88px; display: flex; flex-direction: column; gap: 4px"
@@ -132,7 +132,7 @@
                     @if (cell.day === 1 && demoBadgeActive()) {
                       <span
                         data-tour="plan-badge"
-                        class="truncate"
+                        class="truncate demo-badge-trigger"
                         style="
                           font-size: 10px;
                           font-weight: 600;
@@ -142,12 +142,19 @@
                           background: #5b6ef5;
                           opacity: 0.85;
                         "
-                        title="Demo badge - click a badge like this to hold or resume it"
                       >
                         Demo
                       </span>
                     }
                   </div>
+                  @if (cell.day === 1 && demoBadgeActive()) {
+                    <div
+                      class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-52 z-20 rounded-xl border border-border bg-surface px-3 py-2 text-xs text-text shadow-lg opacity-0 scale-95 origin-bottom transition-all duration-150 group-has-[.demo-badge-trigger:hover]:opacity-100 group-has-[.demo-badge-trigger:hover]:scale-100"
+                    >
+                      Demo badge - click a badge like this to hold or resume it
+                      <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-px w-2 h-2 rotate-45 border-b border-r border-border bg-surface"></div>
+                    </div>
+                  }
                 </div>
               } @else {
                 <div></div>

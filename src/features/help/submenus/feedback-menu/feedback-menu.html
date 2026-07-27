@@ -43,11 +43,16 @@
                 <button
                   type="button"
                   (click)="removeAttachment(i)"
-                  class="absolute -top-2 -right-2 bg-text/70 hover:bg-text/90 text-background rounded-full p-1 shadow-md transition-colors"
+                  class="group absolute -top-2 -right-2 bg-text/70 hover:bg-text/90 text-background rounded-full p-1 shadow-md transition-colors"
                   aria-label="Remove attachment"
-                  title="Remove attachment"
                 >
                   <app-icon name="closeIcon" [size]="12"></app-icon>
+                  <span
+                    class="pointer-events-none absolute bottom-full right-0 mb-2 whitespace-nowrap rounded-xl border border-border bg-surface px-3 py-1.5 text-xs text-text shadow-lg opacity-0 scale-95 origin-bottom-right transition-all duration-150 group-hover:opacity-100 group-hover:scale-100 z-10"
+                  >
+                    Remove attachment
+                    <span class="absolute top-full right-3 -mt-px w-2 h-2 rotate-45 border-b border-r border-border bg-surface"></span>
+                  </span>
                 </button>
               </div>
             }

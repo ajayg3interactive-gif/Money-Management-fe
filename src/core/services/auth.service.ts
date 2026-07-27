@@ -94,9 +94,9 @@ export class AuthService {
         );
     }
 
-    updateProfile(name: string, email: string, phone: string | null): Observable<AuthUser> {
+    updateProfile(name: string, phone: string | null): Observable<AuthUser> {
         return this.http
-            .put<ApiSuccess<AuthUser>>(`${this.apiUrl}/me`, { name, email, phone }, { withCredentials: true })
+            .put<ApiSuccess<AuthUser>>(`${this.apiUrl}/me`, { name, phone }, { withCredentials: true })
             .pipe(
                 map(res => res.data),
                 tap(user => this._currentUser.set(user))
@@ -123,6 +123,32 @@ export class AuthService {
             );
     }
 
+    requestChangeEmail(): Observable<{ email: string }> {
+        return this.http
+            .post<ApiSuccess<{ email: string }>>(`${this.apiUrl}/change-email/request`, {}, { withCredentials: true })
+            .pipe(map(res => res.data));
+    }
+
+    /** Public confirm step: the change-email link may be opened on a device with no active session. */
+    confirmChangeEmail(token: string, newEmail: string, confirmEmail: string): Observable<{ email: string }> {
+        return this.http
+            .post<ApiSuccess<{ email: string }>>(`${this.apiUrl}/change-email/confirm`, { token, newEmail, confirmEmail }, { withCredentials: true })
+            .pipe(map(res => res.data));
+    }
+
+    requestChangePassword(): Observable<{ email: string }> {
+        return this.http
+            .post<ApiSuccess<{ email: string }>>(`${this.apiUrl}/change-password/request`, {}, { withCredentials: true })
+            .pipe(map(res => res.data));
+    }
+
+    /** Public confirm step: the reset-password link may be opened on a device with no active session. */
+    confirmResetPassword(token: string, newPassword: string, confirmPassword: string): Observable<null> {
+        return this.http
+            .post<ApiSuccess<null>>(`${this.apiUrl}/reset-password/confirm`, { token, newPassword, confirmPassword }, { withCredentials: true })
+            .pipe(map(res => res.data));
+    }
+
     markTourSeen(tourId: string, seen = true): Observable<AuthUser> {
         return this.http
             .patch<ApiSuccess<AuthUser>>(`${this.apiUrl}/me/tour`, { tourId, seen }, { withCredentials: true })
@@ -136,6 +162,7 @@ export class AuthService {
     handleUnauthorized(): void {
         this._currentUser.set(null);
         this._resolved.set(true);
+        if (this.router.url.startsWith('/login')) return;
         this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
     }
 

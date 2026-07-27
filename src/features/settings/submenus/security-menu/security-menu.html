@@ -1,9 +1,77 @@
-<div class="text-text" style="display: flex; flex-direction: column;gap: 20px; justify-content: center; align-items: center; height: 200px">
-  <p>Security Settings will implement soon</p>
-  <app-icon
-    name="loadingIcon"
-    class="animate-[spin_1.5s_linear_infinite] w-8 h-8 text-primary"
-    [strokeWidth]="1"
-    [size]="20"
-  />
+<div class="max-w-2xl">
+  <h2 class="text-xl font-bold text-text">Security</h2>
+  <p class="text-sm text-text-muted mt-1 mb-6">
+    Manage your email address and password. We'll send a confirmation link to your current email before applying any change.
+  </p>
+
+  <div class="flex flex-col gap-4">
+    <!-- Email -->
+    <div class="bg-surface rounded-2xl border border-border p-6 flex items-center justify-between gap-4 flex-wrap">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-secondary/30 flex items-center justify-center shrink-0">
+          <app-icon name="mail" [size]="18" class="text-text-muted" />
+        </div>
+        <div>
+          <h3 class="font-semibold text-text">Email Address</h3>
+          <p class="text-sm text-text-muted mt-0.5">{{ currentEmail() }}</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        (click)="requestChangeEmail()"
+        [disabled]="isSendingEmailLink()"
+        class="bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
+      >
+        @if (isSendingEmailLink()) {
+          <span class="flex items-center gap-2">
+            <app-icon name="loadingIcon" class="animate-spin" [size]="16" />
+            Sending…
+          </span>
+        } @else {
+          Change Email
+        }
+      </button>
+    </div>
+
+    <!-- Password -->
+    <div class="bg-surface rounded-2xl border border-border p-6 flex items-center justify-between gap-4 flex-wrap">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-secondary/30 flex items-center justify-center shrink-0">
+          <app-icon name="lockIcon" [size]="18" class="text-text-muted" />
+        </div>
+        <div>
+          <h3 class="font-semibold text-text">Password</h3>
+          <p class="text-sm text-text-muted mt-0.5">••••••••</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        (click)="requestChangePassword()"
+        [disabled]="isSendingPasswordLink()"
+        class="bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
+      >
+        @if (isSendingPasswordLink()) {
+          <span class="flex items-center gap-2">
+            <app-icon name="loadingIcon" class="animate-spin" [size]="16" />
+            Sending…
+          </span>
+        } @else {
+          Change Password
+        }
+      </button>
+    </div>
+
+    <!-- Info -->
+    <div class="bg-accent/10 rounded-2xl border border-accent/20 p-6">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="flex items-center justify-center w-6 h-6 rounded-full bg-accent text-white text-xs">
+          <app-icon name="shieldTickIcon" [strokeWidth]="1" [size]="14"></app-icon>
+        </span>
+        <h3 class="font-semibold text-accent">Heads up</h3>
+      </div>
+      <p class="text-sm text-text-muted leading-relaxed">
+        After you confirm a new email or password, you'll be signed out on all devices and need to log in again.
+      </p>
+    </div>
+  </div>
 </div>

@@ -5,6 +5,8 @@ import { Plan } from '../features/plan/plan/plan';
 import { Budget } from '../features/budget/budget/budget';
 import { Login } from '../features/auth/login/login';
 import { Signup } from '../features/auth/signup/signup';
+import { ChangeEmailConfirm } from '../features/auth/change-email-confirm/change-email-confirm';
+import { ResetPasswordConfirm } from '../features/auth/reset-password-confirm/reset-password-confirm';
 import { authGuard } from '../core/guards/auth.guard';
 import { guestGuard } from '../core/guards/guest.guard';
 import { Settings } from '../features/settings/settings';
@@ -13,6 +15,8 @@ import { Help } from '../features/help/help';
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard] },
     { path: 'signup', component: Signup, canActivate: [guestGuard] },
+    { path: 'change-email/confirm', component: ChangeEmailConfirm },
+    { path: 'reset-password/confirm', component: ResetPasswordConfirm },
     { path: '', component: Dashboard, canActivate: [authGuard] },
     { path: 'transaction', component: Transactions, canActivate: [authGuard] },
     { path: 'plan', component: Plan, canActivate: [authGuard] },

@@ -1,0 +1,84 @@
+<div class="auth-flip-stage min-h-screen flex items-center justify-center p-4 bg-background">
+  <div class="auth-flip-card bg-surface rounded-2xl shadow-xl w-full max-w-md p-6 sm:p-8 border border-border">
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+        style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)">
+        <app-icon name="mail" [size]="20" class="text-white" />
+      </div>
+      <h1 class="text-2xl font-bold text-text">Change Your Email</h1>
+      <p class="text-text-muted mt-1 text-sm">Enter your new email address twice to confirm.</p>
+    </div>
+
+    @if (tokenMissing()) {
+      <p class="text-sm text-red-600 text-center">
+        This link is missing its confirmation token. Please request a new email change from Settings &gt; Security.
+      </p>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        <!-- New Email -->
+        <div class="mb-5">
+          <label class="block text-sm font-medium text-text mb-1.5" for="newEmail">New Email Address</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <app-icon name="mail" class="text-text-muted" [size]="19" />
+            </div>
+            <input id="newEmail" type="email" formControlName="newEmail" placeholder="you@example.com"
+              [class]="fieldClass('newEmail')" />
+          </div>
+          @if (newEmail.touched && newEmail.hasError('required')) {
+            <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+              <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
+              New email is required.
+            </p>
+          }
+          @if (newEmail.touched && newEmail.hasError('email')) {
+            <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+              <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
+              Please enter a valid email address.
+            </p>
+          }
+        </div>
+
+        <!-- Confirm Email -->
+        <div class="mb-2">
+          <label class="block text-sm font-medium text-text mb-1.5" for="confirmEmail">Confirm New Email</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <app-icon name="mail" class="text-text-muted" [size]="19" />
+            </div>
+            <input id="confirmEmail" type="email" formControlName="confirmEmail" placeholder="you@example.com"
+              [class]="fieldClass('confirmEmail')" />
+          </div>
+          @if (confirmEmail.touched && confirmEmail.hasError('required')) {
+            <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+              <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
+              Please confirm your new email.
+            </p>
+          }
+          @if (confirmEmail.touched && !confirmEmail.hasError('required') && form.hasError('emailMismatch')) {
+            <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+              <app-icon name="exclamation" [strokeWidth]="0.5" [size]="14"></app-icon>
+              Emails do not match.
+            </p>
+          }
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" [disabled]="isSubmitting()"
+          class="mt-6 w-full bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2">
+          @if (isSubmitting()) {
+            <span class="flex items-center justify-center gap-2">
+              <app-icon name="loadingIcon" class="animate-spin" />
+              Updating…
+            </span>
+          } @else {
+            Update Email
+          }
+        </button>
+      </form>
+    }
+  </div>
+</div>
