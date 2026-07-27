@@ -16,7 +16,7 @@ if (fs.existsSync(envPath)) {
     });
 }
 
-const apiOrigin = env.API_URL || 'http://localhost:3000';
+const apiOrigin = process.env.API_URL || env.API_URL || 'http://localhost:3000';
 
 const content = `// This file is auto-generated from .env by scripts/generate-env.js. Do not edit directly.
 export const environment = {
