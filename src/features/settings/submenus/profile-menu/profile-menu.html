@@ -24,7 +24,7 @@
           type="button"
           (click)="fileInput.click()"
           [disabled]="isUploadingAvatar()"
-          class="group absolute bottom-0 right-0 bg-primary hover:opacity-90 disabled:opacity-60 text-white rounded-full p-2 shadow-md transition-colors"
+          class="group absolute bottom-0 right-0 bg-primary hover:opacity-90 disabled:opacity-60 text-on-primary rounded-full p-2 shadow-md transition-colors"
           aria-label="Change profile picture"
         >
           <app-icon name="edit" [size]="16"></app-icon>
@@ -158,12 +158,12 @@
         <button
           type="submit"
           [disabled]="isSubmitting()"
-          class="w-40 bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-6 rounded-xl transition-all active:scale-99 duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
+          class="w-40 bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-on-primary font-semibold py-2.5 px-6 rounded-xl transition-all active:scale-99 duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
         >
           @if (isSubmitting()) {
             <span class="flex items-center justify-center gap-2">
               <svg
-                class="animate-spin h-4 w-4 text-white"
+                class="animate-spin h-4 w-4 text-on-primary"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"

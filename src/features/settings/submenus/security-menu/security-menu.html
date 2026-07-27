@@ -20,7 +20,7 @@
         type="button"
         (click)="requestChangeEmail()"
         [disabled]="isSendingEmailLink()"
-        class="bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
+        class="bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-on-primary font-semibold py-2.5 px-5 rounded-xl transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
       >
         @if (isSendingEmailLink()) {
           <span class="flex items-center gap-2">
@@ -48,7 +48,7 @@
         type="button"
         (click)="requestChangePassword()"
         [disabled]="isSendingPasswordLink()"
-        class="bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
+        class="bg-primary hover:opacity-90 active:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed text-on-primary font-semibold py-2.5 px-5 rounded-xl transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
       >
         @if (isSendingPasswordLink()) {
           <span class="flex items-center gap-2">
