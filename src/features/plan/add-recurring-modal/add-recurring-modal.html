@@ -231,22 +231,11 @@
                 >&nbsp;(optional)</span
               >
             </label>
-            <input
-              type="date"
-              [ngModel]="endDate()"
-              (ngModelChange)="endDate.set($event)"
-              style="
-                width: 100%;
-                border: 1.5px solid var(--border);
-                border-radius: 12px;
-                padding: 10px 12px;
-                font-size: 13.5px;
-                color: var(--text);
-                background: var(--background);
-                outline: none;
-                cursor: pointer;
-              "
-            />
+            <app-date-picker
+              [value]="endDate()"
+              (valueChange)="endDate.set($event)"
+              placeholder="No end date"
+            ></app-date-picker>
           </div>
         </div>
 

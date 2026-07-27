@@ -1,0 +1,171 @@
+<div style="position: relative">
+  <button
+    type="button"
+    (click)="toggleOpen()"
+    style="
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13.5px;
+      text-align: left;
+      color: var(--text);
+      background: var(--background);
+      outline: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    "
+  >
+    <span [style.color]="value ? 'var(--text)' : 'var(--text-muted)'" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+      {{ value ? displayValue() : placeholder }}
+    </span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      style="flex-shrink: 0"
+    >
+      <rect x="3.5" y="5" width="17" height="16" rx="4" stroke="var(--primary)" stroke-width="1.6" />
+      <path d="M3.5 9.5H20.5" stroke="var(--primary)" stroke-width="1.6" stroke-linecap="round" />
+      <path d="M8 3V6.5" stroke="var(--primary)" stroke-width="1.6" stroke-linecap="round" />
+      <path d="M16 3V6.5" stroke="var(--primary)" stroke-width="1.6" stroke-linecap="round" />
+      <circle cx="8" cy="13.2" r="1.15" fill="var(--primary)" />
+      <circle cx="12" cy="13.2" r="1.15" fill="var(--primary)" opacity="0.55" />
+      <circle cx="16" cy="13.2" r="1.15" fill="var(--primary)" opacity="0.3" />
+      <circle cx="8" cy="17" r="1.15" fill="var(--primary)" opacity="0.55" />
+      <circle cx="12" cy="17" r="1.15" fill="var(--primary)" opacity="0.3" />
+    </svg>
+  </button>
+
+  @if (open()) {
+    <div (click)="closeCalendar()" style="position: fixed; inset: 0; z-index: 9"></div>
+    <div
+      class="date-picker-panel"
+      [class.date-picker-panel-up]="openUpward()"
+      [style.top]="openUpward() ? 'auto' : 'calc(100% + 6px)'"
+      [style.bottom]="openUpward() ? 'calc(100% + 6px)' : 'auto'"
+      style="
+        position: absolute;
+        right: 0;
+        z-index: 10;
+        width: 260px;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+        padding: 14px;
+      "
+    >
+      <!-- Month nav -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px">
+        <button
+          type="button"
+          (click)="prevMonth()"
+          class="date-picker-nav-btn"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            border: none;
+            background: var(--background);
+            color: var(--text-muted);
+            cursor: pointer;
+          "
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <span class="text-text" style="font-size: 13px; font-weight: 700">{{ monthLabel() }}</span>
+        <button
+          type="button"
+          (click)="nextMonth()"
+          class="date-picker-nav-btn"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            border: none;
+            background: var(--background);
+            color: var(--text-muted);
+            cursor: pointer;
+          "
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Weekday header -->
+      <div style="display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 4px">
+        @for (wd of weekDays; track $index) {
+          <div class="text-text-muted" style="font-size: 10.5px; font-weight: 600; text-align: center; padding: 4px 0">
+            {{ wd }}
+          </div>
+        }
+      </div>
+
+      <!-- Day grid -->
+      <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px">
+        @for (cell of calendarCells(); track $index) {
+          @if (cell) {
+            <button
+              type="button"
+              (click)="selectDay(cell)"
+              class="date-picker-day"
+              [style.background]="cell.isSelected ? 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)' : (cell.isToday ? 'color-mix(in srgb, var(--primary), transparent 90%)' : 'transparent')"
+              [style.color]="cell.isSelected ? '#fff' : (cell.isToday ? 'var(--primary)' : 'var(--text)')"
+              [style.font-weight]="cell.isSelected || cell.isToday ? 700 : 500"
+              style="
+                border: none;
+                border-radius: 9px;
+                height: 30px;
+                font-size: 12.5px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              {{ cell.day }}
+            </button>
+          } @else {
+            <span></span>
+          }
+        }
+      </div>
+
+      <!-- Footer -->
+      <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end">
+        <button
+          type="button"
+          (click)="selectToday()"
+          style="
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 8px;
+          "
+        >
+          Today
+        </button>
+      </div>
+    </div>
+  }
+</div>

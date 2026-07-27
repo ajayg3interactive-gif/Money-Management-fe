@@ -2,6 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from "../../../../shared/icons/icons.component";
 import { CurrencyDropdown } from '../../../../shared/currency-dropdown/currency-dropdown';
+import { DatePicker } from '../../../../shared/date-picker/date-picker';
 import { BalanceService, Currency } from '../../../../core/services/balance.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -9,7 +10,7 @@ import { extractErrorMessage } from '../../../../core/utils/api-error';
 
 @Component({
   selector: 'current-balance-menu',
-  imports: [IconComponent, FormsModule, CurrencyDropdown],
+  imports: [IconComponent, FormsModule, CurrencyDropdown, DatePicker],
   templateUrl: './current-balance-menu.html',
   styleUrl: './current-balance-menu.css',
 })

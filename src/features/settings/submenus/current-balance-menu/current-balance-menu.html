@@ -39,25 +39,10 @@
     <!-- Balance Date -->
     <div class="mb-2">
       <label class="block text-sm font-medium text-text mb-1.5" for="balanceDate">Balance Date</label>
-      <div class="relative">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <input
-          id="balanceDate"
-          type="date"
-          [ngModel]="date()"
-          (ngModelChange)="date.set($event)"
-          class="w-full pl-10 pr-10 py-2.5 border border-border rounded-xl text-sm text-text bg-surface cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-transparent transition-all"
-        />
-        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </div>
+      <app-date-picker
+        [value]="date()"
+        (valueChange)="date.set($event)"
+      ></app-date-picker>
       <p class="mt-1.5 text-xs text-text-muted">Select the date of your current balance</p>
     </div>
 

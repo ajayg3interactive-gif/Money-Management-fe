@@ -5,11 +5,12 @@ import { ToastService } from '../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../core/utils/api-error';
 import { Category, CategoryService } from '../../../core/services/category.service';
 import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
+import { DatePicker } from '../../../shared/date-picker/date-picker';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-add-transaction-modal',
-  imports: [FormsModule, CategoryDropdown],
+  imports: [FormsModule, CategoryDropdown, DatePicker],
   templateUrl: './add-transaction-modal.html',
   styleUrl: './add-transaction-modal.css',
 })
