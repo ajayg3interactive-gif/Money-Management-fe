@@ -103,3 +103,13 @@
     (budgetDeleted)="onBudgetsChanged()"
   ></app-budget-status-modal>
 }
+
+@if (pendingDeleteRow(); as row) {
+  <app-confirm-dialog
+    title="Delete budget?"
+    [message]="'Are you sure you want to delete the budget for &quot;' + row.category + '&quot;? This action cannot be undone.'"
+    confirmLabel="Delete"
+    (confirmed)="confirmDelete()"
+    (cancelled)="cancelDelete()"
+  />
+}

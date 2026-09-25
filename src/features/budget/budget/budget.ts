@@ -4,10 +4,11 @@ import { Budget as BudgetModel, BudgetColumn, BudgetService } from '../../../cor
 import { BudgetStatusModal } from '../budget-status-modal/budget-status-modal';
 import { Category, CategoryService } from '../../../core/services/category.service';
 import { YearMonthFilter } from '../../../shared/year-month-filter/year-month-filter';
+import { ConfirmDialog } from '../../../shared/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-budget',
-  imports: [Table, BudgetStatusModal, YearMonthFilter],
+  imports: [Table, BudgetStatusModal, YearMonthFilter, ConfirmDialog],
   templateUrl: './budget.html',
   styleUrl: './budget.css',
 })
@@ -23,6 +24,7 @@ export class Budget implements OnInit {
   searchTerm = signal('');
   filterYear = signal(new Date().getFullYear());
   filterMonth = signal(new Date().getMonth() + 1);
+  pendingDeleteRow = signal<BudgetModel | null>(null);
 
   years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 
@@ -75,9 +77,25 @@ export class Budget implements OnInit {
 
   onDeleteRow(row: BudgetModel) {
     if (!row.id) return;
+    this.pendingDeleteRow.set(row);
+  }
+
+  cancelDelete() {
+    this.pendingDeleteRow.set(null);
+  }
+
+  confirmDelete() {
+    const row = this.pendingDeleteRow();
+    if (!row?.id) return;
     this.budgetService.deleteBudget(row.id).subscribe({
-      next: () => this.loadBudgets(),
-      error: (err) => console.error('Failed to delete budget', err),
+      next: () => {
+        this.loadBudgets();
+        this.pendingDeleteRow.set(null);
+      },
+      error: (err) => {
+        console.error('Failed to delete budget', err);
+        this.pendingDeleteRow.set(null);
+      },
     });
   }
 

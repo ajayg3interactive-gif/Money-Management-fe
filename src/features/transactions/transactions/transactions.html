@@ -127,3 +127,13 @@
     (transactionUpdated)="onTransactionUpdated($event)"
   />
 }
+
+@if (pendingDeleteRow(); as row) {
+  <app-confirm-dialog
+    title="Delete transaction?"
+    [message]="'Are you sure you want to delete &quot;' + row.description + '&quot;? This action cannot be undone.'"
+    confirmLabel="Delete"
+    (confirmed)="confirmDelete()"
+    (cancelled)="cancelDelete()"
+  />
+}

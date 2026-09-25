@@ -4,9 +4,10 @@
     (click)="toggleOpen()"
     class="flex items-center gap-2 bg-surface rounded-xl px-3 py-2.5 text-sm font-medium transition-all"
     [style]="
-      isActive()
+      (isActive()
         ? 'color: var(--primary); border: 1.5px solid var(--primary); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)'
-        : 'color: var(--text-muted); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)'
+        : 'color: var(--text-muted); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04)') +
+      '; position: relative; z-index: 6'
     "
   >
     <svg
@@ -31,7 +32,7 @@
   @if (open()) {
     <div
       (click)="closeDropdown()"
-      style="position: fixed; inset: 0; z-index: 9"
+      style="position: fixed; inset: 0; z-index: 5"
     ></div>
     <div
       style="
