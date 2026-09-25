@@ -15,7 +15,7 @@
     >
       <div>
         <h2 class="text-text" style="font-size: 17px; font-weight: 700; margin: 0 0 3px">
-          Add Transaction
+          {{ isEditMode() ? 'Edit Transaction' : 'Add Transaction' }}
         </h2>
         <p class="text-text-muted" style="font-size: 12px; margin: 0">Record a new income or expense</p>
       </div>
@@ -97,6 +97,7 @@
           >
           <input
             type="number"
+            noScrollNumber
             placeholder="0"
             class="no-spinner"
             [ngModel]="amount()"

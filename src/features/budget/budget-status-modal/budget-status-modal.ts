@@ -6,10 +6,11 @@ import { ToastService } from '../../../core/services/toast.service';
 import { extractErrorMessage } from '../../../core/utils/api-error';
 import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
 import { AuthService } from '../../../core/services/auth.service';
+import { NoScrollNumberDirective } from '../../../shared/directives/no-scroll-number.directive';
 
 @Component({
   selector: 'app-budget-status-modal',
-  imports: [FormsModule, CategoryDropdown],
+  imports: [FormsModule, CategoryDropdown, NoScrollNumberDirective],
   templateUrl: './budget-status-modal.html',
   styleUrl: './budget-status-modal.css',
 })
@@ -27,7 +28,7 @@ export class BudgetStatusModal implements OnInit {
   @Output() budgetUpdated = new EventEmitter<Budget>();
   @Output() budgetDeleted = new EventEmitter<string>();
 
-  amount = signal(0);
+  amount = signal<number | null>(null);
   category = signal("")
   categories = signal<Category[]>([]);
   budgets = signal<Budget[]>([]);
@@ -72,7 +73,7 @@ export class BudgetStatusModal implements OnInit {
     this.category.set(value);
     const existing = this.budgetForCategory(value);
     this.editingBudgetId.set(existing?.id ?? null);
-    this.amount.set(existing ? existing.maximum : 0);
+    this.amount.set(existing ? existing.maximum : null);
   }
 
   onCategoryEdit(value: string) {
@@ -91,7 +92,7 @@ export class BudgetStatusModal implements OnInit {
       return;
     }
 
-    if (this.amount() <= 0) {
+    if ((this.amount() ?? 0) <= 0) {
       if (!editingId) {
         this.toast.error('Please enter a valid maximum amount.');
         return;
@@ -110,7 +111,7 @@ export class BudgetStatusModal implements OnInit {
 
     const budget: Budget = {
       category: this.category(),
-      maximum: this.amount(),
+      maximum: this.amount() ?? 0,
     };
 
     if (editingId) {

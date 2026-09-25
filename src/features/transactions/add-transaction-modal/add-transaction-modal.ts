@@ -7,10 +7,11 @@ import { Category, CategoryService } from '../../../core/services/category.servi
 import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
 import { DatePicker } from '../../../shared/date-picker/date-picker';
 import { AuthService } from '../../../core/services/auth.service';
+import { NoScrollNumberDirective } from '../../../shared/directives/no-scroll-number.directive';
 
 @Component({
   selector: 'app-add-transaction-modal',
-  imports: [FormsModule, CategoryDropdown, DatePicker],
+  imports: [FormsModule, CategoryDropdown, DatePicker, NoScrollNumberDirective],
   templateUrl: './add-transaction-modal.html',
   styleUrl: './add-transaction-modal.css',
 })
@@ -27,7 +28,7 @@ export class AddTransactionModal implements OnInit {
 
   isEditMode = signal(false);
   type = signal<'Expense' | 'Income'>('Expense');
-  amount = signal(0);
+  amount = signal<number | null>(null);
   category = signal('');
   date = signal('');
   description = signal('');
@@ -52,7 +53,7 @@ export class AddTransactionModal implements OnInit {
       // ← reset form for add mode
       this.isEditMode.set(false);
       this.type.set('Expense');
-      this.amount.set(0);
+      this.amount.set(null);
       this.category.set('');
       this.date.set('');
       this.description.set('');
@@ -73,7 +74,7 @@ export class AddTransactionModal implements OnInit {
       date: this.date(),
       description: this.description(),
       category: this.category(),
-      amount: this.amount(),
+      amount: this.amount() ?? 0,
       type: this.type()
     };
     if (this.isEditMode() && this.editData?.id) {

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
+import { formatDdMmmYyyy } from '../utils/date-format';
 
 @Component({
   selector: 'app-table',
@@ -20,6 +21,9 @@ export class Table {
   }
 
   getCellValue(row: Record<string, any>, key: string): any {
+    if (key === 'date' && row[key]) {
+      return formatDdMmmYyyy(row[key]);
+    }
     return row[key] || "-";
   }
 }

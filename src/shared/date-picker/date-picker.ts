@@ -72,7 +72,9 @@ export class DatePicker {
   displayValue(): string {
     const parsed = this.parseDate(this.value);
     if (!parsed) return '';
-    return `${this.monthNames[parsed.getMonth()].slice(0, 3)} ${parsed.getDate()}, ${parsed.getFullYear()}`;
+    const dd = String(parsed.getDate()).padStart(2, '0');
+    const mmm = this.monthNames[parsed.getMonth()].slice(0, 3);
+    return `${dd}-${mmm}-${parsed.getFullYear()}`;
   }
 
   prevMonth() {

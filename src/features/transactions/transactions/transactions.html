@@ -65,6 +65,8 @@
           border: none;
           background: transparent;
         "
+        [value]="searchTerm()"
+        (input)="searchTerm.set($any($event.target).value)"
       />
     </div>
 

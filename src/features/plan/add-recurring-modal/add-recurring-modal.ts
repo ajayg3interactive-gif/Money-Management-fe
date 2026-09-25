@@ -7,10 +7,11 @@ import { Category, CategoryService } from '../../../core/services/category.servi
 import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
 import { DatePicker } from '../../../shared/date-picker/date-picker';
 import { AuthService } from '../../../core/services/auth.service';
+import { NoScrollNumberDirective } from '../../../shared/directives/no-scroll-number.directive';
 
 @Component({
   selector: 'app-add-recurring-modal',
-  imports: [FormsModule, CategoryDropdown, DatePicker],
+  imports: [FormsModule, CategoryDropdown, DatePicker, NoScrollNumberDirective],
   templateUrl: './add-recurring-modal.html',
   styleUrl: './add-recurring-modal.css',
 })
@@ -25,7 +26,7 @@ export class AddRecurringModal implements OnInit, OnChanges {
   @Output() ruleAdded = new EventEmitter<RecurringRule>();
 
   type = signal<'Expense' | 'Income'>('Expense');
-  amount = signal(0);
+  amount = signal<number | null>(null);
   category = signal('');
   description = signal('');
   frequency = signal<'monthly-same-day' | 'every-n-days'>('monthly-same-day');
@@ -41,7 +42,7 @@ export class AddRecurringModal implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.type.set('Expense');
-    this.amount.set(0);
+    this.amount.set(null);
     this.category.set('');
     this.description.set('');
     this.frequency.set('monthly-same-day');
@@ -65,7 +66,7 @@ export class AddRecurringModal implements OnInit, OnChanges {
     const rule: Omit<RecurringRule, 'id' | 'active'> = {
       description: this.description(),
       category: this.category(),
-      amount: this.amount(),
+      amount: this.amount() ?? 0,
       type: this.type(),
       startDate: this.startDate,
       endDate: this.endDate() || null,

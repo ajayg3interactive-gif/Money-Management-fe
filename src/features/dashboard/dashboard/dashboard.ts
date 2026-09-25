@@ -10,6 +10,7 @@ import { Category, CategoryService } from '../../../core/services/category.servi
 import { DropdownOption, DropdownService } from '../../../core/services/dropdown.service';
 import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
 import { AuthService } from '../../../core/services/auth.service';
+import { formatDdMmmYyyy } from '../../../shared/utils/date-format';
 
 interface BudgetStatusRow {
   id: string;
@@ -239,6 +240,6 @@ export class Dashboard implements OnInit {
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
     if (diffDays > 1) return `${diffDays} days ago`;
-    return txDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+    return formatDdMmmYyyy(date);
   }
 }

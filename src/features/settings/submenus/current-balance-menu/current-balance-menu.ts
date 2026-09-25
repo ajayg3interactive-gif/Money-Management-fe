@@ -1,6 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from "../../../../shared/icons/icons.component";
+import { NoScrollNumberDirective } from '../../../../shared/directives/no-scroll-number.directive';
 import { CurrencyDropdown } from '../../../../shared/currency-dropdown/currency-dropdown';
 import { DatePicker } from '../../../../shared/date-picker/date-picker';
 import { BalanceService, Currency } from '../../../../core/services/balance.service';
@@ -10,7 +11,7 @@ import { extractErrorMessage } from '../../../../core/utils/api-error';
 
 @Component({
   selector: 'current-balance-menu',
-  imports: [IconComponent, FormsModule, CurrencyDropdown, DatePicker],
+  imports: [IconComponent, FormsModule, CurrencyDropdown, DatePicker, NoScrollNumberDirective],
   templateUrl: './current-balance-menu.html',
   styleUrl: './current-balance-menu.css',
 })
@@ -25,10 +26,20 @@ export class CurrentBalanceMenu implements OnInit {
   date = signal('');
   saving = signal(false);
 
+  private savedCurrency = signal('USD');
+  private savedAmount = signal<number | null>(null);
+  private savedDate = signal('');
+
   currencySymbol = computed(() => {
     const match = this.currencies().find(c => c.code === this.currency());
     return match?.symbol ?? '$';
   });
+
+  hasChanges = computed(() =>
+    this.currency() !== this.savedCurrency() ||
+    (this.amount() ?? 0) !== (this.savedAmount() ?? 0) ||
+    this.date() !== this.savedDate()
+  );
 
   ngOnInit() {
     this.balanceService.getCurrencies().subscribe(currencies => {
@@ -39,7 +50,14 @@ export class CurrentBalanceMenu implements OnInit {
       this.currency.set(balance.currency);
       this.amount.set(balance.amount);
       this.date.set(balance.date ?? '');
+      this.syncSavedSnapshot();
     });
+  }
+
+  private syncSavedSnapshot() {
+    this.savedCurrency.set(this.currency());
+    this.savedAmount.set(this.amount());
+    this.savedDate.set(this.date());
   }
 
   handleSave() {
@@ -53,6 +71,7 @@ export class CurrentBalanceMenu implements OnInit {
       .subscribe({
         next: () => {
           this.saving.set(false);
+          this.syncSavedSnapshot();
           this.toast.success('Current balance saved successfully.');
           this.authService.fetchCurrentUser().subscribe();
         },
