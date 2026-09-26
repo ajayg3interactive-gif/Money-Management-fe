@@ -14,11 +14,11 @@
 }
 
 :root {
-  --background: #f6f5f3;
-  --text: #171712;
-  --primary: #514e3e;
-  --secondary: #a0aab6;
-  --accent: #786887;
+  --text: #0a1014;
+  --background: #edf3f7;
+  --primary: #264b64;
+  --secondary: #83b7d8;
+  --accent: #2c75a5;
   --surface: color-mix(in srgb, var(--background), var(--text) 3%);
   --border: color-mix(in srgb, var(--background), var(--text) 10%);
   --text-muted: color-mix(in srgb, var(--text), var(--background) 45%);
@@ -26,11 +26,11 @@
 }
 
 .dark {
-  --background: #0c0b09;
-  --text: #edede8;
-  --primary: #c1beae;
-  --secondary: #49535f;
-  --accent: #887897;
+  --text: #ebf1f5;
+  --background: #080e12;
+  --primary: #9bc0d9;
+  --secondary: #275c7c;
+  --accent: #5aa3d3;
   --surface: color-mix(in srgb, var(--background), var(--text) 6%);
   --border: color-mix(in srgb, var(--background), var(--text) 14%);
   --text-muted: color-mix(in srgb, var(--text), var(--background) 40%);
