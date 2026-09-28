@@ -19,6 +19,7 @@ export class Budget implements OnInit {
   rows = signal<BudgetModel[]>([]);
   columns = signal<BudgetColumn[]>([]);
   categories = signal<Category[]>([]);
+  isLoading = signal(true);
   openModal = signal(false);
   selectedCategory = signal<string | null>(null);
   searchTerm = signal('');
@@ -50,8 +51,16 @@ export class Budget implements OnInit {
   }
 
   loadBudgets() {
-    this.budgetService.getBudgets(this.filterMonth(), this.filterYear()).subscribe(data => {
-      this.rows.set(data);
+    this.isLoading.set(true);
+    this.budgetService.getBudgets(this.filterMonth(), this.filterYear()).subscribe({
+      next: (data) => {
+        this.rows.set(data);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load budgets', err);
+        this.isLoading.set(false);
+      },
     });
   }
 

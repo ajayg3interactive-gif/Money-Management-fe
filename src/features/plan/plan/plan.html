@@ -88,6 +88,17 @@
 
           <!-- Day cells -->
           <div class="grid grid-cols-7 gap-1.5">
+            @if (isOccurrencesLoading()) {
+              @for (i of skeletonCellIndexes; track i) {
+                <div
+                  class="rounded-xl p-2 border border-border"
+                  style="min-height: 88px; display: flex; flex-direction: column; gap: 6px; background: var(--background)"
+                >
+                  <app-skeleton width="16px" height="12px" rounded="4px" />
+                  <app-skeleton width="70%" height="14px" rounded="99px" />
+                </div>
+              }
+            } @else {
             @for (cell of calendarCells(); track $index) {
               @if (cell) {
                 <div
@@ -160,6 +171,7 @@
                 <div></div>
               }
             }
+            }
           </div>
         </div>
       </div>
@@ -205,6 +217,20 @@
           padding-right: 6px;
         "
       >
+        @if (isRulesLoading()) {
+          @for (i of [0, 1, 2]; track i) {
+            <div class="rounded-xl p-3 border border-border bg-background">
+              <div class="flex items-center justify-between mb-1">
+                <app-skeleton width="60px" height="12.5px" rounded="4px" />
+                <app-skeleton width="50px" height="17px" rounded="99px" />
+              </div>
+              <div style="margin-bottom: 6px">
+                <app-skeleton width="90px" height="11.5px" rounded="4px" />
+              </div>
+              <app-skeleton width="110px" height="11px" rounded="4px" />
+            </div>
+          }
+        } @else {
         @for (rule of rules(); track rule.id) {
           <div class="rounded-xl p-3 border border-border bg-background">
             <div class="flex items-center justify-between mb-1">
@@ -245,6 +271,7 @@
           <p class="text-text-muted" style="font-size: 12px; text-align: center; margin: 12px 0">
             No auto transactions yet. Click a date on the calendar to add one.
           </p>
+        }
         }
       </div>
     </div>

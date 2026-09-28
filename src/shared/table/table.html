@@ -24,6 +24,21 @@
 
   <!-- Body -->
   <tbody>
+    @if (isLoading) {
+      @for (skeletonRow of skeletonRows; track $index) {
+        <tr class="border-b border-border">
+          @for (col of sortedColumns; track col.key) {
+            <td style="padding: 14px 20px; vertical-align: middle">
+              <app-skeleton
+                [height]="'14px'"
+                [width]="col.key === 'action' ? '70px' : '80%'"
+                [rounded]="'6px'"
+              ></app-skeleton>
+            </td>
+          }
+        </tr>
+      }
+    } @else {
     @for (row of rows; track row) {
       <tr
         class="table-row border-b border-border"
@@ -134,6 +149,7 @@
           </div>
         </td>
       </tr>
+    }
     }
   </tbody>
 </table>

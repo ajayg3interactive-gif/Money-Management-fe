@@ -45,6 +45,19 @@
 
   <!-- Summary Cards -->
   <div class="grid grid-cols-1 gap-5 mb-6 sm:grid-cols-2 lg:grid-cols-4">
+    @if (isSummaryLoading()) {
+      @for (i of [0, 1, 2, 3]; track i) {
+        <div class="rounded-2xl p-5 border border-border bg-surface" style="box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06)">
+          <app-skeleton width="70px" height="11px" rounded="4px" />
+          <div style="margin-top: 12px">
+            <app-skeleton width="110px" height="22px" rounded="6px" />
+          </div>
+          <div style="margin-top: 12px">
+            <app-skeleton width="90px" height="18px" rounded="99px" />
+          </div>
+        </div>
+      }
+    } @else {
     @for (card of totals(); track card.id; let i = $index) {
       <div
         class="rounded-2xl p-5 relative overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
@@ -136,6 +149,7 @@
         </div>
       </div>
     }
+    }
   </div>
 
   <!-- Middle Row: Spending Report + Quick Stats -->
@@ -157,6 +171,17 @@
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 16px">
+        @if (isSummaryLoading()) {
+          @for (i of [0, 1, 2, 3]; track i) {
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <app-skeleton width="100px" height="12px" rounded="4px" />
+                <app-skeleton width="60px" height="12px" rounded="4px" />
+              </div>
+              <app-skeleton height="6px" rounded="99px" />
+            </div>
+          }
+        } @else {
         @for (cat of spendingPerMonth(); track cat.id) {
           <div>
             <div class="flex items-center justify-between mb-1.5">
@@ -194,6 +219,7 @@
             </div>
           </div>
         }
+        }
       </div>
     </div>
 
@@ -216,6 +242,15 @@
         >
           Net Savings Rate
         </p>
+        @if (isSummaryLoading()) {
+          <div style="margin-bottom: 12px">
+            <app-skeleton width="80px" height="32px" rounded="6px" />
+          </div>
+          <app-skeleton height="8px" rounded="99px" />
+          <div style="margin-top: 8px">
+            <app-skeleton width="120px" height="11px" rounded="4px" />
+          </div>
+        } @else {
         <div class="flex items-end gap-2 mb-3">
           <span class="text-text" style="font-size: 32px; font-weight: 700; line-height: 1"
             >{{ savingsRate().rate | number: '1.0-1' }}%</span
@@ -229,6 +264,7 @@
           ></div>
         </div>
         <p class="text-text-muted" style="font-size: 11px; margin-top: 8px">Goal: 60% savings rate</p>
+        }
       </div>
 
       <!-- Budget Status -->
@@ -255,6 +291,22 @@
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 14px">
+          @if (isBudgetsLoading()) {
+            @for (i of [0, 1, 2]; track i) {
+              <div class="flex items-center gap-3">
+                <div class="shrink-0" style="width: 8px; height: 8px; margin: 0 13px">
+                  <app-skeleton width="8px" height="8px" rounded="99px" />
+                </div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-center mb-1">
+                    <app-skeleton width="80px" height="11px" rounded="4px" />
+                    <app-skeleton width="70px" height="11px" rounded="4px" />
+                  </div>
+                  <app-skeleton height="5px" rounded="99px" />
+                </div>
+              </div>
+            }
+          } @else {
           @for (item of budgetStatusList(); track item.id) {
             <div class="flex items-center gap-3">
               <div class="rounded-full shrink-0" [style.background]="item.color" style="width: 8px; height: 8px; margin: 0 13px"></div>
@@ -278,6 +330,7 @@
             <p class="text-text-muted" style="font-size: 12px; text-align: center; margin: 8px 0">
               No budgets added yet. Click "Add Budget" to add one.
             </p>
+          }
           }
         </div>
       </div>
@@ -308,6 +361,23 @@
     </div>
 
     <div>
+      @if (isTransactionsLoading()) {
+        @for (i of [0, 1, 2, 3, 4]; track i) {
+          <div class="flex items-center gap-4 px-5 py-3.5 border-b border-border">
+            <app-skeleton width="40px" height="40px" rounded="12px" />
+            <div class="flex-1 min-w-0">
+              <div style="margin-bottom: 6px">
+                <app-skeleton width="140px" height="13px" rounded="4px" />
+              </div>
+              <app-skeleton width="80px" height="11px" rounded="4px" />
+            </div>
+            <div class="hidden sm:block">
+              <app-skeleton width="70px" height="20px" rounded="99px" />
+            </div>
+            <app-skeleton width="70px" height="14px" rounded="4px" />
+          </div>
+        }
+      } @else {
       @for (tx of recentTransactions(); track tx.id) {
         <div
           class="flex items-center gap-4 px-5 py-3.5 transition-colors border-b border-border hover:bg-[color-mix(in_srgb,var(--text)_4%,transparent)]"
@@ -359,6 +429,7 @@
         <p class="text-text-muted" style="font-size: 12px; text-align: center; margin: 24px 0">
           No transactions yet.
         </p>
+      }
       }
     </div>
   </div>

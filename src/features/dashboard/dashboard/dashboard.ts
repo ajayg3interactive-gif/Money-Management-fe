@@ -1,6 +1,7 @@
 import { DecimalPipe, NgClass } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { ProductTourService } from '../../../shared/product-tour/product-tour.service';
 import { ExpenseReport, SavingsRate, Totals, Transaction, TransactionService } from '../../../core/services/transaction.service';
 import { BudgetStatusModal } from "../../budget/budget-status-modal/budget-status-modal";
@@ -11,6 +12,7 @@ import { DropdownOption, DropdownService } from '../../../core/services/dropdown
 import { CategoryDropdown } from '../../../shared/category-dropdown/category-dropdown';
 import { AuthService } from '../../../core/services/auth.service';
 import { formatDdMmmYyyy } from '../../../shared/utils/date-format';
+import { Skeleton } from '../../../shared/skeleton/skeleton';
 
 interface BudgetStatusRow {
   id: string;
@@ -34,7 +36,7 @@ interface RecentTx {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NgClass, DecimalPipe, BudgetStatusModal, AddTransactionModal, CategoryDropdown, RouterLink],
+  imports: [NgClass, DecimalPipe, BudgetStatusModal, AddTransactionModal, CategoryDropdown, RouterLink, Skeleton],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -59,6 +61,12 @@ export class Dashboard implements OnInit {
   budgets = signal<Budget[]>([]);
   categories = signal<Category[]>([]);
   transactions = signal<Transaction[]>([]);
+
+  // Each summary section loads from its own API call, so each gets its own flag -
+  // one section finishing shouldn't hide the skeleton in another section.
+  isSummaryLoading = signal(true);
+  isTransactionsLoading = signal(true);
+  isBudgetsLoading = signal(true);
 
   budgetStatusModal = signal(false) ;
 
@@ -153,27 +161,51 @@ export class Dashboard implements OnInit {
 
   loadMonthlySummary() {
     const month = this.selectedMonth();
-    this.transactionService.getTotals(month).subscribe(data => {
-      this.totals.set(data);
-    })
-    this.transactionService.getExpenseReport(month).subscribe(data => {
-      this.spendingPerMonth.set(data)
-    })
-    this.transactionService.getSavingsRate(month).subscribe(data => {
-      this.savingsRate.set(data)
-    })
+    this.isSummaryLoading.set(true);
+    forkJoin({
+      totals: this.transactionService.getTotals(month),
+      spendingPerMonth: this.transactionService.getExpenseReport(month),
+      savingsRate: this.transactionService.getSavingsRate(month),
+    }).subscribe({
+      next: ({ totals, spendingPerMonth, savingsRate }) => {
+        this.totals.set(totals);
+        this.spendingPerMonth.set(spendingPerMonth);
+        this.savingsRate.set(savingsRate);
+        this.isSummaryLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load monthly summary', err);
+        this.isSummaryLoading.set(false);
+      },
+    });
   }
 
   loadTransactions() {
-    this.transactionService.getTransactions().subscribe(data => {
-      this.transactions.set(data);
-    })
+    this.isTransactionsLoading.set(true);
+    this.transactionService.getTransactions().subscribe({
+      next: (data) => {
+        this.transactions.set(data);
+        this.isTransactionsLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load transactions', err);
+        this.isTransactionsLoading.set(false);
+      },
+    });
   }
 
   loadBudgets() {
-    this.budgetService.getBudgets(this.selectedMonth()).subscribe(data => {
-      this.budgets.set(data)
-    })
+    this.isBudgetsLoading.set(true);
+    this.budgetService.getBudgets(this.selectedMonth()).subscribe({
+      next: (data) => {
+        this.budgets.set(data);
+        this.isBudgetsLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load budgets', err);
+        this.isBudgetsLoading.set(false);
+      },
+    });
   }
 
   handleModal(open: boolean) {

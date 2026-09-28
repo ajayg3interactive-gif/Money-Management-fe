@@ -9,6 +9,7 @@ import { extractErrorMessage } from '../../../core/utils/api-error';
 import { AddRecurringModal } from '../add-recurring-modal/add-recurring-modal';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProductTourService } from '../../../shared/product-tour/product-tour.service';
+import { Skeleton } from '../../../shared/skeleton/skeleton';
 
 interface DayCell {
   day: number;
@@ -19,7 +20,7 @@ interface DayCell {
 
 @Component({
   selector: 'app-plan',
-  imports: [AddRecurringModal],
+  imports: [AddRecurringModal, Skeleton],
   templateUrl: './plan.html',
   styleUrl: './plan.css',
 })
@@ -35,6 +36,8 @@ export class Plan implements OnInit {
 
   occurrences = signal<Occurrence[]>([]);
   rules = signal<RecurringRule[]>([]);
+  isOccurrencesLoading = signal(true);
+  isRulesLoading = signal(true);
 
   addModalOpen = signal(false);
   selectedDate = signal('');
@@ -47,6 +50,9 @@ export class Plan implements OnInit {
   );
 
   weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  /** Placeholder cell count for the loading grid - a typical month view (5 weeks). */
+  skeletonCellIndexes = Array.from({ length: 35 }, (_, i) => i);
 
   calendarCells = computed<(DayCell | null)[]>(() => {
     const year = this.viewYear();
@@ -126,15 +132,31 @@ export class Plan implements OnInit {
   }
 
   loadOccurrences(onLoaded?: () => void) {
-    this.recurringService.getOccurrences(this.viewMonth(), this.viewYear()).subscribe(data => {
-      this.occurrences.set(data);
-      onLoaded?.();
+    this.isOccurrencesLoading.set(true);
+    this.recurringService.getOccurrences(this.viewMonth(), this.viewYear()).subscribe({
+      next: (data) => {
+        this.occurrences.set(data);
+        this.isOccurrencesLoading.set(false);
+        onLoaded?.();
+      },
+      error: (err) => {
+        console.error('Failed to load occurrences', err);
+        this.isOccurrencesLoading.set(false);
+      },
     });
   }
 
   loadRules() {
-    this.recurringService.getRules().subscribe(data => {
-      this.rules.set(data);
+    this.isRulesLoading.set(true);
+    this.recurringService.getRules().subscribe({
+      next: (data) => {
+        this.rules.set(data);
+        this.isRulesLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load rules', err);
+        this.isRulesLoading.set(false);
+      },
     });
   }
 
