@@ -265,6 +265,12 @@ export class TransactionService {
             .pipe(map(res => res.data));
     }
 
+    bulkAddTransactions(transactions: Transaction[]): Observable<Transaction[]> {
+        return this.http
+            .post<{ success: true; data: Transaction[] }>(this.apiUrl + "/transaction/bulk", { transactions })
+            .pipe(map(res => res.data));
+    }
+
     updateTransaction(id: number, transaction: Transaction): Observable<Transaction> {
         return this.http.put<Transaction>(this.apiUrl + "/transaction/" + id, transaction)
     }
