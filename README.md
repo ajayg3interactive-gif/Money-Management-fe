@@ -1,59 +1,56 @@
-# MoneyManagement
+# FinTrack (mm-fe)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.11.
+FinTrack is the Angular frontend for the Money Management app — a personal finance SPA for tracking transactions, budgets, and dashboards. Built with Angular 21 (standalone components, signals), Tailwind CSS v4, and Vitest.
+
+This is one of two independent apps in the repo (sibling `mm-be/` is the Express + Mongoose REST API). The frontend requires the backend running to authenticate and load data.
+
+## Prerequisites
+
+- Node.js and npm
+- A `.env` file in `mm-fe/` defining `API_URL` (falls back to `http://localhost:3000` if unset)
+- The `mm-be/` backend running (see its own README/CLAUDE.md for setup)
 
 ## Development server
 
 To start a local development server, run:
 
 ```bash
-ng serve
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
+This runs `prestart` first, which generates `src/environments/environment.ts` from `mm-fe/.env` (via `scripts/generate-env.js`) — that file is gitignored and should never be edited directly. Once the server is running, open `http://localhost:4200/`. The app will automatically reload whenever you modify source files.
 
 ## Building
 
-To build the project run:
+To build the project for production, run:
 
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+This regenerates the environment file and compiles to the `dist/` directory. Production budgets: 500kB warn / 1MB error for the initial bundle, 4kB warn / 8kB error per component stylesheet.
 
 ## Running unit tests
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Unit tests run via [Vitest](https://vitest.dev/) using `@angular/build:unit-test`:
 
 ```bash
-ng test
+npm test
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+To run a single test file:
 
 ```bash
-ng e2e
+npx ng test --include src/features/settings/settings.spec.ts
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+If you run `ng test` directly (bypassing `npm test`/`npm start`), the environment file won't be generated automatically — run `npm run generate-env` first.
 
-## Additional Resources
+## Formatting
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Code style is enforced with Prettier (`printWidth: 100`, single quotes, Angular parser for HTML). No linter is configured.
+
+## Notes
+
+- `db.json` and `json-server` in this repo are leftovers from before the real backend existed and are not used by the app.
+- Auth, theming, and other architecture details are documented in the repo's `CLAUDE.md`.
