@@ -199,8 +199,11 @@
               <input
                 type="number"
                 min="1"
+                step="1"
+                class="no-spinner"
                 [ngModel]="interval()"
-                (ngModelChange)="interval.set($event)"
+                (ngModelChange)="onIntervalChange($event)"
+                (keydown)="blockNonIntegerKeys($event)"
                 style="
                   width: 100%;
                   border: 1.5px solid var(--border);
@@ -289,14 +292,15 @@
         Cancel
       </button>
       <button
-        class="flex-1 py-3 rounded-xl text-white text-sm font-semibold transition-all active:scale-99"
+        class="flex-1 py-3 rounded-xl text-white text-sm font-semibold transition-all active:scale-99 disabled:opacity-60 disabled:cursor-not-allowed"
         style="
           background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
           box-shadow: 0 2px 8px color-mix(in srgb, var(--primary), transparent 65%);
         "
+        [disabled]="isSaving()"
         (click)="handleSave()"
       >
-        Save
+        {{ isSaving() ? 'Saving…' : 'Save' }}
       </button>
     </div>
   </div>

@@ -33,6 +33,7 @@ export class AddTransactionModal implements OnInit {
   date = signal('');
   description = signal('');
   categories = signal<Category[]>([]);
+  isSaving = signal(false);
 
   ngOnInit() {
     this.categoryService.getCategories().subscribe(categories => {
@@ -70,6 +71,8 @@ export class AddTransactionModal implements OnInit {
   }
 
   handleSave() {
+    if (this.isSaving()) return;
+
     const transaction: Transaction = {
       date: this.date(),
       description: this.description(),
@@ -77,6 +80,9 @@ export class AddTransactionModal implements OnInit {
       amount: this.amount() ?? 0,
       type: this.type()
     };
+
+    this.isSaving.set(true);
+
     if (this.isEditMode() && this.editData?.id) {
       // ← UPDATE existing
       this.transactionService.updateTransaction(this.editData.id, transaction).subscribe({
@@ -84,7 +90,10 @@ export class AddTransactionModal implements OnInit {
           this.transactionUpdated.emit(updated);
           this.closeModal();
         },
-        error: (err) => console.error('Failed to update:', err)
+        error: (err) => {
+          this.isSaving.set(false);
+          console.error('Failed to update:', err);
+        }
       });
     } else {
       // ← ADD new
@@ -94,7 +103,10 @@ export class AddTransactionModal implements OnInit {
           this.transactionAdded.emit(saved);
           this.closeModal();
         },
-        error: (err) => this.toast.error(extractErrorMessage(err, 'Could not save transaction. Please try again.'))
+        error: (err) => {
+          this.isSaving.set(false);
+          this.toast.error(extractErrorMessage(err, 'Could not save transaction. Please try again.'));
+        }
       });
     }
   }

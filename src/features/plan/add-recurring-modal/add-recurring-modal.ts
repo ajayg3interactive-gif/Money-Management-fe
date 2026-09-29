@@ -33,6 +33,7 @@ export class AddRecurringModal implements OnInit, OnChanges {
   interval = signal(7);
   endDate = signal('');
   categories = signal<Category[]>([]);
+  isSaving = signal(false);
 
   ngOnInit() {
     this.categoryService.getCategories().subscribe(categories => {
@@ -48,6 +49,7 @@ export class AddRecurringModal implements OnInit, OnChanges {
     this.frequency.set('monthly-same-day');
     this.interval.set(7);
     this.endDate.set('');
+    this.isSaving.set(false);
   }
 
   closeModal() {
@@ -62,7 +64,20 @@ export class AddRecurringModal implements OnInit, OnChanges {
     this.frequency.set(value);
   }
 
+  onIntervalChange(value: number) {
+    this.interval.set(Math.floor(value));
+  }
+
+  /** Blocks '.', 'e'/'E' (scientific notation) and '+'/'-' so the interval input only ever accepts whole numbers. */
+  blockNonIntegerKeys(event: KeyboardEvent) {
+    if (['.', 'e', 'E', '+', '-'].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   handleSave() {
+    if (this.isSaving()) return;
+
     const rule: Omit<RecurringRule, 'id' | 'active'> = {
       description: this.description(),
       category: this.category(),
@@ -74,13 +89,17 @@ export class AddRecurringModal implements OnInit, OnChanges {
       interval: this.frequency() === 'every-n-days' ? this.interval() : null,
     };
 
+    this.isSaving.set(true);
     this.recurringService.addRule(rule).subscribe({
       next: (saved) => {
         this.toast.success('Auto transaction scheduled.');
         this.ruleAdded.emit(saved);
         this.closeModal();
       },
-      error: (err) => this.toast.error(extractErrorMessage(err, 'Could not schedule this transaction. Please try again.')),
+      error: (err) => {
+        this.isSaving.set(false);
+        this.toast.error(extractErrorMessage(err, 'Could not schedule this transaction. Please try again.'));
+      },
     });
   }
 }

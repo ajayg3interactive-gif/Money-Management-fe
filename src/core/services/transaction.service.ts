@@ -9,7 +9,8 @@ export interface Transaction {
     description: string,
     category: string,
     amount: number,
-    type: string
+    type: string,
+    fromRecurring?: boolean
 }
 
 export interface TransactionColumn {

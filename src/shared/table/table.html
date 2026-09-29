@@ -109,6 +109,26 @@
               <span class="text-text-muted" style="font-size: 13px">
                 {{ getCellValue(row, col.key) }}
               </span>
+            } @else if (col.key === 'type') {
+              <span class="text-text" style="font-size: 13.5px; font-weight: 500">
+                {{ getCellValue(row, col.key) }}
+                @if (row['fromRecurring']) {
+                  <span
+                    title="This transaction is from your scheduled plan"
+                    class="inline-flex items-center justify-center text-primary font-bold"
+                    style="
+                      width: 16px;
+                      height: 16px;
+                      font-size: 9px;
+                      border-radius: 9999px;
+                      background: color-mix(in srgb, var(--primary), transparent 85%);
+                      margin-left: 6px;
+                      vertical-align: middle;
+                      cursor: default;
+                    "
+                  >P</span>
+                }
+              </span>
             } @else {
               <span class="text-text" style="font-size: 13.5px; font-weight: 500">
                 {{ getCellValue(row, col.key) }}
