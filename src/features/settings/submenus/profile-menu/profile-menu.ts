@@ -6,10 +6,11 @@ import { extractErrorMessage } from '../../../../core/utils/api-error';
 import { environment } from '../../../../environments/environment';
 import { IconComponent } from "../../../../shared/icons/icons.component";
 import { ThemeService } from '../../../../core/services/theme.service';
+import { ConfirmDialog } from '../../../../shared/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'profile-menu',
-  imports: [ReactiveFormsModule, IconComponent],
+  imports: [ReactiveFormsModule, IconComponent, ConfirmDialog],
   templateUrl: './profile-menu.html',
   styleUrl: './profile-menu.css',
 })
@@ -21,6 +22,7 @@ export class ProfileMenu {
 
   isSubmitting = signal(false);
   isUploadingAvatar = signal(false);
+  showRemoveAvatarConfirm = signal(false);
 
   profileForm: FormGroup = this.fb.group({
     name: ['', [Validators.required]],
@@ -38,6 +40,10 @@ export class ProfileMenu {
         );
       }
     });
+  }
+
+  hasChanges(): boolean {
+    return this.profileForm.dirty;
   }
 
   get name() { return this.profileForm.get('name')!; }
@@ -78,7 +84,15 @@ export class ProfileMenu {
 
   removeAvatar(): void {
     if (!this.avatarUrl()) return;
+    this.showRemoveAvatarConfirm.set(true);
+  }
 
+  cancelRemoveAvatar(): void {
+    this.showRemoveAvatarConfirm.set(false);
+  }
+
+  confirmRemoveAvatar(): void {
+    this.showRemoveAvatarConfirm.set(false);
     this.isUploadingAvatar.set(true);
     this.authService.deleteAvatar().subscribe({
       next: () => {
@@ -93,6 +107,8 @@ export class ProfileMenu {
   }
 
   onSubmit(): void {
+    if (this.isSubmitting()) return;
+
     if (this.profileForm.invalid) {
       this.profileForm.markAllAsTouched();
       return;
@@ -105,6 +121,7 @@ export class ProfileMenu {
       next: () => {
         this.toast.success('Profile updated successfully.');
         this.isSubmitting.set(false);
+        this.profileForm.markAsPristine();
       },
       error: (err) => {
         this.toast.error(extractErrorMessage(err, 'Could not update profile. Please try again.'));

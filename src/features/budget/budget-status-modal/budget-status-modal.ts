@@ -34,6 +34,7 @@ export class BudgetStatusModal implements OnInit {
   budgets = signal<Budget[]>([]);
 
   editingBudgetId = signal<string | null>(null);
+  isSaving = signal(false);
 
   editableCategoryValues = computed(() =>
     this.categories()
@@ -85,6 +86,8 @@ export class BudgetStatusModal implements OnInit {
   }
 
   handleSave() {
+    if (this.isSaving()) return;
+
     const editingId = this.editingBudgetId();
 
     if (!this.category()) {
@@ -98,13 +101,17 @@ export class BudgetStatusModal implements OnInit {
         return;
       }
 
+      this.isSaving.set(true);
       this.budgetService.deleteBudget(editingId).subscribe({
         next: () => {
           this.toast.success('Budget removed.');
           this.budgetDeleted.emit(editingId);
           this.closeModal();
         },
-        error: (err) => this.toast.error(extractErrorMessage(err, 'Could not remove budget. Please try again.'))
+        error: (err) => {
+          this.isSaving.set(false);
+          this.toast.error(extractErrorMessage(err, 'Could not remove budget. Please try again.'));
+        }
       });
       return;
     }
@@ -114,6 +121,8 @@ export class BudgetStatusModal implements OnInit {
       maximum: this.amount() ?? 0,
     };
 
+    this.isSaving.set(true);
+
     if (editingId) {
       this.budgetService.updateBudget(editingId, budget).subscribe({
         next: (updated) => {
@@ -121,7 +130,10 @@ export class BudgetStatusModal implements OnInit {
           this.budgetUpdated.emit(updated);
           this.closeModal();
         },
-        error: (err) => this.toast.error(extractErrorMessage(err, 'Could not update budget. Please try again.'))
+        error: (err) => {
+          this.isSaving.set(false);
+          this.toast.error(extractErrorMessage(err, 'Could not update budget. Please try again.'));
+        }
       });
       return;
     }
@@ -132,7 +144,10 @@ export class BudgetStatusModal implements OnInit {
         this.budgetAdded.emit(saved);
         this.closeModal();
       },
-      error: (err) => this.toast.error(extractErrorMessage(err, 'Could not save budget. Please try again.'))
+      error: (err) => {
+        this.isSaving.set(false);
+        this.toast.error(extractErrorMessage(err, 'Could not save budget. Please try again.'));
+      }
     });
   }
 
