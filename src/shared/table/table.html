@@ -114,8 +114,7 @@
                 {{ getCellValue(row, col.key) }}
                 @if (row['fromRecurring']) {
                   <span
-                    title="This transaction is from your scheduled plan"
-                    class="inline-flex items-center justify-center text-primary font-bold"
+                    class="group relative inline-flex items-center justify-center text-primary font-bold"
                     style="
                       width: 16px;
                       height: 16px;
@@ -124,9 +123,19 @@
                       background: color-mix(in srgb, var(--primary), transparent 85%);
                       margin-left: 6px;
                       vertical-align: middle;
-                      cursor: default;
+                      cursor: pointer;
                     "
-                  >P</span>
+                  >
+                    P
+                    <span
+                      class="pointer-events-none absolute bottom-full left-0 mb-2 w-56 rounded-xl border border-border bg-surface px-3 py-2 text-xs font-normal text-text shadow-lg opacity-0 scale-95 origin-bottom-left transition-all duration-150 group-hover:opacity-100 group-hover:scale-100 z-10"
+                    >
+                      This transaction is from your scheduled plan.
+                      <span
+                        class="absolute top-full left-2 -mt-px w-2 h-2 rotate-45 border-b border-r border-border bg-surface"
+                      ></span>
+                    </span>
+                  </span>
                 }
               </span>
             } @else {
