@@ -29,6 +29,10 @@ export interface Occurrence {
     category: string;
     amount: number;
     type: 'Income' | 'Expense';
+    /** True when a monthly rule was moved to the month's last day because the month lacks its day. */
+    adjusted?: boolean;
+    /** The rule's original day of month (e.g. 31); only set when `adjusted`. */
+    scheduledDay?: number | null;
 }
 
 @Injectable({ providedIn: 'root' })

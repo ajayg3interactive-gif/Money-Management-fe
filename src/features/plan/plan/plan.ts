@@ -243,6 +243,24 @@ export class Plan implements OnInit {
     return this.authService.currencySymbol() + ' ' + Math.abs(amount).toLocaleString('en-IN');
   }
 
+  /** Explains why a monthly occurrence isn't on its usual day of the month. */
+  adjustedMessage(occ: Occurrence): string {
+    const day = occ.scheduledDay ?? 0;
+    const month = new Date(this.viewYear(), this.viewMonth() - 1, 1).toLocaleDateString('en-US', {
+      month: 'long',
+    });
+    const lastDay = Number(occ.date.slice(8, 10));
+    return `Scheduled for the ${this.ordinal(day)} of every month, but ${month} only has ${lastDay} days. It runs on the last day of the month instead (${month} ${lastDay}).`;
+  }
+
+  private ordinal(n: number): string {
+    const rem100 = n % 100;
+    if (rem100 >= 11 && rem100 <= 13) return `${n}th`;
+    const suffixes: Record<number, string> = { 1: 'st', 2: 'nd', 3: 'rd' };
+    const suffix = suffixes[n % 10] ?? 'th';
+    return `${n}${suffix}`;
+  }
+
   statusColor(status: Occurrence['status']): string {
     if (status === 'posted') return '#10b981';
     if (status === 'held') return '#f59e0b';

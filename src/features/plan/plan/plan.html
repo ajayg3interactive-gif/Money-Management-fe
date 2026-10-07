@@ -121,7 +121,7 @@
                         <span
                           (click)="toggleHold(occ, $event)"
                           [attr.data-tour]="isFirstOccurrence(occ) ? 'plan-badge' : null"
-                          class="block truncate"
+                          class="truncate flex justify-between items-center"
                           style="
                             font-size: 10px;
                             font-weight: 600;
@@ -133,11 +133,36 @@
                           [style.background]="statusColor(occ.status)"
                         >
                           {{ formatAmount(occ.amount) }}
+                          @if (occ.adjusted) {
+                            <span
+                              data-testid="adjusted-icon"
+                              style="
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                width: 12px;
+                                height: 12px;
+                                margin-left: 4px;
+                                border-radius: 50%;
+                                background: rgba(255, 255, 255, 0.9);
+                                color: #5b6ef5;
+                                font-size: 9px;
+                                font-weight: 800;
+                                line-height: 1;
+                              "
+                              >!</span
+                            >
+                          }
                         </span>
                         <div
                           class="pointer-events-none absolute bottom-full left-0 mb-2 rounded-xl border border-border bg-surface px-3 py-2 text-xs font-normal text-text shadow-lg opacity-0 scale-95 origin-bottom-left transition-all duration-150 group-hover/badge:opacity-100 group-hover/badge:scale-100 z-10"
                         >
                           {{ occ.description || occ.category }}
+                          @if (occ.adjusted) {
+                            <p class="text-text-muted" style="margin: 4px 0 0; width: 200px; white-space: normal">
+                              {{ adjustedMessage(occ) }}
+                            </p>
+                          }
                           <div
                             class="absolute top-full left-4 -mt-px w-2 h-2 rotate-45 border-b border-r border-border bg-surface"
                           ></div>
@@ -265,6 +290,9 @@
             <p class="text-text-muted" style="font-size: 11px; margin: 0 0 8px">
               @if (rule.frequency === 'monthly-same-day') {
                 Monthly on day {{ rule.startDate.slice(8, 10) }}
+                @if (+rule.startDate.slice(8, 10) > 28) {
+                  <span> (last day in shorter months)</span>
+                }
               } @else {
                 Every {{ rule.interval }} days
               }
